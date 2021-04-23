@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_padding">16dp</dimen>
+    <dimen name="screen_padding_half">8dp</dimen>
+    <dimen name="card_padding">8dp</dimen>
+    <dimen name="card_padding_half">4dp</dimen>
+    <dimen name="card_radius">8dp</dimen>
+
+    <dimen name="portfolio_icon">36dp</dimen>
+    <dimen name="portfolio_header_min_height">90dp</dimen>
+</resources>

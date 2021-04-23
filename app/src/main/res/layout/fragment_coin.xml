@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.coin.CoinVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineSidebar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.64" />
+
+        <View
+            android:id="@+id/sidebar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/portfolioBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/HodlTheme"
+                android:minHeight="@dimen/portfolio_header_min_height"
+                android:background="@color/colorPrimary"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputAmountExchange"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/buttonSwap"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editAmountExchange"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:digits="0123456789.,"
+                        android:hint="@string/portfolio_edit_exchange_amount"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
+                        android:text="@={vm.amountExchange}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonSwap"
+                    style="@style/ImageButton.Outlined"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:layout_marginTop="6dp"
+                    app:icon="@drawable/ic_swap"
+                    app:layout_constraintBottom_toBottomOf="@+id/inputAmountExchange"
+                    app:layout_constraintEnd_toStartOf="@+id/inputAmountWallet"
+                    app:layout_constraintStart_toEndOf="@+id/inputAmountExchange"
+                    app:layout_constraintTop_toTopOf="@+id/inputAmountExchange" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/inputAmountWallet"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/buttonSwap"
+                    app:layout_constraintTop_toTopOf="@+id/inputAmountExchange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editAmountWallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:digits="0123456789.,"
+                        android:imeOptions="actionDone"
+                        android:hint="@string/portfolio_edit_wallet_amount"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
+                        android:text="@={vm.amountWallet}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentPadding="0dp"
+                android:layout_marginTop="@dimen/screen_padding_half"
+                android:layout_marginStart="@dimen/screen_padding_half"
+                android:layout_marginEnd="@dimen/screen_padding_half">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guidelineCoinSidebar"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.6" />
+                    <View
+                        android:id="@+id/coinSidebar"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="16dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guidelineCoinSidebar"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icon"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_margin="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:url="@{vm.coin.image}"
+                        tools:src="@drawable/ic_coin_bitcoin" />
+
+                    <include
+                        android:id="@+id/coinHeader"
+                        layout="@layout/layout_coin_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:data="@{vm.coin}"
+                        app:layout_constraintStart_toEndOf="@+id/icon"
+                        app:layout_constraintTop_toTopOf="@+id/icon" />
+
+                    <TextView
+                        android:id="@+id/textPriceBtc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/coin_bitcoin"
+                        android:text="@{vm.coin.getBtcPriceString()}"
+                        app:layout_constraintStart_toStartOf="@+id/coinHeader"
+                        app:layout_constraintTop_toBottomOf="@+id/textPriceFiat"
+                        tools:text="1 BTC" />
+
+                    <TextView
+                        android:id="@+id/textPriceFiat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.coin.getUsdPriceString()}"
+                        app:layout_constraintStart_toStartOf="@+id/coinHeader"
+                        app:layout_constraintTop_toBottomOf="@+id/coinHeader"
+                        tools:text="1000 USD" />
+
+
+                    <TextView
+                        android:id="@+id/textPortfolioAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@{vm.amountTotal}"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="0,1 BTC" />
+
+                    <TextView
+                        android:id="@+id/textPortfolioTotalAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.amountTotalFiat}"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="@+id/textPortfolioAmount"
+                        app:layout_constraintTop_toBottomOf="@+id/textPortfolioAmount"
+                        tools:text="10 000 $" />
+
+                    <TextView
+                        android:id="@+id/textPortfolioTotalAmountBtc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.amountTotalBtc}"
+                        android:textColor="@color/colorSecondary"
+                        app:layout_constraintEnd_toEndOf="@+id/textPortfolioTotalAmount"
+                        app:layout_constraintTop_toBottomOf="@+id/textPortfolioTotalAmount"
+                        tools:text="0,1 BTC" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/screen_padding_half">
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonBinanceBtc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/coin_trade_to_btc"
+                        tools:text="BTC"
+                        app:icon="@drawable/ic_binance"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/black"
+                        android:layout_marginStart="16dp"
+                        android:onClick="@{() -> vm.showBinanceBtcTrade()}"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonBinanceUsdt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/coin_trade_to_usdt"
+                        app:icon="@drawable/ic_binance"
+                        app:iconSize="16dp"
+                        app:iconTint="@color/black"
+                        tools:text="USDT"
+                        android:onClick="@{() -> vm.showBinanceUsdtTrade()}"
+                        app:layout_constraintStart_toEndOf="@+id/buttonBinanceBtc"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

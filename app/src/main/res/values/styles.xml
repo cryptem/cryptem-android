@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Card">
+        <item name="cardElevation">4dp</item>
+        <item name="contentPadding">@dimen/card_padding</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Normal</item>
+    </style>
+
+    <style name="Card.Clickable">
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+
+    </style>
+
+    <style name="ImageButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="ImageButton.Red" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/delete</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="ImageButton.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="tint">@color/black</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Normal" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/card_radius</item>
+    </style>
+
+</resources>

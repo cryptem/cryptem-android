@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="io.cryptem.app.R"/>
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.market.MarketVM" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:paddingStart="@dimen/screen_padding"
+    android:paddingEnd="@dimen/screen_padding"
+    android:paddingBottom="@dimen/screen_padding_half">
+
+    <TextView
+        android:id="@+id/textMarketCapTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/white"
+        tools:text="@string/market_marketcap"
+        android:text="@{@string/market_marketcap(vm.marketGlobalData.marketCapString)}"/>
+
+    <TextView
+        android:id="@+id/textBtcDominanceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorSecondary"
+        tools:text="@string/market_btc_dominance"
+        app:layout_constraintStart_toStartOf="@+id/textMarketCapTitle"
+        app:layout_constraintTop_toBottomOf="@id/textMarketCapTitle"
+        android:text="@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString)}" />
+
+    <TextView
+        android:id="@+id/textEthDominance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{@string/market_eth_dominance(vm.marketGlobalData.ethDominanceString)}"
+        android:textColor="#AFA9D3"
+        app:layout_constraintStart_toStartOf="@+id/textMarketCapTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textBtcDominanceTitle"
+        tools:text="@string/market_eth_dominance" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

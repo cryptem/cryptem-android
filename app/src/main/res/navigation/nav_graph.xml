@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/walletFragment">
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="io.cryptem.app.ui.map.MapFragment"
+        android:label="@string/nav_map"/>
+    <fragment
+        android:id="@+id/payFragment"
+        android:name="io.cryptem.app.ui.pay.PayFragment"
+        android:label="@string/nav_pay"/>
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="io.cryptem.app.ui.request.RequestFragment"
+        android:label="@string/request_title">
+        <action
+            android:id="@+id/action_requestFragment_to_walletsFragment"
+            app:destination="@id/walletsFragment" />
+        <action
+            android:id="@+id/action_requestFragment_to_walletFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletsFragment"
+        android:name="io.cryptem.app.ui.wallets.WalletsFragment"
+        android:label="@string/wallets_title" >
+        <action
+            android:id="@+id/action_walletsFragment_to_walletFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/portfolioFragment"
+        android:name="io.cryptem.app.ui.portfolio.PortfolioFragment"
+        android:label="@string/nav_portfolio" >
+        <action
+            android:id="@+id/action_portfolioFragment_to_coinFragment"
+            app:destination="@id/coinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/marketFragment"
+        android:name="io.cryptem.app.ui.market.MarketFragment"
+        android:label="@string/nav_prices" >
+        <action
+            android:id="@+id/action_marketFragment_to_coinFragment"
+            app:destination="@id/coinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/coinFragment"
+        android:name="io.cryptem.app.ui.coin.CoinFragment"
+        android:label="{name}" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_portfolioEditFragment_to_portfolioFragment"
+            app:destination="@id/portfolioFragment"
+            app:popUpTo="@id/portfolioFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="io.cryptem.app.ui.wallets.WalletFragment"
+        android:label="@string/wallet_title" >
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="coin"
+            app:argType="io.cryptem.app.model.ui.WalletCoin"
+            android:defaultValue="BTC" />
+    </fragment>
+</navigation>

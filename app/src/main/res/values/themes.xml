@@ -1,0 +1,40 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Cryptem" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="materialCardViewStyle">@style/Card</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="materialButtonStyle">@style/Button</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Toolbar" parent="ThemeOverlay.MaterialComponents">
+        <item name="android:textColorSecondary">@color/colorSecondary</item>
+        <item name="titleTextColor">@color/colorSecondary</item>
+    </style>
+
+    <style name="DepositIndicator" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">#fff</item>
+    </style>
+
+    <style name="BtcIndicator" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/colorSecondary
+        </item>
+    </style>
+
+    <style name="HodlTheme" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/colorSecondary</item>
+        <item name="colorPrimaryVariant">@color/colorSecondary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+
+    </style>
+</resources>

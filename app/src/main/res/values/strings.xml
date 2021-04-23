@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Cryptem</string>
+
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+    <string name="cancel">Zrušit</string>
+    <string name="remove">Smazat</string>
+    <string name="save">Uložit</string>
+    <string name="ok">OK</string>
+
+    <string name="nav_pay">Zaplatit</string>
+    <string name="nav_map">Mapa</string>
+    <string name="nav_request">Vyžádat</string>
+    <string name="nav_prices">Market</string>
+    <string name="nav_portfolio">HODL</string>
+
+    <string name="request_title">Vyžádat platbu</string>
+    <string name="request_amount_hint">Částka</string>
+    <string name="request_currency_hint">Měna</string>
+    <string name="request_coin_hint">Coin</string>
+    <string name="request_create_qr">Vytvořit QR</string>
+
+    <string name="format_fiat_amount">%.2f %s</string>
+    <string name="format_crypto_amount">%.8f %s</string>
+    <string name="format_rate">1 %s = %s</string>
+    <string name="request_fee_mask">Poplatek: %f %s</string>
+    <string name="request_no_addresses">Přidejte si do aplikace svojí %s peněženku, aby se  mohl vygenerovat QR kód pro platbu.</string>
+    <string name="request_dont_have_wallet">Nemám peněženku</string>
+    <string name="request_have_wallet">Mám peněženku</string>
+
+    <string name="wallets_title">Moje peněženky</string>
+
+    <string name="wallet_title">Detail peněženky</string>
+    <string name="wallet_private_name">Název peněženky</string>
+    <string name="wallet_public_name">Veřejný název (nepovinné)</string>
+    <string name="wallet_public_address">Veřejná adresa</string>
+    <string name="wallet_remove_dialog">Opravdu chcete smazat peněženku?</string>
+    <string name="wallet_public_name_description">Slouží zákazníkovi pro snadnější identifikaci platby</string>
+    <string name="my_addresses_info">Zde zadejte veřejné (public) adresy peněženek, které chcete používat k přijímání plateb.</string>
+    <string name="scan_address_prompt">Naskenujte svojí veřejnou %s adresu.</string>
+
+    <string name="percent_format">%.1f%%</string>
+    <string name="dca_format">DCA: %s</string>
+    <string name="format_rank">%d.</string>
+
+    <string name="time_day">24h</string>
+    <string name="time_week">7d</string>
+    <string name="time_month">30d</string>
+    <string name="time_quarter">90 dní</string>
+
+    <string name="deposit_hint">Suma vkladů</string>
+
+    <string name="hodl_action_edit">Upravit</string>
+
+    <string name="btc">₿</string>
+    <string name="czk">Kč</string>
+    <string name="usd">$</string>
+    <string name="eur">€</string>
+
+    <string name="portfolio">HODL</string>
+    <string name="portfolio_empty">Zatím nemáte v portfoliu žádné coiny.</string>
+    <string name="portfolio_edit_exchange_amount">Směnárna</string>
+    <string name="portfolio_edit_wallet_amount">HW peněženka</string>
+    <string name="portfolio_edit_remove">Odebrat</string>
+    <string name="portfolio_edit_save">Uložit</string>
+    <string name="coin_detail_title">Detail coinu</string>
+    <string name="coin_trade_to_btc">BTC</string>
+    <string name="coin_trade_to_usdt">USDT</string>
+    <string name="coin_action_save">Uložit</string>
+    <string name="coin_action_delete">Odebrat</string>
+    <string name="coingecko">CoinGecko</string>
+
+    <string name="market_btc_dominance">Bitcoin dominance: %s</string>
+    <string name="market_eth_dominance">Ethereum dominance: %s</string>
+    <string name="market_marketcap">Kapitalizace: %s</string>
+</resources>

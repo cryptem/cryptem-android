@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.wallets.WalletVM" />
+        <variable
+            name="lifecycle"
+            type="androidx.lifecycle.LifecycleOwner" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="0dp"
+        android:layout_margin="@dimen/screen_padding_half">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCoins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                app:data="@{vm.coins}"
+                app:layoutId="@{@layout/item_wallet_coin}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lifecycle="@{lifecycle}"
+                app:viewModel="@{vm}" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/recyclerCoins"
+                android:layout_marginTop="8dp"
+                android:hint="@string/wallet_private_name"
+                android:id="@+id/inputName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="textCapSentences"
+                    android:maxLength="20"
+                    android:layout_marginStart="@dimen/card_padding"
+                    android:layout_marginEnd="@dimen/card_padding"
+                    android:text="@={vm.wallet.name}"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/wallet_public_address"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/card_padding"
+                android:layout_marginEnd="@dimen/card_padding"
+                app:layout_constraintTop_toBottomOf="@+id/inputName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:paddingEnd="64dp"
+                    android:text="@={vm.wallet.address}"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="56dp"
+                android:layout_height="58dp"
+                style="@style/ImageButton.Outlined"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_scan_qr"
+                app:iconTintResource="@{vm.selectedCoin.color}"
+                tools:iconTint="@color/coin_bitcoin"
+                android:layout_marginEnd="4dp"
+                android:scaleType="fitCenter"
+                android:padding="8dp"
+                android:layout_marginTop="4dp"
+                android:onClick="@{() -> vm.scanAddress()}"
+                app:layout_constraintEnd_toEndOf="@+id/inputAddress"
+                app:layout_constraintTop_toTopOf="@+id/inputAddress" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:backgroundTintResource="@{vm.selectedCoin.color}"
+                android:text="@string/save"
+                android:layout_marginEnd="@dimen/card_padding"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/white"
+                android:onClick="@{() -> vm.save()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputAddress"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:onClick="@{() -> vm.remove()}"
+                app:visibleOrGone="@{vm.wallet.id != null}"
+                android:text="@string/remove"
+                app:layout_constraintBottom_toBottomOf="@+id/materialButton"
+                app:layout_constraintEnd_toStartOf="@+id/materialButton"
+                app:layout_constraintTop_toTopOf="@+id/materialButton" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+</layout>
