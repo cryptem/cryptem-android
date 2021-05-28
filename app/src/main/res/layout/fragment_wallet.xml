@@ -73,9 +73,20 @@
                     android:inputType="textMultiLine"
                     android:maxLength="300"
                     android:paddingEnd="64dp"
+                    android:imeOptions="actionDone"
                     android:text="@={vm.wallet.address}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textQrWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:visibleOrInvisible="@{vm.scanWarning}"
+                android:text="@string/wallet_scan_warning"
+                app:layout_constraintTop_toBottomOf="@+id/inputAddress" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="56dp"
@@ -98,16 +109,16 @@
                 android:id="@+id/materialButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:backgroundTintResource="@{vm.selectedCoin.color}"
-                android:text="@string/save"
-                android:layout_marginEnd="@dimen/card_padding"
-                android:layout_marginBottom="2dp"
-                android:textColor="@color/white"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="4dp"
                 android:onClick="@{() -> vm.save()}"
+                android:textColor="@color/white"
+                android:text="@string/save"
+                app:backgroundTintResource="@{vm.selectedCoin.color}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputAddress"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/textQrWarning" />
 
             <com.google.android.material.button.MaterialButton
                 style="@style/OutlinedButton"

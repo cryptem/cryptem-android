@@ -38,15 +38,38 @@
 
     <TextView
         android:id="@+id/textExchangeWarning"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:gravity="center"
-        android:text="Máte 60% portfolia na směnárně"
-        android:visibility="gone"
-        android:background="@color/red"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/header"/>
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="@{@string/portfolio_exchange_warning(vm.portfolio.percentOnExchangeString)}"
+        tools:text="@string/portfolio_exchange_warning"
+        app:visibleOrGone="@{vm.portfolio.percentOnExchange > 0.2}"
+        android:background="@color/colorSecondary"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/sidebar"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:icon="@drawable/trezor_button"
+        app:visibleOrGone="@{vm.portfolio.percentOnExchange > 0.2}"
+        android:onClick="@{() -> vm.showTrezor()}"
+        app:iconTint="@color/black"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textExchangeWarning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintTop_toTopOf="@+id/textExchangeWarning" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -60,6 +83,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/recycler"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:paddingTop="4dp"
         android:paddingBottom="80dp"

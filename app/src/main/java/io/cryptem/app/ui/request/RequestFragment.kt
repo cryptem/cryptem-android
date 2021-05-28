@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentRequestBinding
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.ui.base.event.RunAppEvent
 
 
 @AndroidEntryPoint
@@ -37,6 +38,10 @@ class RequestFragment : BaseFragment<RequestVM, FragmentRequestBinding>(R.layout
 
         if (viewModel.hasDefaultWallet()) {
             showKeyboard(binding.inputAmount)
+        }
+
+        observe(RunAppEvent::class){
+            runOrInstall(it.packageName)
         }
     }
 

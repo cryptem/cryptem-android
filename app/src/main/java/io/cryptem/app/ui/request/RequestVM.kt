@@ -12,21 +12,26 @@ import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.WalletRepository
 import io.cryptem.app.model.ui.Currency
+import io.cryptem.app.model.ui.SoftwareWallet
 import io.cryptem.app.model.ui.Wallet
 import io.cryptem.app.model.ui.WalletCoin
 import io.cryptem.app.ui.base.BaseVM
+import io.cryptem.app.ui.base.event.RunAppEvent
 import io.cryptem.app.ui.base.listener.OnWalletCoinSelectedListener
 import io.cryptem.app.ui.base.listener.OnWalletSelectedListener
 import io.cryptem.app.util.L
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class RequestVM @Inject constructor(
-    private val repository: WalletRepository,
+    private val walletRepository: WalletRepository,
     private val marketRepository: MarketRepository,
     private val prefs: SharedPrefsRepository,
-    private val remoteConfigRepo : RemoteConfigRepository
+    private val remoteConfigRepo: RemoteConfigRepository
 ) : BaseVM(), OnWalletCoinSelectedListener, OnWalletSelectedListener {
 
     val loadingPrice = MutableLiveData(false)
@@ -47,9 +52,10 @@ class RequestVM @Inject constructor(
     val currency = MutableLiveData<Currency>()
 
     val wallets = ObservableArrayList<Wallet>()
-    val wallet = MutableLiveData<Wallet>()
+    val wallet = MutableLiveData<Wallet?>()
     val walletSelector = MutableLiveData(false)
     val qr = MutableLiveData<String>()
+    var isInit = false
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
@@ -69,11 +75,12 @@ class RequestVM @Inject constructor(
         currency.value = prefs.getDefaultCurrency()
 
         coins.clear()
-        coins.addAll(repository.getSupportedCoins())
+        coins.addAll(walletRepository.getSupportedCoins())
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    fun onResume() {
+        isInit = false
         init()
     }
 
@@ -114,12 +121,12 @@ class RequestVM @Inject constructor(
         }
     }
 
-    private fun init(){
+    private fun init() {
         viewModelScope.launch {
             kotlin.runCatching {
-               repository.getDefaultWallet()
+                walletRepository.getDefaultWallet()
             }.onSuccess {
-                if (it != null){
+                if (it != null) {
                     onCoinSelected(it.coin)
                 } else {
                     onCoinSelected(WalletCoin.BTC)
@@ -134,7 +141,7 @@ class RequestVM @Inject constructor(
         selectedCoin.value?.let {
             viewModelScope.launch {
                 kotlin.runCatching {
-                    repository.getWallets(it)
+                    walletRepository.getWallets(it)
                 }.onSuccess {
                     when {
                         it.isEmpty() -> {
@@ -144,9 +151,16 @@ class RequestVM @Inject constructor(
                             onWalletSelected(it.first())
                         }
                         else -> {
-                            walletSelector.value = true
-                            wallets.clear()
-                            wallets.addAll(it)
+                            val foundDefaultWallet = it.find { it.id == prefs.getDefaultWallet() }
+                            if (!isInit && foundDefaultWallet != null) {
+                                onWalletSelected(foundDefaultWallet)
+                                isInit = true
+                            } else {
+                                wallet.value = null
+                                walletSelector.value = true
+                                wallets.clear()
+                                wallets.addAll(it)
+                            }
                         }
                     }
                 }.onFailure {
@@ -157,7 +171,7 @@ class RequestVM @Inject constructor(
     }
 
     override fun onWalletSelected(wallet: Wallet?) {
-        repository.setDefaultWallet(wallet?.id)
+        walletRepository.setDefaultWallet(wallet?.id)
         this.wallet.value = wallet
         wallets.clear()
         walletSelector.value = false
@@ -177,8 +191,23 @@ class RequestVM @Inject constructor(
     }
 
     private fun generateQR() {
-        if (cryptoAmount.value != null && selectedCoin.value != null && currency.value != null) {
-            qr.value = "bitcoin:${wallet.value?.address}?amount=${cryptoAmount.value}"
+
+        val address = wallet.value?.address?.value
+        val amount =
+            DecimalFormat("#.########", DecimalFormatSymbols.getInstance(Locale.US)).format(
+                cryptoAmount.value
+            )
+        val name = wallet.value?.name
+
+        if (address != null && amount != null && selectedCoin.value != null && currency.value != null) {
+            qr.value = when (selectedCoin.value) {
+                WalletCoin.BTC -> "bitcoin:${address}?amount=${amount}"
+                WalletCoin.LTC -> "litecoin:${address}?amount=${amount}"
+                WalletCoin.XMR -> "monero:${address}?amount=${amount}"
+                WalletCoin.ETH -> "ethereum:${address}?amount=${amount}"
+                WalletCoin.ADA -> "cardano:${address}?amount=${amount}"
+                else -> null
+            }
         }
     }
 
@@ -188,7 +217,11 @@ class RequestVM @Inject constructor(
         }
     }
 
-    fun hasDefaultWallet() : Boolean{
-        return repository.hasDefaultWallet()
+    fun createWallet(){
+        publish(RunAppEvent(SoftwareWallet.EXODUS.packageName))
+    }
+
+    fun hasDefaultWallet(): Boolean {
+        return walletRepository.hasDefaultWallet()
     }
 }

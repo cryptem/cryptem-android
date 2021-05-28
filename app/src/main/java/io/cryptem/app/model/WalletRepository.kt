@@ -85,7 +85,7 @@ class WalletRepository @Inject constructor(
             WalletCoin.XMR -> {
                 "monero:${wallet.address}?tx_amount=${amount}"
             }
-            WalletCoin.ETH -> "ethereum:${wallet.address}?value=${amount}"
+            WalletCoin.ETH -> "ethereum:${wallet.address}?amount=${amount}"
             WalletCoin.ADA -> "cardano:${wallet.address}?amount=${amount}"
         }
     }

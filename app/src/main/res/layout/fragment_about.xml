@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<data>
+    <import type="io.cryptem.app.model.ui.WalletCoin"/>
+    <import type="io.cryptem.app.BuildConfig"/>
+    <variable
+        name="vm"
+        type="io.cryptem.app.ui.about.AboutVM" />
+</data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:background="@color/black"
+            android:src="@drawable/cryptem_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textLicense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/about_license"
+            android:onClick="@{() -> vm.gitHub()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageLogo" />
+
+        <TextView
+            android:id="@+id/textAbout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_github"
+            android:onClick="@{() -> vm.gitHub()}"
+            android:textColor="#555"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textLicense" />
+
+        <TextView
+            android:id="@+id/textSupportUs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/about_support_us"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAbout" />
+
+        <ScrollView
+            android:id="@+id/scrollAddresses"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/iconCoinGecko"
+            app:layout_constraintTop_toBottomOf="@+id/textSupportUs">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentPadding="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/layoutDonateAddresses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.btcAddress}"
+                    app:coin="@{WalletCoin.BTC}"
+                    app:vm="@{vm}" />
+
+                <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.ethAddress}"
+                    app:coin="@{WalletCoin.ETH}"
+                    app:vm="@{vm}" />
+
+                <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.adaAddress}"
+                    app:coin="@{WalletCoin.ADA}"
+                    app:vm="@{vm}" />
+
+                <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.ltcAddress}"
+                    app:coin="@{WalletCoin.LTC}"
+                    app:vm="@{vm}" />
+
+                <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.xmrAddress}"
+                    app:coin="@{WalletCoin.XMR}"
+                    app:vm="@{vm}" />
+
+            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </ScrollView>
+
+        <ImageView
+            android:id="@+id/iconCoinGecko"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/ic_coingecko_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textPowered" />
+
+        <TextView
+            android:id="@+id/textPowered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> vm.coinGecko()}"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/about_powered"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iconCoinGecko" />
+
+        <TextView
+            android:id="@+id/textVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@{BuildConfig.VERSION_NAME}"
+            android:textColor="@color/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/imageLogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageLogo"
+            tools:text="1.0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

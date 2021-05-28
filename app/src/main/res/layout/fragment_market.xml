@@ -4,6 +4,9 @@
         <variable
             name="vm"
             type="io.cryptem.app.ui.market.MarketVM" />
+        <variable
+            name="lifecycle"
+            type="androidx.lifecycle.LifecycleOwner" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,6 +33,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
+        android:id="@+id/recycler"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:paddingTop="4dp"
@@ -37,7 +41,8 @@
         android:clipToPadding="false"
         app:data="@{vm.items}"
         app:viewModel="@{vm}"
-        app:layoutId="@{@layout/item_market}"/>
+        app:layoutId="@{@layout/item_market}"
+        app:lifecycle="@{lifecycle}"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

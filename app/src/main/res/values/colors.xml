@@ -6,6 +6,8 @@
     <color name="windowTint">#88000000</color>
     <color name="portfolioBackground">#222222</color>
 
+    <color name="button_disabled">#595959</color>
+
     <color name="textOnPrimary">#FFFFFF</color>
 
     <color name="colorSecondary">#FFC800</color>
@@ -19,14 +21,15 @@
 
     <color name="black">#000</color>
     <color name="white">#fff</color>
-    <color name="red">#8A0000</color>
+    <color name="red">#D10000</color>
     <color name="coin_bitcoin">#f7931a</color>
     <color name="coin_litecoin">#345d9d</color>
     <color name="coin_monero">#ff6600</color>
-    <color name="coin_ethereum">#3c3c3d</color>
+    <color name="coin_ethereum">#564E81</color>
+    <color name="coin_ethereum_light">#9F96D1</color>
     <color name="coin_cardano">#0033AD</color>
 
-    <color name="trend_up">#378100</color>
+    <color name="trend_up">#419700</color>
     <color name="trend_down">@color/red</color>
 
     <color name="trend_up_light">#B8FF83</color>

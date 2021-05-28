@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>supportedCurrencies</key>
+        <value>USD, EUR, CZK, GBP, RUB, UAH, CAD, AUD, DKK, NOK, SEK, CHF</value>
+    </entry>
+    <entry>
+        <key>supportedCountries</key>
+        <value>CZ, SK</value>
+    </entry>
+
+    <entry>
+        <key>binance</key>
+        <value>https://www.binance.com/en/register?ref=XN7BY789</value>
+    </entry>
+
+    <entry>
+        <key>trezorOne</key>
+        <value>https://shop.trezor.io/product/trezor-one-black?offer_id=35&amp;aff_id=8006</value>
+    </entry>
+    <entry>
+        <key>trezorOneAlza</key>
+        <value>https://www.alza.cz/trezor-black-d4928293.htm?idp=10091</value>
+    </entry>
+    <entry>
+        <key>trezorT</key>
+        <value>https://shop.trezor.io/product/trezor-model-t?offer_id=15&amp;aff_id=8006</value>
+    </entry>
+    <entry>
+        <key>trezorTAlza</key>
+        <value>https://www.alza.cz/trezor-t-d5150839.htm?idp=10091</value>
+    </entry>
+
+    <entry>
+        <key>donateBtc</key>
+        <value>bc1qy7gc5mva9df4swtnknyjt00m3dphrn98l7vkkl</value>
+    </entry>
+    <entry>
+        <key>donateLtc</key>
+        <value>LYGJ2ssXHGSBWfAEbZ54zAS2sQ5mfRGqyn</value>
+    </entry>
+    <entry>
+        <key>donateXmr</key>
+        <value>44wQELFsb6xLpVAwktiBMMjZbUfXExbS4LxvjW35LoNBjV91cqKPieH63FMAvHpuBGax4Nrw8K4ArMv3SaUBSfdJG3WopDv</value>
+    </entry>
+    <entry>
+        <key>donateEth</key>
+        <value>0x1bd7196Be7771ADd41AE92A0AEDcde510499De86</value>
+    </entry>
+    <entry>
+        <key>donateAda</key>
+        <value>addr1qyjne2zd2tynywaauk3s9jxy7he247vanxzec4dk02xfcye98j5y65kfxgammedrqtyvfa0j4tuemxv9n32mv75vnsfscevhm7</value>
+    </entry>
+</defaultsMap>

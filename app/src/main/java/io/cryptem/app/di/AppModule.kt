@@ -1,6 +1,10 @@
 package io.cryptem.app.di
 
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.os.Vibrator
 import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -96,5 +100,29 @@ class AppModule {
             context,
             WalletDatabase::class.java, "wallet"
         ).fallbackToDestructiveMigration().build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesGeoceoder(@ApplicationContext context: Context) : Geocoder{
+        return Geocoder(context)
+    }
+
+    @Provides
+    @Singleton
+    fun providesClipboardManager(@ApplicationContext context: Context) : ClipboardManager{
+        return context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    }
+
+    @Provides
+    @Singleton
+    fun providesPackageManager(@ApplicationContext context: Context) : PackageManager{
+        return context.packageManager
+    }
+
+    @Provides
+    @Singleton
+    fun provideVibrator(@ApplicationContext context: Context) : Vibrator{
+        return context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 }

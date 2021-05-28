@@ -1,5 +1,6 @@
 package io.cryptem.app.model.ui
 
+import androidx.lifecycle.MutableLiveData
 import io.cryptem.app.ext.toBtcString
 import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.ext.toPercentString
@@ -13,18 +14,22 @@ class Portfolio(var currency: Currency, val deposit: Long) {
     var valuationPercent = 0.0
     var valuationFiat = 0.0
     var valuationBtc = 0.0
+    val percentOnExchange = MutableLiveData(0.0)
 
     fun recalculate() {
-        L.i("recalculate")
         valuationBtc = 0.0
         valuationFiat = 0.0
+        percentOnExchange.value = 0.0
+        var valuationOnExchange = 0.0
 
         for (item in items) {
             item.recalculateValuations()
             valuationBtc += item.valuationBtc
             valuationFiat += item.valuationCustom
+            valuationOnExchange += item.valuationOnExchange
         }
         valuationPercent = ((valuationFiat-deposit)/deposit)
+        percentOnExchange.value = (valuationOnExchange/valuationFiat)
 
         for (item in items) {
             item.recalculate(this)
@@ -53,5 +58,9 @@ class Portfolio(var currency: Currency, val deposit: Long) {
 
     fun getProfitProgressInt() : Int{
         return 100 - ((deposit / valuationFiat) * 100).toInt()
+    }
+
+    fun getPercentOnExchangeString() : String?{
+        return percentOnExchange.value?.toPercentString(0)
     }
 }

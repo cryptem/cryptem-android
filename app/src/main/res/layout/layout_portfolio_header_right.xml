@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="io.cryptem.app.R"/>
+        <variable
+            name="data"
+            type="io.cryptem.app.model.ui.Portfolio" />
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.portfolio.PortfolioVM" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:theme="@style/HodlTheme"
+    android:minHeight="@dimen/portfolio_header_min_height"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="8dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineSidebar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.64" />
+
+    <TextView
+        android:id="@+id/textDeposit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="@{data.depositString}"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="10000 Kč" />
+
+    <TextView
+        android:id="@+id/textHodlings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@{data.valuationFiatString}"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/textDeposit"
+
+        app:layout_constraintTop_toBottomOf="@+id/textDeposit"
+        tools:text="20000 Kč" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/profitIndicator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:progress="@{data.profitProgressInt}"
+        android:theme="@style/DepositIndicator"
+        app:layout_constraintEnd_toEndOf="@+id/textHodlings"
+        app:layout_constraintStart_toStartOf="@+id/textHodlings"
+        app:layout_constraintTop_toBottomOf="@+id/textHodlings"
+        tools:progress="50" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/BtcIndicator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:progress="@{data.btcProgressInt}"
+        android:theme="@style/BtcIndicator"
+        app:layout_constraintEnd_toEndOf="@+id/textHodlingsBtc"
+        app:layout_constraintStart_toStartOf="@+id/textHodlingsBtc"
+        app:layout_constraintTop_toBottomOf="@+id/textHodlingsBtc"
+        tools:progress="50" />
+
+    <TextView
+        android:id="@+id/textHodlingsBtc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{data.valuationBtcString}"
+        android:textColor="@color/colorSecondary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/textHodlings"
+        app:layout_constraintTop_toBottomOf="@id/profitIndicator"
+        tools:text="0,5 BTC" />
+
+    <ImageView
+        android:id="@+id/iconTrend"
+        android:layout_width="16dp"
+        android:layout_height="wrap_content"
+        android:src="@{data.valuationPercent >= 0 ? @drawable/ic_trend_up : @drawable/ic_trend_down}"
+        app:layout_constraintEnd_toStartOf="@+id/textValuationPercent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textValuationPercent"
+        app:tintResource="@{data.valuationPercent >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
+        tools:src="@drawable/ic_trend_up"
+        tools:tint="@color/trend_up_light" />
+
+    <TextView
+        android:id="@+id/textValuationPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{data.valuationPercentString}"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iconTrend"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iconTrend"
+        app:textColorResource="@{data.valuationPercent >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
+        tools:layout_editor_absoluteX="348dp"
+        tools:text="123 %"
+        tools:textColor="@color/trend_up_light" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/black"
+            android:visibility="invisible"
+            tools:visibility="gone"
+            app:animationIn="@{@anim/slide_down_in}"
+            app:animationOut="@{@anim/slide_up_out}"
+            app:visibleOrInvisible="@{vm.depositEditor}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="2dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/inputDeposit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:hint="@string/deposit_hint"
+                android:minWidth="100dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editDeposit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:text="@={vm.deposit}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputCurrency"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_weight="0.64"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp"
+                android:hint="@string/request_currency_hint"
+                android:inputType="none">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    app:layoutId="@{@layout/item_currency_dropdown}"
+                    app:data="@{vm.currencies}"
+                    app:selectedItem="@={vm.currency}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/ImageButton.Outlined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="44dp"
+        android:minHeight="0dp"
+        android:onClick="@{() -> vm.toggleTrendTime()}"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="24h"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
+        app:textResource="@{vm.trendTime.title}" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

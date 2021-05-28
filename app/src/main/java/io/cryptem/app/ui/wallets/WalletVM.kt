@@ -20,6 +20,7 @@ class WalletVM @Inject constructor(val repo : WalletRepository, val prefs : Shar
 
     val coins = ObservableArrayList<WalletCoin>()
     val wallet = MutableLiveData<Wallet>()
+    val scanWarning = MutableLiveData(false)
     override val selectedCoin = MutableLiveData<WalletCoin>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -33,6 +34,7 @@ class WalletVM @Inject constructor(val repo : WalletRepository, val prefs : Shar
     }
 
     fun scanAddress(){
+        scanWarning.value = true
         wallet.value?.let {
             publish(ScanAddressEvent())
         }

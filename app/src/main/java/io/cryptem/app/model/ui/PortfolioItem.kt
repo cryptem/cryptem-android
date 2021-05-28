@@ -14,6 +14,7 @@ class PortfolioItem(
     var valuationBtc = 0.0
     var valuationCustom = 0.0
     var valuationUsd = 0.0
+    var valuationOnExchange = 0.0
     var portfolioBtcPercent = 0.0
     var portfolioFiatPercent = 0.0
     var valuationBtcPercent = 0.0
@@ -26,6 +27,7 @@ class PortfolioItem(
         valuationBtc = amount * (coin.priceBtc?.currentPrice ?: 0.0)
         valuationCustom = amount * (coin.priceCustom?.currentPrice ?: 0.0)
         valuationUsd = amount * (coin.priceUsd?.currentPrice ?: 0.0)
+        valuationOnExchange = amountExchange * (coin.priceCustom?.currentPrice ?: 0.0)
     }
 
     fun recalculate(portfolio: Portfolio) {

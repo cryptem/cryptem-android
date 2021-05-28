@@ -1,5 +1,7 @@
 package io.cryptem.app.ui.portfolio
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentPortfolioBinding
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.ui.base.event.UrlEvent
 
 
 @AndroidEntryPoint
@@ -24,7 +27,7 @@ class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.recycler.itemAnimator = null
         binding.header.editDeposit.setOnEditorActionListener { v, actionId, event ->
             viewModel.depositEditor.value = false
             viewModel.savePortfolio()
@@ -45,6 +48,10 @@ class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.
                 }
             }
         })
+
+        observe(UrlEvent::class){
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.url)))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

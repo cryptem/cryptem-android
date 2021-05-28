@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.poieditor.PoiEditorVM" />
+
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/screen_padding_half">
+
+    <TextView
+        android:id="@+id/textMainInstructions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/screen_padding_half"
+        android:layout_marginStart="@dimen/screen_padding_half"
+        android:layout_marginEnd="@dimen/screen_padding_half"
+        android:text="@string/poi_editor_instructions"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:visibleOrGone="@{vm.name == null || vm.url == null}" />
+
+    <LinearLayout
+        android:id="@+id/layoutInstructions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/screen_padding_half"
+        android:layout_marginEnd="@dimen/screen_padding_half"
+        android:orientation="vertical"
+        app:visibleOrGone="@{vm.name == null || vm.url == null}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textMainInstructions">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/poi_editor_gmaps_instructions_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textMainInstructions" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/poi_editor_gmaps_instructions_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textMainInstructions" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/poi_editor_gmaps_instructions_3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textMainInstructions" />
+
+    </LinearLayout>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cardPoi"
+        android:layout_marginStart="@dimen/screen_padding_half"
+        android:layout_marginEnd="@dimen/screen_padding_half"
+        android:layout_marginTop="16dp"
+        app:visibleOrGone="@{vm.name != null &amp;&amp; vm.url != null}"
+        app:layout_constraintTop_toBottomOf="@id/buttonGoogleMaps">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{vm.name}"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/imageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Merchant Name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textUrl"
+                android:text="@{vm.url}"
+                android:textColor="@color/textSecondary"
+                tools:text="https://maps.app.goo.gl/123456"
+                app:layout_constraintTop_toBottomOf="@id/textName"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_check"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/colorSecondary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonGoogleMaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        app:visibleOrGone="@{vm.name == null}"
+        android:onClick="@{() -> vm.showGoogleMaps()}"
+        android:text="@string/poi_editor_google_maps"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutInstructions" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding_half"
+        android:layout_marginEnd="@dimen/screen_padding_half"
+        android:layout_marginTop="16dp"
+        android:enabled="@{vm.latitude == 0.0 &amp;&amp; vm.longitude == 0.0}"
+        android:hint="@string/poi_editor_address_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardPoi"
+        app:visibleOrGone="@{vm.name != null &amp;&amp; vm.url != null}">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:text="@={vm.address}" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputCategory"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding_half"
+        android:layout_marginEnd="@dimen/screen_padding_half"
+        android:layout_marginTop="16dp"
+        android:enabled="@{vm.latitude == 0.0 &amp;&amp; vm.longitude == 0.0}"
+        android:hint="@string/poi_editor_category_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputAddress"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        app:visibleOrGone="@{vm.name != null &amp;&amp; vm.url != null}">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/spinnerFilterStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            app:data="@{vm.categories}"
+            app:selectedItem="@={vm.category}" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/checkAcceptCrypto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding_half"
+        android:text="@string/poi_editor_checkbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputCategory"
+        app:visibleOrGone="@{vm.name != null &amp;&amp; vm.url != null}" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:enabled="@{checkAcceptCrypto.checked}"
+        android:onClick="@{() -> vm.send()}"
+        android:text="@string/poi_editor_send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkAcceptCrypto"
+        app:visibleOrInvisible="@{vm.name != null &amp;&amp; vm.url != null &amp;&amp; !vm.loading}" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:visibleOrGone="@{vm.loading}"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonSend"
+        app:layout_constraintEnd_toEndOf="@+id/buttonSend"
+        app:layout_constraintStart_toStartOf="@+id/buttonSend"
+        app:layout_constraintTop_toTopOf="@+id/buttonSend" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

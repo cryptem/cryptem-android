@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="io.cryptem.app.model.ui.WalletCoin"
+/>        <variable
+            name="coin"
+            type="WalletCoin" />
+        <variable
+            name="address"
+            type="String" />
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.about.AboutVM" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageIcon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        app:imageResource="@{coin.icon}"
+        tools:src="@drawable/ic_coin_bitcoin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        textColorResource="@{coin.color}"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@{coin.title}"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCopy"
+        app:layout_constraintStart_toEndOf="@+id/imageIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Bitcoin" />
+
+    <TextView
+        android:id="@+id/textAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingBottom="8dp"
+        android:text="@{address}"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCopy"
+        app:layout_constraintStart_toEndOf="@+id/imageIcon"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
+        tools:text="qwertzuiopasdfghjklyxcvbnm" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonCopy"
+        style="@style/ImageButton.Outlined"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:onClick="@{() -> vm.copyAddress(address, coin)}"
+        app:icon="@drawable/ic_copy"
+        app:iconTintResource="@{coin.color}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,7 +12,7 @@
     </style>
 
     <style name="Button" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="backgroundTint">@color/button_background_selector</item>
         <item name="android:textColor">@color/black</item>
     </style>
 

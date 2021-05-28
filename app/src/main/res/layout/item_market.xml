@@ -29,21 +29,14 @@
             android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineSidebar"
+                android:id="@+id/guidelinePercentPrimary"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.6" />
+                app:layout_constraintGuide_percent="0.75" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineWeekTrend"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.8" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineMonthTrend"
+                android:id="@+id/guidelinePercentSecondary"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
@@ -70,6 +63,16 @@
                 app:layout_constraintTop_toTopOf="@+id/icon" />
 
             <TextView
+                android:id="@+id/textMarketCap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{data.marketCapString}"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1000 USD" />
+
+            <TextView
                 android:id="@+id/textCurrentPriceBtc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,28 +89,19 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.usdPriceString}"
                 android:textColor="@color/textPrimary"
+                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:text="1000 USD" />
-
-            <include
-                android:id="@+id/trendDayUsd"
-                layout="@layout/layout_trend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:data="@{data.getPercentUsd(PercentTimeInterval.DAY)}"
-                app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
-                app:layout_constraintEnd_toEndOf="@id/guidelineSidebar"
-                app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
 
             <include
                 android:id="@+id/trendWeekUsd"
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:data="@{data.getPercentUsd(PercentTimeInterval.WEEK)}"
+                app:data="@{data.getPercentUsd(vm.percentInterval.get(0))}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
-                app:layout_constraintEnd_toEndOf="@id/guidelineWeekTrend"
+                app:layout_constraintEnd_toEndOf="@id/guidelinePercentPrimary"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
 
             <include
@@ -115,30 +109,19 @@
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:data="@{data.getPercentUsd(PercentTimeInterval.MONTH)}"
+                app:data="@{data.getPercentUsd(vm.percentInterval.get(1))}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineMonthTrend"
+                app:layout_constraintEnd_toStartOf="@+id/guidelinePercentSecondary"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
-
-
-            <include
-                android:id="@+id/trendDayBtc"
-                layout="@layout/layout_trend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:data="@{data.getPercentBtc(PercentTimeInterval.DAY)}"
-                app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
-                app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
 
             <include
                 android:id="@+id/trendWeekBtc"
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:data="@{data.getPercentBtc(PercentTimeInterval.WEEK)}"
+                app:data="@{data.getPercentBtc(vm.percentInterval.get(0))}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
-                app:layout_constraintEnd_toEndOf="@+id/guidelineWeekTrend"
+                app:layout_constraintEnd_toEndOf="@+id/guidelinePercentPrimary"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
 
             <include
@@ -146,16 +129,16 @@
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:data="@{data.getPercentBtc(PercentTimeInterval.MONTH)}"
+                app:data="@{data.getPercentBtc(vm.percentInterval.get(1))}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineMonthTrend"
+                app:layout_constraintEnd_toStartOf="@+id/guidelinePercentSecondary"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
 
             <androidx.constraintlayout.widget.Group
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:visibleOrInvisible="@{!data.isBtc()}"
-                app:constraint_referenced_ids="trendDayBtc, trendWeekBtc, trendMonthBtc"/>
+                app:constraint_referenced_ids=" trendWeekBtc, trendMonthBtc"
+                app:visibleOrInvisible="@{!data.isBtc()}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

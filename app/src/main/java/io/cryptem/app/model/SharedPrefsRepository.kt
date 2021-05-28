@@ -2,9 +2,8 @@ package io.cryptem.app.model
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.cryptem.app.model.ui.CryptoAddress
 import io.cryptem.app.model.ui.Currency
-import io.cryptem.app.model.ui.WalletCoin
+import io.cryptem.app.model.ui.SoftwareWallet
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,6 +26,9 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val LAST_MARKET_GLOBAL_DATA_REFRESH = "LAST_MARKET_GLOBAL_DATA_REFRESH"
         const val LAST_PORTFOLIO_REFRESH = "LAST_PORTFOLIO_REFRESH"
         const val HOME_SCREEN = "HOME_SCREEN"
+        const val BINANCE_REGISTERED = "BINANCE_REGISTERED"
+        const val COUNTRY = "COUNTRY"
+        const val SW_WALLET = "SW_WALLET"
     }
 
     fun saveDefaultWallet(id: Long?) {
@@ -38,7 +40,7 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
     }
 
     fun getDefaultWallet(): Long? {
-        return if (prefs.contains(DEFAULT_WALLET)){
+        return if (prefs.contains(DEFAULT_WALLET)) {
             prefs.getLong(DEFAULT_WALLET, 0L)
         } else {
             null
@@ -96,5 +98,29 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
 
     fun getHomeScreen(): HomeScreen {
         return HomeScreen.valueOf(prefs.getString(HOME_SCREEN, HomeScreen.MARKET.name)!!)
+    }
+
+    fun saveBinanceRegistered() {
+        prefs.edit().putBoolean(BINANCE_REGISTERED, true).apply()
+    }
+
+    fun isBinanceRegistered(): Boolean {
+        return prefs.getBoolean(BINANCE_REGISTERED, false)
+    }
+
+    fun saveCountry(country: String) {
+        prefs.edit().putString(COUNTRY, country).apply()
+    }
+
+    fun getCountry(): String {
+        return prefs.getString(COUNTRY, null) ?: Locale.getDefault().country
+    }
+
+    fun saveDefaultSwWallet(swWallet: SoftwareWallet) {
+        prefs.edit().putString(SW_WALLET, swWallet.packageName).apply()
+    }
+
+    fun getDefaultSwWallet(): String {
+        return prefs.getString(SW_WALLET, null) ?: SoftwareWallet.EXODUS.packageName
     }
 }

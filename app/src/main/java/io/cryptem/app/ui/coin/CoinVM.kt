@@ -10,6 +10,8 @@ import io.cryptem.app.ext.toBtcString
 import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.model.MarketRepository
 import io.cryptem.app.model.PortfolioRepository
+import io.cryptem.app.model.RemoteConfigRepository
+import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.ui.PortfolioItem
 import io.cryptem.app.ui.base.BaseVM
@@ -24,11 +26,13 @@ import javax.inject.Inject
 @HiltViewModel
 class CoinVM @Inject constructor(
     val marketRepo: MarketRepository,
-    val portfolioRepo: PortfolioRepository
+    val portfolioRepo: PortfolioRepository,
+    val prefs : SharedPrefsRepository,
+    val remoteConfigRepository: RemoteConfigRepository
 ) : BaseVM() {
 
     val coin = MutableLiveData<Coin?>()
-    val porfolioItem = MutableLiveData<PortfolioItem>()
+    val portfolioItem = MutableLiveData<PortfolioItem>()
     val amountExchange = MutableLiveData<String>()
     val amountWallet = MutableLiveData<String>()
     val amountTotal = MutableLiveData<String>()
@@ -72,8 +76,11 @@ class CoinVM @Inject constructor(
             kotlin.runCatching {
                 marketRepo.getCoin(id = id)
             }.onSuccess {
-                coin.value = it
-                recalculatePortfolio()
+                it?.let {
+                    coin.value = it
+                    recalculatePortfolio()
+                }
+
             }.onFailure {
                 L.e(it)
             }
@@ -154,5 +161,9 @@ class CoinVM @Inject constructor(
 
     fun showBinanceUsdtTrade() {
         publish(UrlEvent("https://www.binance.com/en/trade/${coin.value?.symbol}_USDT"))
+    }
+
+    fun getBinanceLink() : String{
+        return remoteConfigRepository.getBinanceLink()
     }
 }

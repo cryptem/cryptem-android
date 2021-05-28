@@ -14,49 +14,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/inputAmount"
-        app:layout_constraintTop_toTopOf="parent"
-        android:hint="@string/request_amount_hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/inputCurrency"
-        android:layout_marginTop="@dimen/screen_padding"
-        android:layout_marginStart="@dimen/screen_padding"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:id="@+id/header"
+        android:orientation="horizontal"
+        android:background="@color/black"
+        android:theme="@style/HodlTheme"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@={vm.fiatAmountString}"
-            android:maxLength="8"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"/>
+            android:layout_weight="1"
+            android:id="@+id/inputAmount"
+            app:layout_constraintTop_toTopOf="parent"
+            android:hint="@string/request_amount_hint"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/inputCurrency"
+            android:layout_marginStart="@dimen/screen_padding"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={vm.fiatAmountString}"
+                android:maxLength="8"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputCurrency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="@dimen/screen_padding"
-        android:hint="@string/request_currency_hint"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        app:layout_constraintTop_toTopOf="@id/inputAmount"
-        app:layout_constraintStart_toEndOf="@id/inputAmount"
-        app:layout_constraintEnd_toEndOf="parent">
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputCurrency"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="120dp"
-            app:data="@{vm.currencies}"
-            android:inputType="none"
-            app:selectedItem="@={vm.currency}" />
+            android:layout_weight="0.54"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:hint="@string/request_currency_hint"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="120dp"
+                app:data="@{vm.currencies}"
+                android:inputType="none"
+                app:layoutId="@{@layout/item_currency_dropdown}"
+                app:selectedItem="@={vm.currency}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCoins"
@@ -70,10 +81,9 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputAmount"
+        app:layout_constraintTop_toBottomOf="@+id/header"
         app:lifecycle="@{lifecycle}"
         app:viewModel="@{vm}" />
-
 
     <TextView
         android:id="@+id/textFiatAmount"
@@ -212,6 +222,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> vm.createWallet()}"
             app:textColorResource="@{vm.selectedCoin.color}"
             android:text="@string/request_dont_have_wallet" />
 

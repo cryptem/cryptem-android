@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165228947370",
+    "project_id": "cryptem-prod",
+    "storage_bucket": "cryptem-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165228947370:android:082453d94af8611d3fedd3",
+        "android_client_info": {
+          "package_name": "io.cryptem.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165228947370-ge4p6ore789tu0id38ph57i81fon7gnl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0veNAMacZrgCZsF1i-_h2TB7tA8-mC4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165228947370-ge4p6ore789tu0id38ph57i81fon7gnl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

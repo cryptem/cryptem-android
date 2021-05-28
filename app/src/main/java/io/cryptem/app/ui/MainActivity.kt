@@ -1,6 +1,9 @@
 package io.cryptem.app.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -8,10 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.ActivityMainBinding
-import io.cryptem.app.model.HomeScreen
+import io.cryptem.app.ui.poieditor.PoiEditorFragmentArgs
+import io.cryptem.app.util.L
 import kodebase.view.KodebaseActivity
-import java.util.*
-import kotlin.collections.HashSet
 
 @AndroidEntryPoint
 class MainActivity : KodebaseActivity<MainActivityVM, ActivityMainBinding>(R.layout.activity_main) {
@@ -38,5 +40,40 @@ class MainActivity : KodebaseActivity<MainActivityVM, ActivityMainBinding>(R.lay
         })
 
         NavigationUI.setupActionBarWithNavController(this, navController(), appBarConfiguration)
+        handleIntent(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_about -> {
+                navigate(R.id.fragmentAbout)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val data = intent?.clipData?.getItemAt(0)?.text.toString()
+        L.d(data)
+        if (data.contains("maps.app.goo.gl")) {
+            val lines = data.split("\n")
+            val name = lines[0]
+            val url = lines.find { it.startsWith("https://") }
+            if (navController().currentDestination?.id == R.id.poiEditorFragment) {
+                navController().popBackStack()
+            }
+            navigate(R.id.poiEditorFragment, PoiEditorFragmentArgs(name, url).toBundle())
+        }
     }
 }

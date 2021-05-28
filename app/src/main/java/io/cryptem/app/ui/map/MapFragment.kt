@@ -2,18 +2,33 @@ package io.cryptem.app.ui.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
+import com.google.android.gms.maps.model.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentMapBinding
+import io.cryptem.app.model.ui.Poi
+import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseFragment
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 @AndroidEntryPoint
@@ -25,15 +40,34 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     }
 
     private var map: GoogleMap? = null
+    private val markersMap = HashMap<Marker, Poi>()
+    private val markers = ArrayList<Marker>()
+    private val markerIcons = HashMap<String, BitmapDescriptor?>()
+    private var defaultMarker: BitmapDescriptor? = null
+    var countryMenuItem : MenuItem? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
         initMap()
-        viewModel.location.observe(viewLifecycleOwner){
+        viewModel.location.observe(viewLifecycleOwner) {
             val previousZoomLevel = 13.00f
-            val zoomPoint = LatLng(it.latitude, it.longitude)
-            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(zoomPoint, previousZoomLevel))
+            it?.let {
+                val zoomPoint = LatLng(it.latitude, it.longitude)
+                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(zoomPoint, previousZoomLevel))
+            }
+        }
+        viewModel.categories.observe(viewLifecycleOwner) {
+            initMarkers(it)
+            viewModel.loadPois()
+        }
+        viewModel.pois.observe(viewLifecycleOwner) {
+            addMarkers(it)
         }
     }
 
@@ -54,7 +88,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     }
 
     @SuppressLint("MissingPermission")
-    private fun onLocationEnabled(){
+    private fun onLocationEnabled() {
         viewModel.getLastLocation()
         map?.isMyLocationEnabled = true
     }
@@ -65,8 +99,8 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_LOCATION && grantResults.first() == PackageManager.PERMISSION_GRANTED){
-           onLocationEnabled()
+        if (requestCode == REQUEST_LOCATION && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+            onLocationEnabled()
         }
     }
 
@@ -74,7 +108,113 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         binding.mapView.getMapAsync { m ->
             map = m
             checkLocationPermission()
+            if (viewModel.isCountrySupported()){
+                viewModel.loadCategories()
+            } else {
+                showUnsupportedCountryDialog()
+            }
+            map?.setOnMarkerClickListener { marker ->
+                val poi = markersMap[marker]
+                try{
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(poi?.url)))
+                    true
+                } catch (t : Throwable){
+                    false
+                }
+            }
         }
+    }
+
+    fun showUnsupportedCountryDialog(){
+        MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.map_unsupported_country_title)
+            .setMessage(
+                getString(
+                    R.string.map_unsupported_country_message, Locale(
+                        Locale.getDefault().language,
+                        viewModel.getCountry()
+                    ).displayCountry
+                )
+            )
+            .setPositiveButton(R.string.ok){ _, _ -> }
+            .setNegativeButton(R.string.action_donate){ _, _ -> navigate(R.id.fragmentAbout)}
+            .show()
+    }
+
+    fun addMarkers(pois: List<Poi>) {
+        removeMarkers()
+        pois.forEach { poi ->
+            val options = MarkerOptions().apply {
+                position(
+                    LatLng(
+                        poi.latitude,
+                        poi.longitude
+                    )
+                )
+                title(poi.name)
+                icon(markerIcons.get(poi.category) ?: defaultMarker)
+            }
+            map?.addMarker(options)?.let { marker ->
+                markers.add(marker)
+                markersMap[marker] = poi
+            }
+        }
+    }
+
+    private fun initMarkers(categories: List<PoiCategory>) {
+        categories.forEach {
+            markerIcons[it.id] = bitmapDescriptorFromVector(it.getIcon())
+        }
+        defaultMarker = bitmapDescriptorFromVector(R.drawable.ic_poi_other)
+    }
+
+    private fun bitmapDescriptorFromVector(vectorResId: Int): BitmapDescriptor? {
+        val size = 128
+        val sidePadding = 40
+        val topOffset = 20
+
+        return ContextCompat.getDrawable(requireContext(), vectorResId)?.run {
+            val background = ContextCompat.getDrawable(requireContext(), R.drawable.ic_marker)
+            background!!.setBounds(0, 0, size, size)
+            setBounds(sidePadding, sidePadding-topOffset, size - sidePadding, size - sidePadding - topOffset)
+            val bitmap = Bitmap.createBitmap(
+                size,
+                size,
+                Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(bitmap)
+            background.draw(canvas)
+            this.draw(canvas)
+            return BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
+    }
+
+    fun removeMarkers() {
+        markers.forEach {
+            it.remove()
+        }
+        markers.clear()
+        markersMap.clear()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.map, menu)
+        countryMenuItem = menu.findItem(R.id.action_country)
+        val subMenu = countryMenuItem?.subMenu
+        viewModel.countries.forEach {
+            subMenu?.add(it)
+        }
+        countryMenuItem?.title = viewModel.country.value
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_add) {
+            navigate(R.id.action_mapFragment_to_poiEditorFragment)
+        }
+        if (item.itemId == 0){
+            viewModel.country.value = item.title.toString()
+            countryMenuItem?.title = item.title
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {

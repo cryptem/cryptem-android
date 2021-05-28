@@ -15,6 +15,7 @@
     <style name="Toolbar" parent="ThemeOverlay.MaterialComponents">
         <item name="android:textColorSecondary">@color/colorSecondary</item>
         <item name="titleTextColor">@color/colorSecondary</item>
+        <item name="android:textColorPrimary">@color/colorSecondary</item>
     </style>
 
     <style name="DepositIndicator" parent="ThemeOverlay.MaterialComponents">
@@ -22,8 +23,11 @@
     </style>
 
     <style name="BtcIndicator" parent="ThemeOverlay.MaterialComponents">
-        <item name="colorPrimary">@color/colorSecondary
-        </item>
+        <item name="colorPrimary">@color/colorSecondary</item>
+    </style>
+
+    <style name="EthIndicator" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/coin_ethereum_light</item>
     </style>
 
     <style name="HodlTheme" parent="ThemeOverlay.MaterialComponents">

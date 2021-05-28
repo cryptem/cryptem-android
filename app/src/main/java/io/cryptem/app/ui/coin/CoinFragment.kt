@@ -12,7 +12,9 @@ import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import io.cryptem.app.AppConfig
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentCoinBinding
 import io.cryptem.app.ui.base.BaseFragment
@@ -55,7 +57,12 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
         }
 
         observe(UrlEvent::class){
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.url)))
+            if (it.url.contains("binance") && !viewModel.prefs.isBinanceRegistered()){
+                showBinanceDialog(it.url)
+                return@observe
+            } else {
+                showUrl(it.url)
+            }
         }
     }
 
@@ -72,4 +79,14 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
             else -> false
         }
     }
+
+    fun showBinanceDialog(url: String){
+        MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.binance_dialog_title).setMessage(R.string.binance_dialog_message).setPositiveButton(R.string.yes){ _, _ ->
+            viewModel.prefs.saveBinanceRegistered()
+            showUrl(url)
+        }.setNegativeButton(R.string.no){ _, _ ->
+            showUrl(viewModel.getBinanceLink())
+        }.show()
+    }
+
 }

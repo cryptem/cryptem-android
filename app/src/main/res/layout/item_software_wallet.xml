@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="io.cryptem.app.model.ui.WalletCoin"/>
+        <variable
+            name="data"
+            type="io.cryptem.app.model.ui.SoftwareWallet" />
+
+        <variable
+            name="vm"
+            type="io.cryptem.app.ui.pay.PayVM" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Card.Clickable"
+        app:contentPadding="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/card_padding">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineSidebar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/portfolio_icon"
+                android:layout_height="@dimen/portfolio_icon"
+                android:layout_marginTop="@dimen/card_padding"
+                android:layout_marginBottom="@dimen/card_padding"
+                android:scaleType="fitCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:imageResource="@{data.icon}"
+                tools:src="@drawable/ic_wallet_exodus" />
+
+            <View
+                android:id="@+id/sidebar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textTitle"
+                style="@style/ItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{data.title}"
+                app:layout_constraintStart_toEndOf="@+id/icon"
+                app:layout_constraintTop_toTopOf="@+id/icon"
+                tools:text="Exodus" />
+
+            <LinearLayout
+                android:id="@+id/layoutSupportedCoins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/card_padding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textTitle">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.BTC)}"
+                    android:src="@drawable/ic_coin_bitcoin" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.ETH)}"
+                    android:src="@drawable/ic_coin_ethereum" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.ADA)}"
+                    android:src="@drawable/ic_coin_cardano" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.LTC)}"
+                    android:src="@drawable/ic_coin_litecoin" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.XMR)}"
+                    android:src="@drawable/ic_coin_monero" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton2"
+                style="@style/ImageButton"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:icon="@drawable/ic_download"
+                app:visibleOrGone="@{!vm.isAppInstalled(data.packageName)}"
+                android:onClick="@{() -> vm.installApp(data.packageName)}"
+                app:layout_constraintBottom_toBottomOf="@+id/sidebar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sidebar" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/materialRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{vm.defaultWallet.equals(data.packageName)}"
+                android:onClick="@{() -> vm.setDefaultWallet(data)}"
+                android:textColor="@color/colorSecondary"
+                android:theme="@style/HodlTheme"
+                app:layout_constraintBottom_toBottomOf="@+id/sidebar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/sidebar"
+                app:visibleOrGone="@{vm.isAppInstalled(data.packageName)}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

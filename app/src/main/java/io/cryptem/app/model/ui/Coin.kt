@@ -13,6 +13,7 @@ class Coin(
     var priceBtc : CoinPrice? = null,
     var priceUsd : CoinPrice? = null,
     var priceCustom : CoinPrice? = null,
+    var marketCap : Double? = null,
 ) {
 
     fun getPrice(currency : Currency) : Double?{
@@ -37,6 +38,10 @@ class Coin(
 
     fun getSatPriceString() : String?{
         return getPrice(Currency.BTC)?.toSatString()
+    }
+
+    fun getMarketCapString() : String?{
+        return marketCap?.toFiatString(Currency.USD, 0)
     }
 
     fun getPercentBtc(time : PercentTimeInterval) : Double?{

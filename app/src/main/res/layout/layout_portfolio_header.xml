@@ -17,9 +17,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
+    android:theme="@style/HodlTheme"
     android:minHeight="@dimen/portfolio_header_min_height"
-    android:paddingStart="@dimen/screen_padding"
-    android:paddingEnd="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:paddingBottom="8dp">
 
     <androidx.constraintlayout.widget.Guideline
@@ -108,7 +109,8 @@
         app:layout_constraintTop_toTopOf="@id/textValuationPercent"
         app:tintResource="@{data.valuationPercent >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
         tools:src="@drawable/ic_trend_up"
-        tools:tint="@color/trend_up_light" />
+        tools:tint="@color/trend_up_light"
+        app:visibleOrGone="@{vm.portfolio.deposit != 0}"/>
 
     <TextView
         android:id="@+id/textValuationPercent"
@@ -117,6 +119,7 @@
         android:text="@{data.valuationPercentString}"
         android:textSize="18sp"
         android:layout_marginEnd="8dp"
+        app:visibleOrGone="@{vm.portfolio.deposit != 0}"
         app:layout_constraintBottom_toBottomOf="@+id/iconTrend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -124,28 +127,22 @@
         tools:text="123 %"
         tools:textColor="@color/trend_up_light" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        tools:visibility="visible"
+        android:background="@color/black"
+        android:visibility="invisible"
+        tools:visibility="invisible"
         app:animationIn="@{@anim/slide_down_in}"
         app:animationOut="@{@anim/slide_up_out}"
-        app:cardCornerRadius="8dp"
-        app:contentPadding="4dp"
-        android:visibility="invisible"
+        app:visibleOrInvisible="@{vm.depositEditor}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iconWallet"
         app:layout_constraintTop_toTopOf="parent"
-        app:visibleOrInvisible="@{vm.depositEditor}">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="2dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -153,7 +150,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="4dp"
                 android:hint="@string/deposit_hint"
                 android:minWidth="100dp">
 
@@ -171,10 +167,9 @@
                 android:id="@+id/inputCurrency"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
-                android:layout_weight="0.64"
+                android:layout_weight="0.54"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="4dp"
                 android:hint="@string/request_currency_hint"
                 android:inputType="none">
 
@@ -182,31 +177,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
+                    app:layoutId="@{@layout/item_currency_dropdown}"
                     app:data="@{vm.currencies}"
                     app:selectedItem="@={vm.currency}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
+        style="@style/OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="24h"
-        android:minHeight="0dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:minWidth="44dp"
-        android:textSize="12sp"
-        android:textAllCaps="false"
+        android:minHeight="0dp"
+        android:onClick="@{() -> vm.toggleTrendTime()}"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:insetBottom="0dp"
-        android:insetTop="0dp"
         android:layout_marginEnd="8dp"
-        app:textResource="@{vm.trendTime.title}"
-        android:onClick="@{() -> vm.toggleTrendTime()}"
+        android:text="24h"
+        android:textAllCaps="false"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
+        app:textResource="@{vm.trendTime.title}" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

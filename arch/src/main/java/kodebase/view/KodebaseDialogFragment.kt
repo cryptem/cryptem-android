@@ -27,7 +27,7 @@ import kotlin.reflect.KClass
  * https://github.com/kodebase-android
  */
 
-abstract class KodebaseDialogFragment<B : ViewDataBinding, VM : KodebaseViewModel>(@LayoutRes val layoutId: Int) :
+abstract class KodebaseDialogFragment<VM : KodebaseViewModel, B : ViewDataBinding>(@LayoutRes val layoutId: Int) :
     DialogFragment() {
 
     abstract val viewModel : VM

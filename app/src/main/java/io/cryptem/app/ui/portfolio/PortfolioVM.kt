@@ -9,6 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.*
 import io.cryptem.app.ui.base.BaseVM
+import io.cryptem.app.ui.base.event.UrlEvent
+import io.cryptem.app.ui.pay.PayFragmentDirections
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
@@ -131,6 +133,10 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     fun showCoinDetail(coin: Coin){
         addCoinMode.value = false
         navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin.id, coin.name))
+    }
+
+    fun showTrezor(){
+        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToTrezorFragment())
     }
 
 }
