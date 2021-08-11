@@ -43,9 +43,7 @@ class RequestVM @Inject constructor(
 
     val rate = MutableLiveData<Double>()
 
-    val currencies = ObservableArrayList<Currency>().apply {
-        addAll(remoteConfigRepo.getSupportedCurrencies())
-    }
+    val currencies = ObservableArrayList<Currency>()
     val currency = MutableLiveData<Currency>()
 
     val wallets = ObservableArrayList<Wallet>()
@@ -57,6 +55,7 @@ class RequestVM @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         prefs.setHomeScreen(HomeScreen.PAYMENT_REQUEST)
+        loadCurrnecies()
 
         fiatAmountString.observeForever {
             fiatAmount.value = it.toDoubleOrNull() ?: 0.0
@@ -92,6 +91,16 @@ class RequestVM @Inject constructor(
         coinPrice.value = 0.0
         cryptoAmount.value = 0.0
         rate.value = 0.0
+    }
+
+    private fun loadCurrnecies(){
+        viewModelScope.launch {
+            kotlin.runCatching {
+                remoteConfigRepo.getSupportedCurrencies()
+            }.onSuccess {
+                currencies.addAll(it)
+            }
+        }
     }
 
     private fun loadCoinPrice() {

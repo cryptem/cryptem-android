@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.FirestoreRepository
-import io.cryptem.app.model.HomeScreen
 import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.ui.MapData
@@ -18,12 +17,12 @@ import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.UrlEvent
+import io.cryptem.app.ui.map.event.LoadDataEvent
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashMap
 
 @HiltViewModel
 class MapVM @Inject constructor (val locationClient : FusedLocationProviderClient, val firestoreRepository: FirestoreRepository, val prefs : SharedPrefsRepository, val remoteConfigRepository: RemoteConfigRepository) : BaseVM() {
@@ -32,9 +31,7 @@ class MapVM @Inject constructor (val locationClient : FusedLocationProviderClien
     val categories = ObservableArrayList<PoiCategory>()
     val pois = MutableLiveData<List<Poi>>()
     val selectedCategory = MutableLiveData<PoiCategory?>()
-
     val selectedPoi = MutableLiveData<Poi?>()
-
     val countries = ArrayList<String>()
     val country = SafeMutableLiveData(prefs.getCountry())
     var countryInitFlag = false
@@ -45,12 +42,7 @@ class MapVM @Inject constructor (val locationClient : FusedLocationProviderClien
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
         //prefs.setHomeScreen(HomeScreen.MAP)
-
-        countries.clear()
-        countries.addAll(remoteConfigRepository.getSupportedCountries())
-        if (!countries.contains(Locale.getDefault().country)){
-            countries.add(0, Locale.getDefault().country)
-        }
+        loadCountries()
         country.observeForever {
             if (countryInitFlag) {
                 prefs.saveCountry(it)
@@ -61,7 +53,21 @@ class MapVM @Inject constructor (val locationClient : FusedLocationProviderClien
         }
         search.observeForever {
             it?.let {
-                pois.value = data.value?.search(it, selectedCategory.value)
+                if (data.value != null){
+                    pois.value = data.value?.search(it, selectedCategory.value)
+                }
+            }
+        }
+    }
+
+    private fun loadCountries(){
+        viewModelScope.launch {
+            kotlin.runCatching {
+                remoteConfigRepository.getSupportedCountries()
+            }.onSuccess {
+                countries.clear()
+                countries.addAll(it)
+                publish(LoadDataEvent())
             }
         }
     }
@@ -100,7 +106,7 @@ class MapVM @Inject constructor (val locationClient : FusedLocationProviderClien
     }
 
     fun isCountrySupported() : Boolean{
-        return remoteConfigRepository.getSupportedCountries().contains(prefs.getCountry())
+        return countries.contains(prefs.getCountry())
     }
 
     fun getCountry() : String{

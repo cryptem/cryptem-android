@@ -33,13 +33,13 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     var initFlag = true
 
     val currency = MutableLiveData(portfolioRepo.getPortfolioCurrency())
-    val currencies = ObservableArrayList<Currency>().apply {
-        addAll(remoteConfigRepo.getSupportedCurrencies())
-    }
+    val currencies = ObservableArrayList<Currency>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.PORTFOLIO)
+        loadCurrnecies()
+
         currency.observeForever {
             if (!initFlag) {
                 savePortfolio()
@@ -49,6 +49,16 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
             }
         }
         loadPortfolioFromDb()
+    }
+
+    private fun loadCurrnecies(){
+        viewModelScope.launch {
+            kotlin.runCatching {
+                remoteConfigRepo.getSupportedCurrencies()
+            }.onSuccess {
+                currencies.addAll(it)
+            }
+        }
     }
 
     fun savePortfolio(){

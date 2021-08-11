@@ -2,11 +2,9 @@ package io.cryptem.app.ui.map
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -27,6 +25,7 @@ import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.UrlEvent
+import io.cryptem.app.ui.map.event.LoadDataEvent
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -57,8 +56,12 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
         defaultMarker = createMarkerBitmap(R.drawable.ic_poi_other)
-
         initMap()
+
+        observe(LoadDataEvent::class){
+            requireActivity().invalidateOptionsMenu()
+            loadData()
+        }
         viewModel.location.observe(viewLifecycleOwner) {
             it?.let {
                 val zoomPoint = LatLng(it.latitude, it.longitude)
@@ -119,11 +122,6 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         binding.mapView.getMapAsync { m ->
             map = m
             checkLocationPermission()
-            if (viewModel.isCountrySupported()){
-                viewModel.loadData()
-            } else {
-                showUnsupportedCountryDialog()
-            }
             map?.setOnMarkerClickListener { marker ->
                 return@setOnMarkerClickListener markersMap[marker]?.let {
                     viewModel.selectedPoi.value = it
@@ -133,7 +131,15 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         }
     }
 
-    fun showUnsupportedCountryDialog(){
+    private fun loadData(){
+        if (viewModel.isCountrySupported()){
+            viewModel.loadData()
+        } else {
+            showUnsupportedCountryDialog()
+        }
+    }
+
+    private fun showUnsupportedCountryDialog(){
         MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.map_unsupported_country_title)
             .setMessage(
                 getString(
@@ -148,7 +154,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
             .show()
     }
 
-    fun addMarkers(pois: List<Poi>) {
+    private fun addMarkers(pois: List<Poi>) {
         removeMarkers()
         pois.forEach { poi ->
             val options = MarkerOptions().apply {
@@ -198,7 +204,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         }
     }
 
-    fun removeMarkers() {
+    private fun removeMarkers() {
         markers.forEach {
             it.remove()
         }
@@ -210,6 +216,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         inflater.inflate(R.menu.map, menu)
         countryMenuItem = menu.findItem(R.id.action_country)
         val subMenu = countryMenuItem?.subMenu
+        subMenu?.add(viewModel.prefs.getCountry())
         viewModel.countries.forEach {
             subMenu?.add(it)
         }

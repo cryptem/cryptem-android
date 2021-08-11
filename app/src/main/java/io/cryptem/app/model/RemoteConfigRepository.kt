@@ -1,5 +1,6 @@
 package io.cryptem.app.model
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -9,6 +10,7 @@ import io.cryptem.app.model.ui.Currency
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class RemoteConfigRepository  @Inject constructor(){
@@ -16,6 +18,7 @@ class RemoteConfigRepository  @Inject constructor(){
     private val remoteConfig = Firebase.remoteConfig
 
     init {
+        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         val configSettings = remoteConfigSettings {
             if (BuildConfig.DEBUG){
                 minimumFetchIntervalInSeconds = 60
@@ -24,20 +27,23 @@ class RemoteConfigRepository  @Inject constructor(){
             }
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
-        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate()
     }
 
-    fun getSupportedCurrencies() : List<Currency>{
-        return remoteConfig.getString(SUPPORTED_CURRENCIES).split(",").map {
-            Currency(it.trim())
-        }.sortedBy {
-            it.code
+    suspend fun getSupportedCurrencies() = suspendCoroutine<List<Currency>> { cont ->
+        remoteConfig.ensureInitialized().addOnCompleteListener {
+            cont.resumeWith(Result.success(remoteConfig.getString(SUPPORTED_CURRENCIES).split(",").map {
+                Currency(it.trim())
+            }.sortedBy {
+                it.code
+            }))
         }
     }
 
-    fun getSupportedCountries() : List<String>{
-        return remoteConfig.getString(SUPPORTED_COUNTRIES).split(",").map { it.trim() }
+    suspend fun getSupportedCountries() = suspendCoroutine<List<String>> { cont ->
+        remoteConfig.ensureInitialized().addOnCompleteListener {
+            cont.resumeWith(Result.success(remoteConfig.getString(SUPPORTED_COUNTRIES).split(",").map { it.trim() }.sortedBy { it }))
+        }
     }
 
     fun getDonateAddress(coin : String) : String{
