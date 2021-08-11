@@ -41,6 +41,8 @@ class CoinVM @Inject constructor(
     val priceCustom = MutableLiveData<Double?>()
     var id: String = ""
     val currency = SafeMutableLiveData(portfolioRepo.getPortfolioCurrency())
+    val simpleCoinVisible = MutableLiveData<Boolean>()
+    val isInPortfolio = MutableLiveData(false)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
@@ -57,6 +59,11 @@ class CoinVM @Inject constructor(
         priceCustom.observeForever {
             recalculatePortfolio()
         }
+        checkSimpleCoin()
+    }
+
+    private fun checkSimpleCoin(){
+        simpleCoinVisible.value = (id == "bitcoin" || id == "ethereum" || id == "litecoin" || id == "bitcoin-cash" || id == "ripple")
     }
 
     private fun recalculatePortfolio(){
@@ -93,8 +100,10 @@ class CoinVM @Inject constructor(
                 portfolioRepo.getPortfolioCoin(id = id)
             }.onSuccess {
                 if (it != null){
-                    coin.value = it.coin
+                    isInPortfolio.value = true
+                    //coin.value = it.coin
                     val format = NumberFormat.getInstance(Locale.getDefault())
+                    format.isGroupingUsed = false
                     amountExchange.value = format.format(it.amountExchange).replace("\\s".toRegex(), "")
                     amountWallet.value = format.format(it.amountWallet).replace("\\s".toRegex(), "")
                     priceCustom.value = it.coin.priceCustom?.currentPrice
@@ -149,6 +158,10 @@ class CoinVM @Inject constructor(
                 L.e(it)
             }
         }
+    }
+
+    fun showSimpleCoin(){
+        publish(UrlEvent(remoteConfigRepository.getSimpleCoinLink()))
     }
 
     fun showCoinGecko() {

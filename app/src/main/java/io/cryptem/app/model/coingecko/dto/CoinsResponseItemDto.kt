@@ -3,6 +3,7 @@ package io.cryptem.app.model.coingecko.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.util.*
 
 @JsonClass(generateAdapter = true)
 data class CoinsResponseItemDto(
@@ -11,7 +12,7 @@ data class CoinsResponseItemDto(
     @Json(name = "ath_change_percentage")
     val athChangePercentage: Double?,
     @Json(name = "ath_date")
-    val athDate: String?,
+    val athDate: Date?,
     @Json(name = "atl")
     val atl: Double?,
     @Json(name = "atl_change_percentage")

@@ -12,12 +12,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +26,7 @@ import io.cryptem.app.databinding.FragmentMapBinding
 import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.ui.base.event.UrlEvent
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -37,6 +38,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
 
     companion object {
         const val REQUEST_LOCATION = 1
+        const val ZOOM = 13f
     }
 
     private var map: GoogleMap? = null
@@ -54,20 +56,29 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
+        defaultMarker = createMarkerBitmap(R.drawable.ic_poi_other)
+
         initMap()
         viewModel.location.observe(viewLifecycleOwner) {
-            val previousZoomLevel = 13.00f
             it?.let {
                 val zoomPoint = LatLng(it.latitude, it.longitude)
-                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(zoomPoint, previousZoomLevel))
+                map?.moveCamera(CameraUpdateFactory.newLatLngZoom(zoomPoint, ZOOM))
             }
-        }
-        viewModel.categories.observe(viewLifecycleOwner) {
-            initMarkers(it)
-            viewModel.loadPois()
         }
         viewModel.pois.observe(viewLifecycleOwner) {
             addMarkers(it)
+        }
+        observe(UrlEvent::class){
+            showUrl(it.url)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (viewModel.selectedPoi.value != null){
+                viewModel.selectedPoi.value = null
+                return@addCallback
+            } else {
+                navController().navigateUp()
+            }
         }
     }
 
@@ -109,18 +120,15 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
             map = m
             checkLocationPermission()
             if (viewModel.isCountrySupported()){
-                viewModel.loadCategories()
+                viewModel.loadData()
             } else {
                 showUnsupportedCountryDialog()
             }
             map?.setOnMarkerClickListener { marker ->
-                val poi = markersMap[marker]
-                try{
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(poi?.url)))
+                return@setOnMarkerClickListener markersMap[marker]?.let {
+                    viewModel.selectedPoi.value = it
                     true
-                } catch (t : Throwable){
-                    false
-                }
+                } ?: false
             }
         }
     }
@@ -136,7 +144,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
                 )
             )
             .setPositiveButton(R.string.ok){ _, _ -> }
-            .setNegativeButton(R.string.action_donate){ _, _ -> navigate(R.id.fragmentAbout)}
+            .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.fragmentAbout)}
             .show()
     }
 
@@ -151,7 +159,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
                     )
                 )
                 title(poi.name)
-                icon(markerIcons.get(poi.category) ?: defaultMarker)
+                icon(getMarkerIcon(poi.category) ?: defaultMarker)
             }
             map?.addMarker(options)?.let { marker ->
                 markers.add(marker)
@@ -160,14 +168,16 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         }
     }
 
-    private fun initMarkers(categories: List<PoiCategory>) {
-        categories.forEach {
-            markerIcons[it.id] = bitmapDescriptorFromVector(it.getIcon())
+    private fun getMarkerIcon(category: PoiCategory?) : BitmapDescriptor? {
+        return category?.let {
+            if (!markerIcons.contains(category.id)){
+                markerIcons[category.id] = createMarkerBitmap(category.getIcon())
+            }
+            return markerIcons[category.id] ?: defaultMarker
         }
-        defaultMarker = bitmapDescriptorFromVector(R.drawable.ic_poi_other)
     }
 
-    private fun bitmapDescriptorFromVector(vectorResId: Int): BitmapDescriptor? {
+    private fun createMarkerBitmap(vectorResId: Int): BitmapDescriptor? {
         val size = 128
         val sidePadding = 40
         val topOffset = 20

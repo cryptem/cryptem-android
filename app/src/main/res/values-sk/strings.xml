@@ -1,0 +1,102 @@
+<resources>
+    <string name="app_name">Cryptem</string>
+
+    <string name="yes">Áno</string>
+    <string name="no">Nie</string>
+    <string name="cancel">Zrušiť</string>
+    <string name="remove">Zmazať</string>
+    <string name="save">Uložiť</string>
+    <string name="ok">OK</string>
+    <string name="settings">Nastavenie</string>
+    <string name="edit">Upraviť</string>
+    <string name="donate">Darovať</string>
+    <string name="send">Odoslať</string>
+    <string name="retry">Skúsiť znova</string>
+
+    <string name="about">O aplikácii</string>
+    <string name="add_poi">Pridať obchodníka</string>
+
+    <string name="nav_pay">Zaplatiť</string>
+    <string name="nav_map">Mapa</string>
+    <string name="nav_request">Vyžiadať</string>
+    <string name="nav_prices">Market</string>
+    <string name="nav_portfolio">Portfólio</string>
+
+    <string name="request_title">Vyžiadať platbu</string>
+    <string name="request_amount_hint">Čiastka</string>
+    <string name="request_currency_hint">Mena</string>
+
+    <string name="pay_sw_wallet_warning">Softwérové peňaženky sú vhodné pre platenie, ale na dlhodobé držanie odporúčame Trezor.</string>
+
+    <string name="trezor_title">Kúpiť Trezor</string>
+    <string name="trezor_description">Nič neochráni vaše kryptomeny lepšie než hardwérová peňaženka. S Trezorem si môžete byť istý, že vaše privátne kľúče sú v bezpečí.</string>
+
+    <string name="request_no_addresses">Pridaj si do aplikácie svoju %s peňaženku, aby sa mohol vygenerovať QR kód pre platbu.</string>
+    <string name="request_dont_have_wallet">Nemám peňaženku</string>
+    <string name="request_have_wallet">Mám peňaženku</string>
+
+    <string name="wallets_title">Moje peňaženky</string>
+
+    <string name="wallet_title">Detail peňaženky</string>
+    <string name="wallet_name">Název peňaženky</string>
+    <string name="wallet_public_address">Verejná adresa</string>
+    <string name="wallet_remove_dialog">Naozaj chceš zmazať peňaženku?</string>
+    <string name="wallet_scan_warning">Pred uložením adresu skontroluj.</string>
+    <string name="scan_address_prompt">Naskenuj svoju verejnú %s adresu.</string>
+
+    <string name="portfolio_deposit_hint">Celkový vklad</string>
+    <string name="portfolio_empty">Zatiaľ nemáš v portfóliu žiadne coiny.</string>
+    <string name="portfolio_edit_exchange_amount">Na zmenárni</string>
+    <string name="portfolio_edit_wallet_amount">V Trezore</string>
+
+    <string name="portfolio_exchange_warning">Máš %s portfólia na zmenárni svoje prostriedky do bezpečia.</string>
+
+    <string name="buy">Kúpiť</string>
+    <string name="coin_ath">Historické maximum</string>
+    <string name="coin_marketcap">Trhová kapitalizácia</string>
+    <string name="coin_date">Dátum</string>
+    <string name="coin_current_price">Aktuálna cena</string>
+    <string name="coin_sale">Zľava</string>
+
+    <string name="market_dominance">Dominancia:</string>
+    <string name="market_altcoin_index">Altcoin sezóna: %s</string>
+    <string name="market_marketcap">Kapitalizácia: %s</string>
+    <string name="load_error">Nepodarilo sa načítať dáta, skontroluj pripojenie a skús to znova.</string>
+
+    <string name="binance_dialog_title">Zmenáreň Binance</string>
+    <string name="binance_dialog_message">Máš už vytvorený účet na najvätšej krypto zmenárni Binance?</string>
+
+    <string name="poi_editor_title">Pridať obchodníka</string>
+    <string name="poi_editor_instructions">Poznáš nejaký obchod nebo podnik, kde prijímajú kryptomeny? Podeľ sa s ostatnými a pridaj ho do mapy.</string>
+    <string name="poi_editor_gmaps_instructions_1">1) V aplikaci Google Mapy vyhľadaj obchodníka.</string>
+    <string name="poi_editor_gmaps_instructions_2">2) Dlhým stlačením si skopíruj do schránky adresu.</string>
+    <string name="poi_editor_gmaps_instructions_3">3) Klikni na tlačidlo "SZdiľať" a vyber Cryptom.</string>
+    <string name="poi_editor_checkbox">Som si istý/á, že tento obchodník prijímá krypto.</string>
+    <string name="poi_editor_address_hint">Adresa obchodníka</string>
+    <string name="poi_editor_category_hint">Kategórie</string>
+    <string name="poi_editor_google_maps">Prejsť do Google Map</string>
+    <string name="poi_editor_address_not_found_title">Neznámá adresa</string>
+    <string name="poi_editor_address_not_found_message">Nepodarilo sa získať GPS súradnice zo zadanej adresy, skús ju uprestniť. Ak problém pretrvává, skús to neskôr.</string>
+    <string name="poi_editor_success_title">Ďakujeme</string>
+    <string name="poi_editor_success_message">Miesto bolo odoslané na schválenie.</string>
+
+    <string name="map_unsupported_country_title">Tu ešte niesme</string>
+    <string name="map_unsupported_country_message">Krajina %s zatiaľ nieje podporovaná, ale usilovne na tom pracujeme!</string>
+    <string name="map_search">Vyhľadávanie</string>
+
+    <string name="about_license">Open-Source License GNU GPL v3.0</string>
+    <string name="about_url">https://cryptem.io</string>
+    <string name="about_support_us">Páči se ti aplikácia a chceš podporiť jej vývoj?</string>
+    <string name="about_copied">%s adresa skopírovaná do schránky.</string>
+    <string name="about_partners">Partneri</string>
+    <string name="report_poi">Nahlásiť problém</string>
+    <string name="report_poi_description">Daj nám vedieť, čo je s týmto bodom záujmu zle.</string>
+    <string name="report_poi_note">Popis problému</string>
+    <string name="report_poi_type">Typ problému</string>
+    <string name="report_poi_type_discontinued">Trvalo zatvorené</string>
+    <string name="report_poi_type_wrong_location">Zlá poloha</string>
+    <string name="report_poi_type_not_accepting_crypto">Neprijíma krypto</string>
+    <string name="report_poi_type_other">Iný problém</string>
+    <string name="poi_report_ok">Ďakujeme za hlásenie.</string>
+    <string name="poi_report_error">Niečo sa pokazilo, skús to proím neskôr.</string>
+</resources>

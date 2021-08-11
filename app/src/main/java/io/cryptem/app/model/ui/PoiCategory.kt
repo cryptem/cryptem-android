@@ -1,8 +1,11 @@
 package io.cryptem.app.model.ui
 
+import android.os.Parcelable
 import io.cryptem.app.R
+import kotlinx.parcelize.Parcelize
 
-class PoiCategory(val id: String, val name : String) {
+@Parcelize
+class PoiCategory(val id: String, val name : String) : Parcelable {
 
     override fun toString(): String {
         return name
@@ -10,6 +13,7 @@ class PoiCategory(val id: String, val name : String) {
 
     fun getIcon() : Int {
         return when(id){
+            "parallel_polis" -> R.drawable.ic_poi_parallel_polis
             "restaurant" -> R.drawable.ic_poi_restaurant
             "cafe" -> R.drawable.ic_poi_cafe
             "car_repair" -> R.drawable.ic_poi_car_repair
@@ -20,19 +24,19 @@ class PoiCategory(val id: String, val name : String) {
             "accommodation" -> R.drawable.ic_poi_accommodation
             "barber" -> R.drawable.ic_poi_barber
             "pub" -> R.drawable.ic_poi_pub
-            "bar" -> R.drawable.ic_poi_bar
             "wine" -> R.drawable.ic_poi_wine
             "theater" -> R.drawable.ic_poi_theater
             "taxi" -> R.drawable.ic_poi_taxi
             "nightlife" -> R.drawable.ic_poi_nightlife
             "home_service" -> R.drawable.ic_poi_home_service
-            "bookstore" -> R.drawable.ic_poi_bookstore
-            "cleaning_service" -> R.drawable.ic_poi_cleaning_service
+            "craftsman" -> R.drawable.ic_poi_craftsman
             "drugstore" -> R.drawable.ic_poi_drugstore
             "pharmacy" -> R.drawable.ic_poi_pharmacy
-            "plumber" -> R.drawable.ic_poi_plumber
-            "painter" -> R.drawable.ic_poi_painter
             "coworking" -> R.drawable.ic_poi_coworking
+            "wellness" -> R.drawable.ic_poi_wellness
+            "clothing" -> R.drawable.ic_poi_clothing
+            "sport" -> R.drawable.ic_poi_sport
+            "gas_station" -> R.drawable.ic_poi_gas_station
             "other" -> R.drawable.ic_poi_other
             else -> R.drawable.ic_poi_other
         }

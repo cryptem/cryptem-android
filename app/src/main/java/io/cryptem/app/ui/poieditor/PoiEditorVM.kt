@@ -13,8 +13,10 @@ import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseVM
+import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.ui.poieditor.event.GoogleMapsEvent
 import io.cryptem.app.ui.poieditor.event.PoiEditorValidationEvent
+import io.cryptem.app.ui.poieditor.event.PoiSentEvent
 import io.cryptem.app.ui.poieditor.event.ValidationException
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
@@ -89,12 +91,12 @@ class PoiEditorVM @Inject constructor(
                         country = country.value,
                         latitude = latitude.value,
                         longitude = longitude.value,
-                        category = category.value?.id
+                        category = category.value
                     )
                 )
             }.onSuccess {
                 loading.value = false
-                navigateUp()
+                publish(PoiSentEvent())
             }.onFailure {
                 loading.value = false
                 L.e(it)
@@ -104,4 +106,5 @@ class PoiEditorVM @Inject constructor(
             }
         }
     }
+
 }

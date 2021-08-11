@@ -13,7 +13,15 @@
         <key>binance</key>
         <value>https://www.binance.com/en/register?ref=XN7BY789</value>
     </entry>
+    <entry>
+        <key>simpleCoin</key>
+        <value>https://client.simplecoin.eu/?a=1232</value>
+    </entry>
 
+    <entry>
+        <key>trezor</key>
+        <value>https://trezor.io/?offer_id=12&amp;aff_id=8006</value>
+    </entry>
     <entry>
         <key>trezorOne</key>
         <value>https://shop.trezor.io/product/trezor-one-black?offer_id=35&amp;aff_id=8006</value>

@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:refreshing="@{vm.loading}"
-        app:onRefresh="@{() -> vm.loadPortfolio(false)}"
+        app:onRefresh="@{() -> vm.loadPortfolio(true)}"
         app:layout_constraintTop_toBottomOf="@id/textExchangeWarning"
         app:layout_constraintBottom_toBottomOf="parent">
 

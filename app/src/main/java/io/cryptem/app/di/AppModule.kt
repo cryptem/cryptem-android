@@ -17,6 +17,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.cryptem.app.BuildConfig
 import io.cryptem.app.model.api.CryptemApiDef
+import io.cryptem.app.model.api.MoshiDateAdapter
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.db.PortfolioDatabase
 import io.cryptem.app.model.db.WalletDatabase
@@ -71,7 +72,8 @@ class AppModule {
             .baseUrl("https://api.coingecko.com/")
             .addConverterFactory(
                 MoshiConverterFactory.create(
-                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                    Moshi.Builder().add(KotlinJsonAdapterFactory())
+                        .add(MoshiDateAdapter()).build()
                 )
             )
             .build()
@@ -104,25 +106,25 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesGeoceoder(@ApplicationContext context: Context) : Geocoder{
+    fun providesGeoceoder(@ApplicationContext context: Context): Geocoder {
         return Geocoder(context)
     }
 
     @Provides
     @Singleton
-    fun providesClipboardManager(@ApplicationContext context: Context) : ClipboardManager{
+    fun providesClipboardManager(@ApplicationContext context: Context): ClipboardManager {
         return context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
     @Provides
     @Singleton
-    fun providesPackageManager(@ApplicationContext context: Context) : PackageManager{
+    fun providesPackageManager(@ApplicationContext context: Context): PackageManager {
         return context.packageManager
     }
 
     @Provides
     @Singleton
-    fun provideVibrator(@ApplicationContext context: Context) : Vibrator{
+    fun provideVibrator(@ApplicationContext context: Context): Vibrator {
         return context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 }

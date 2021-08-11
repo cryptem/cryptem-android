@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:hint="@string/deposit_hint"
+                android:hint="@string/portfolio_deposit_hint"
                 android:minWidth="100dp">
 
                 <com.google.android.material.textfield.TextInputEditText

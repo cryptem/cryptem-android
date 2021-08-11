@@ -65,7 +65,6 @@ class MainActivity : KodebaseActivity<MainActivityVM, ActivityMainBinding>(R.lay
 
     private fun handleIntent(intent: Intent?) {
         val data = intent?.clipData?.getItemAt(0)?.text.toString()
-        L.d(data)
         if (data.contains("maps.app.goo.gl")) {
             val lines = data.split("\n")
             val name = lines[0]

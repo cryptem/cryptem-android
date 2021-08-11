@@ -13,8 +13,8 @@
             android:id="@+id/action_mapFragment_to_poiEditorFragment"
             app:destination="@id/poiEditorFragment" />
         <action
-            android:id="@+id/action_mapFragment_to_poiDialog"
-            app:destination="@id/poiDialog" />
+            android:id="@+id/action_mapFragment_to_reportPoiDialog"
+            app:destination="@id/reportPoiDialog" />
     </fragment>
     <fragment
         android:id="@+id/payFragment"
@@ -117,16 +117,16 @@
         android:id="@+id/fragmentAbout"
         android:name="io.cryptem.app.ui.about.FragmentAbout"
         tools:layout="@layout/fragment_about"
-        android:label="@string/about_title" />
+        android:label="@string/about" />
     <fragment
         android:id="@+id/trezorFragment"
         android:name="io.cryptem.app.ui.trezor.TrezorFragment"
         tools:layout="@layout/fragment_trezor"
         android:label="@string/trezor_title" />
     <dialog
-        android:id="@+id/poiDialog"
-        android:name="io.cryptem.app.ui.map.poi.PoiDialog"
-        tools:layout="@layout/dialog_poi" >
+        android:id="@+id/reportPoiDialog"
+        android:name="io.cryptem.app.ui.map.reportpoi.ReportPoiDialog"
+        tools:layout="@layout/dialog_report_poi" >
         <argument
             android:name="poi"
             app:argType="io.cryptem.app.model.ui.Poi" />

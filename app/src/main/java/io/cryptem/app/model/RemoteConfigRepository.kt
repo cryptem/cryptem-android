@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class RemoteConfigRepository  @Inject constructor(){
 
-    val remoteConfig = Firebase.remoteConfig
+    private val remoteConfig = Firebase.remoteConfig
 
     init {
         val configSettings = remoteConfigSettings {
@@ -51,6 +51,10 @@ class RemoteConfigRepository  @Inject constructor(){
         })
     }
 
+    fun getTrezorLink() : String{
+        return remoteConfig.getString(TREZOR)
+    }
+
     fun getTrezorOneLink() : String{
         return remoteConfig.getString(TREZOR_ONE)
     }
@@ -71,11 +75,17 @@ class RemoteConfigRepository  @Inject constructor(){
         return remoteConfig.getString(BINANCE)
     }
 
+    fun getSimpleCoinLink() : String{
+        return remoteConfig.getString(SIMPLE_COIN)
+    }
+
     companion object{
         const val SUPPORTED_CURRENCIES = "supportedCurrencies"
         const val SUPPORTED_COUNTRIES = "supportedCountries"
 
         const val BINANCE = "binance"
+        const val SIMPLE_COIN = "simpleCoin"
+        const val TREZOR = "trezor"
         const val TREZOR_ONE = "trezorOne"
         const val TREZOR_ONE_ALZA = "trezorOneAlza"
         const val TREZOR_T = "trezorT"

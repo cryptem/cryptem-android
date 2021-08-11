@@ -23,6 +23,7 @@ import javax.inject.Inject
 class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val marketRepo: MarketRepository) : BaseVM() {
 
     val loading = MutableLiveData(false)
+    val error = MutableLiveData(false)
     val items = ObservableArrayList<Coin>()
     val currency = MutableLiveData(prefs.getPortfolioCurrency())
     val marketGlobalData = MutableLiveData<MarketGlobalData>(MarketGlobalData())
@@ -49,6 +50,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
                 calculateAltcoinIndex(it)
             }.onFailure {
                 L.e(it)
+                error.value = true
                 loading.value = false
             }
         }
@@ -81,6 +83,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
             }.onSuccess {
                 marketGlobalData.value = it
             }.onFailure {
+                error.value = true
                 L.e(it)
             }
         }
@@ -101,5 +104,11 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
 
     fun getAltcoinIndexString(value : Double?) : String?{
         return value?.toPercentString(0) ?: "..."
+    }
+
+    fun retry(){
+        error.value = false
+        loadMarketData()
+        loadCoins()
     }
 }

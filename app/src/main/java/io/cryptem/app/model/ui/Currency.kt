@@ -1,5 +1,6 @@
 package io.cryptem.app.model.ui
 
+import java.util.*
 import java.util.Currency
 
 class Currency(ticker : String) {
@@ -9,7 +10,7 @@ class Currency(ticker : String) {
         val USD = Currency("USD")
     }
 
-    val currency : Currency = Currency.getInstance(ticker.toUpperCase())
+    val currency : Currency = Currency.getInstance(ticker.toUpperCase(Locale.getDefault()))
     val code = currency.currencyCode
 
     override fun toString(): String {

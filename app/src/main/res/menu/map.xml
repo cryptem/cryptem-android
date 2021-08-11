@@ -10,6 +10,6 @@
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_add_poi"
-        android:title="@string/action_add_poi"
+        android:title="@string/add_poi"
         app:showAsAction="always" />
 </menu>

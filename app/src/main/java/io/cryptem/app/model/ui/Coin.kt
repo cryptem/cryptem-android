@@ -40,6 +40,14 @@ class Coin(
         return getPrice(Currency.BTC)?.toSatString()
     }
 
+    fun getAthUsdString() : String?{
+        return priceUsd?.ath?.toFiatString(Currency.USD)
+    }
+
+    fun getAthBtcString() : String?{
+        return priceBtc?.ath?.toBtcString()
+    }
+
     fun getMarketCapString() : String?{
         return marketCap?.toFiatString(Currency.USD, 0)
     }

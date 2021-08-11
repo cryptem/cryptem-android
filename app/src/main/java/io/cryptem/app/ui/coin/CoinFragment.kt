@@ -34,13 +34,11 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val focusChangeListener = object: OnFocusChangeListener {
-            override fun onFocusChange(v: View, hasFocus: Boolean) {
-                if (!hasFocus) {
-                    val imm: InputMethodManager =
-                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.windowToken, 0)
-                }
+        val focusChangeListener = OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                val imm: InputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(v.windowToken, 0)
             }
         }
 
@@ -56,6 +54,10 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
             return@setOnEditorActionListener true
         }
 
+        viewModel.isInPortfolio.observe(viewLifecycleOwner){
+            activity?.invalidateOptionsMenu()
+        }
+
         observe(UrlEvent::class){
             if (it.url.contains("binance") && !viewModel.prefs.isBinanceRegistered()){
                 showBinanceDialog(it.url)
@@ -67,7 +69,9 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.coin, menu)
+        if (viewModel.isInPortfolio.value == true) {
+            inflater.inflate(R.menu.coin, menu)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -7,10 +7,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.ext.toFiatString
-import io.cryptem.app.model.MarketRepository
-import io.cryptem.app.model.RemoteConfigRepository
-import io.cryptem.app.model.SharedPrefsRepository
-import io.cryptem.app.model.WalletRepository
+import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.model.ui.SoftwareWallet
 import io.cryptem.app.model.ui.Wallet
@@ -59,6 +56,8 @@ class RequestVM @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
+        prefs.setHomeScreen(HomeScreen.PAYMENT_REQUEST)
+
         fiatAmountString.observeForever {
             fiatAmount.value = it.toDoubleOrNull() ?: 0.0
             calculateCryptoAmount()

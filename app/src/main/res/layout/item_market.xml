@@ -89,7 +89,6 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.usdPriceString}"
                 android:textColor="@color/textPrimary"
-                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:text="1000 USD" />

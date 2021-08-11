@@ -1,122 +1,120 @@
 <resources>
     <string name="app_name">Cryptem</string>
 
-    <string name="yes">Ano</string>
-    <string name="no">Ne</string>
-    <string name="cancel">Zrušit</string>
-    <string name="remove">Smazat</string>
-    <string name="save">Uložit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
+    <string name="save">Save</string>
     <string name="ok">OK</string>
-    <string name="settings">Nastavení</string>
+    <string name="settings">Settings</string>
+    <string name="edit">Edit</string>
+    <string name="donate">Donate</string>
+    <string name="send">Send</string>
+    <string name="retry">Retry</string>
 
-    <string name="action_about">O aplikaci</string>
-    <string name="action_donate">Donate</string>
-    <string name="action_add_poi">Přidat obchodníka</string>
+    <string name="about">About</string>
+    <string name="add_poi">Add new merchant</string>
 
-    <string name="nav_pay">Zaplatit</string>
-    <string name="nav_map">Mapa</string>
-    <string name="nav_request">Vyžádat</string>
+    <string name="nav_pay">Pay</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_request">Request</string>
     <string name="nav_prices">Market</string>
     <string name="nav_portfolio">Portfolio</string>
 
-    <string name="request_title">Vyžádat platbu</string>
-    <string name="request_amount_hint">Částka</string>
-    <string name="request_currency_hint">Měna</string>
-    <string name="request_coin_hint">Coin</string>
-    <string name="request_create_qr">Vytvořit QR</string>
+    <string name="request_title">Request payment</string>
+    <string name="request_amount_hint">Amount</string>
+    <string name="request_currency_hint">Currency</string>
 
-    <string name="pay_no_wallet_installed">Zatím nemáš nainstalovanou žádnou kompatibilní peněženku.</string>
-    <string name="pay_recommended_wallets">Aby vše správně fungovalo, doporučujeme Exodus nebo Coinomi.</string>
-    <string name="pay_sw_wallet_warning">Softwarové peněženky jsou vhodné pro placení, ale na dlouhodobé držení doporučujeme Trezor.</string>
-    <string name="pay_default_wallet">Výchozí</string>
+    <string name="pay_sw_wallet_warning">Software wallets are suitable for small payments. Higher balances should always be kept in Trezor.</string>
 
-    <string name="trezor_description">Nic neochrání vaše kryptoměny lépe než hardwarová peněženka. S Trezorem si můžete být jistí, že vaše privátní klíče jsou v bezpečí.</string>
-    <string name="trezor_one">Trezor One</string>
-    <string name="trezor_t">Trezor Model T</string>
-    <string name="trezor_title">Koupit Trezor</string>
+    <string name="trezor_title">Buy Trezor</string>
+    <string name="trezor_description">Nothing protects your cryptocurrencies better than a hardware wallet. With Trezor you can be sure your private keys are safe. </string>
+    <string name="trezor_one" translatable="false" >Trezor One</string>
+    <string name="trezor_t" translatable="false" >Trezor Model T</string>
 
-    <string name="format_fiat_amount">%.2f %s</string>
-    <string name="format_crypto_amount">%.8f %s</string>
-    <string name="format_rate">1 %s = %s</string>
-    <string name="request_fee_mask">Poplatek: %f %s</string>
-    <string name="request_no_addresses">Přidej si do aplikace svojí %s peněženku, aby se  mohl vygenerovat QR kód pro platbu.</string>
-    <string name="request_dont_have_wallet">Nemám peněženku</string>
-    <string name="request_have_wallet">Mám peněženku</string>
+    <string name="format_crypto_amount" translatable="false" >%.8f %s</string>
+    <string name="format_rate" translatable="false" >1 %s = %s</string>
+    <string name="request_no_addresses">Add your %s wallet to your app to generate a QR code for payment.</string>
+    <string name="request_dont_have_wallet">I don\'t have a wallet</string>
+    <string name="request_have_wallet">I have a wallet</string>
 
-    <string name="wallets_title">Moje peněženky</string>
+    <string name="wallets_title">My wallets</string>
 
-    <string name="wallet_title">Detail peněženky</string>
-    <string name="wallet_private_name">Název peněženky</string>
-    <string name="wallet_public_name">Veřejný název (nepovinné)</string>
-    <string name="wallet_public_address">Veřejná adresa</string>
-    <string name="wallet_remove_dialog">Opravdu chceš smazat peněženku?</string>
-    <string name="wallet_scan_warning">Po naskenování QR celou adresu zkontroluj!</string>
-    <string name="wallet_public_name_description">Slouží zákazníkovi pro snadnější identifikaci platby</string>
-    <string name="my_addresses_info">Zde zadej veřejné (public) adresy peněženek, které chceš používat k přijímání plateb.</string>
-    <string name="scan_address_prompt">Naskenuj svojí veřejnou %s adresu.</string>
+    <string name="wallet_title">Wallet details</string>
+    <string name="wallet_name">Wallet name</string>
+    <string name="wallet_public_address">Public adress</string>
+    <string name="wallet_remove_dialog">Do you really want to remove your wallet?</string>
+    <string name="wallet_scan_warning">Double-check your address before saving.</string>
+    <string name="scan_address_prompt">Scan your public %s address.</string>
 
-    <string name="percent_format">%.1f%%</string>
-    <string name="dca_format">DCA: %s</string>
-    <string name="format_rank">%d.</string>
+    <string name="format_rank" translatable="false" >%d.</string>
 
-    <string name="time_day">24h</string>
-    <string name="time_week">7d</string>
-    <string name="time_month">30d</string>
-    <string name="time_quarter">90 dní</string>
+    <string name="time_day" translatable="false" >24h</string>
+    <string name="time_week" translatable="false" >7d</string>
+    <string name="time_month" translatable="false" >30d</string>
 
-    <string name="deposit_hint">Suma vkladů</string>
+    <string name="portfolio_deposit_hint">Sum of deposits</string>
+    <string name="portfolio_empty">You don\'t have any coins in your portfolio yet.</string>
+    <string name="portfolio_edit_exchange_amount">On exchange</string>
+    <string name="portfolio_edit_wallet_amount">In Trezor</string>
 
-    <string name="hodl_action_edit">Upravit</string>
+    <string name="portfolio_exchange_warning">You have %s of your portfolio on exchanges, move your funds to safety.</string>
 
-    <string name="btc">₿</string>
-    <string name="czk">Kč</string>
-    <string name="usd">$</string>
-    <string name="eur">€</string>
+    <string name="coin_ath">All Time High</string>
+    <string name="coin_marketcap">Marketcap</string>
+    <string name="coin_date">Date</string>
+    <string name="coin_trade_to_btc" translatable="false" >BTC</string>
+    <string name="coin_trade_to_usdt" translatable="false" >USDT</string>
+    <string name="coingecko" translatable="false" >Coin Gecko</string>
+    <string name="simple_coin" translatable="false" >Simple Coin</string>
+    <string name="buy">Buy</string>
 
-    <string name="portfolio">HODL</string>
-    <string name="portfolio_empty">Zatím nemáš v portfoliu žádné coiny.</string>
-    <string name="portfolio_edit_exchange_amount">Na směnárně</string>
-    <string name="portfolio_edit_wallet_amount">V Trezoru</string>
-    <string name="portfolio_edit_remove">Odebrat</string>
-    <string name="portfolio_edit_save">Uložit</string>
-    <string name="portfolio_exchange_warning">Máš %s portfolia na směnárně, přesuň svoje prostředky do bezpečí.</string>
-
-    <string name="coin_trade_to_btc">BTC</string>
-    <string name="coin_trade_to_usdt">USDT</string>
-    <string name="coin_action_save">Uložit</string>
-    <string name="coin_action_delete">Odebrat</string>
-    <string name="coingecko">Coin Gecko</string>
+    <string name="coin_current_price">Current Price</string>
+    <string name="coin_sale">Sale</string>
 
     <string name="market_dominance">Dominance:</string>
-    <string name="market_btc_dominance">BTC %s</string>
-    <string name="market_eth_dominance">ETH %s</string>
-    <string name="market_altcoin_index">Altcoin sezóna: %s</string>
-    <string name="market_marketcap">Kapitalizace: %s</string>
+    <string name="market_btc_dominance" translatable="false" >BTC %s</string>
+    <string name="market_eth_dominance" translatable="false" >ETH %s</string>
+    <string name="market_altcoin_index">Altcoin season: %s</string>
+    <string name="market_marketcap">Marketcap: %s</string>
+    <string name="load_error">Load data failed, check your connection and try again.</string>
 
-    <string name="binance_dialog_title">Směnárna Binance</string>
-    <string name="binance_dialog_message">Máš už vytvořený účet na největší krypto směnárně Binance?</string>
+    <string name="binance_dialog_title">Binance Exchange</string>
+    <string name="binance_dialog_message">Do you already own an account at the largest crypto exchange Binance?</string>
 
-    <string name="poi_editor_title">Přidat obchodníka</string>
-    <string name="poi_editor_instructions">Znáš nějaký obchod nebo podnik, kde přijímají kryptoměny? Poděl se s ostatními a přidej ho do mapy.</string>
-    <string name="poi_editor_gmaps_instructions_1">1) V aplikaci Google Mapy vyhledej obchodníka.</string>
-    <string name="poi_editor_gmaps_instructions_2">2) Dlouhým stisknutím si zkopíruj do schránky adresu.</string>
-    <string name="poi_editor_gmaps_instructions_3">3) Klikni na tlačítko "Sdílet" a vyber Cryptem.</string>
-    <string name="poi_editor_checkbox">Jsem si jistý/á, že tento obchodník přijímá krypto.</string>
-    <string name="poi_editor_address_hint">Adresa obchodníka</string>
-    <string name="poi_editor_category_hint">Kategorie</string>
-    <string name="poi_editor_google_maps">Přejít do Google Map</string>
-    <string name="poi_editor_send">Odeslat</string>
-    <string name="poi_editor_address_not_found_title">Neznámá adresa</string>
-    <string name="poi_editor_address_not_found_message">Nepodařilo se získat GPS souřadnice ze zadané adresy, zkus jí upřesnit. Pokud problém přetrvává zkus to později.</string>
+    <string name="poi_editor_title">Add new merchant</string>
+    <string name="poi_editor_instructions">Do you know any business or enterprise where they accept cryptocurrencies? Share it with others and add them to the map.</string>
+    <string name="poi_editor_gmaps_instructions_1">1) Find a merchant in Google Maps.</string>
+    <string name="poi_editor_gmaps_instructions_2">2) Long press on address to copy it to the clipboard. </string>
+    <string name="poi_editor_gmaps_instructions_3">3) Click the "Share" button and select Cryptem.</string>
+    <string name="poi_editor_checkbox">I\'m sure this merchant is accepting the crypto.</string>
+    <string name="poi_editor_address_hint">Merchant address</string>
+    <string name="poi_editor_category_hint">Category</string>
+    <string name="poi_editor_google_maps">Go to Google Map</string>
+    <string name="poi_editor_address_not_found_title">Unknown address</string>
+    <string name="poi_editor_address_not_found_message">Failed to get GPS coordinates from the specified address, try to specify it. If the problem persists, please try again later.</string>
+    <string name="poi_editor_success_title">Thank you</string>
+    <string name="poi_editor_success_message">Place has been submitted and waiting for approval.</string>
 
-    <string name="map_unsupported_country_title">Tady ještě nejsme</string>
-    <string name="map_unsupported_country_message">Země %s zatím není podporovaná, ale usilovně na tom pracujeme!</string>
-
-    <string name="about_title">O aplikaci</string>
+    <string name="map_unsupported_country_title">We are not here yet</string>
+    <string name="map_unsupported_country_message">Country %s is not supported yet, but we are working hard on it!</string>
+    <string name="map_search">Search</string>
 
     <string name="about_license">Open-Source License GNU GPL v3.0</string>
-    <string name="about_github">https://github.com/cryptem</string>
-    <string name="about_powered">Powered by CoinGecko.com</string>
-    <string name="about_support_us">Líbí se ti aplikace a chceš podpořit její vývoj?</string>
-    <string name="about_copied">%s adresa zkopírována do schránky.</string>
+    <string name="about_url">https://cryptem.io</string>
+    <string name="about_support_us">Do you like the app and want to support development?</string>
+    <string name="about_copied">%s address copied to clipboard.</string>
+    <string name="about_partners">Partners</string>
+    <string name="report_poi">Report problem</string>
+    <string name="report_poi_description">Tell us, what\'s wrong with this POI.</string>
+    <string name="report_poi_note">Problem description</string>
+    <string name="report_poi_type">Problem type</string>
+    <string name="report_poi_type_discontinued">Permanently Closed</string>
+    <string name="report_poi_type_wrong_location">Wrong Location</string>
+    <string name="report_poi_type_not_accepting_crypto">Not accepting crypto</string>
+    <string name="report_poi_type_other">Other problem</string>
+    <string name="poi_report_ok">Thank you for your report.</string>
+    <string name="poi_report_error">Something went wrong, please try again later.</string>
+
 </resources>

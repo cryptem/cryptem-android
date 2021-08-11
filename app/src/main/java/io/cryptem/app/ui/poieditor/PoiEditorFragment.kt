@@ -1,6 +1,5 @@
 package io.cryptem.app.ui.poieditor
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,6 +11,7 @@ import io.cryptem.app.databinding.FragmentPoiEditorBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.poieditor.event.GoogleMapsEvent
 import io.cryptem.app.ui.poieditor.event.PoiEditorValidationEvent
+import io.cryptem.app.ui.poieditor.event.PoiSentEvent
 import io.cryptem.app.ui.poieditor.event.ValidationException
 import java.util.*
 
@@ -35,6 +35,14 @@ class PoiEditorFragment : BaseFragment<PoiEditorVM, FragmentPoiEditorBinding>(R.
                 ValidationException.Type.UNSUPPORTED_COUNTRY -> showUnsupportedCountryDialog()
             }
         }
+
+        observe(PoiSentEvent::class){
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.poi_editor_success_title)
+                .setMessage(R.string.poi_editor_success_message)
+                .setPositiveButton(R.string.ok){ _, _ -> }
+                .setOnDismissListener{ navController().navigateUp() }.show()
+        }
     }
 
     fun showUnsupportedCountryDialog(){
@@ -42,7 +50,7 @@ class PoiEditorFragment : BaseFragment<PoiEditorVM, FragmentPoiEditorBinding>(R.
             MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.map_unsupported_country_title)
                 .setMessage(getString(R.string.map_unsupported_country_message,  Locale(Locale.getDefault().language, it).displayCountry))
                 .setPositiveButton(R.string.ok){ _, _ -> }
-                .setNegativeButton(R.string.action_donate){ _,_ -> navigate(R.id.fragmentAbout)}.show()
+                .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.fragmentAbout)}.show()
         }
     }
 

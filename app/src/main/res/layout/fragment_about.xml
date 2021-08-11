@@ -39,7 +39,7 @@
             android:id="@+id/textAbout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_github"
+            android:text="@string/about_url"
             android:onClick="@{() -> vm.gitHub()}"
             android:textColor="#555"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,78 +64,91 @@
             android:id="@+id/scrollAddresses"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/iconCoinGecko"
+            app:layout_constraintBottom_toTopOf="@+id/textPartners"
             app:layout_constraintTop_toBottomOf="@+id/textSupportUs">
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentPadding="16dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp">
+                app:contentPadding="16dp">
 
-            <LinearLayout
-                android:id="@+id/layoutDonateAddresses"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/layoutDonateAddresses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.btcAddress}"
-                    app:coin="@{WalletCoin.BTC}"
-                    app:vm="@{vm}" />
+                    <include
+                        layout="@layout/layout_donate_address"
+                        app:address="@{vm.btcAddress}"
+                        app:coin="@{WalletCoin.BTC}"
+                        app:vm="@{vm}" />
 
-                <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.ethAddress}"
-                    app:coin="@{WalletCoin.ETH}"
-                    app:vm="@{vm}" />
+                    <include
+                        layout="@layout/layout_donate_address"
+                        app:address="@{vm.ltcAddress}"
+                        app:coin="@{WalletCoin.LTC}"
+                        app:vm="@{vm}" />
 
-                <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.adaAddress}"
-                    app:coin="@{WalletCoin.ADA}"
-                    app:vm="@{vm}" />
+                    <include
+                        layout="@layout/layout_donate_address"
+                        app:address="@{vm.xmrAddress}"
+                        app:coin="@{WalletCoin.XMR}"
+                        app:vm="@{vm}" />
 
-                <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.ltcAddress}"
-                    app:coin="@{WalletCoin.LTC}"
-                    app:vm="@{vm}" />
+                    <include
+                        layout="@layout/layout_donate_address"
+                        app:address="@{vm.ethAddress}"
+                        app:coin="@{WalletCoin.ETH}"
+                        app:vm="@{vm}" />
 
-                <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.xmrAddress}"
-                    app:coin="@{WalletCoin.XMR}"
-                    app:vm="@{vm}" />
+                    <include
+                        layout="@layout/layout_donate_address"
+                        app:address="@{vm.adaAddress}"
+                        app:coin="@{WalletCoin.ADA}"
+                        app:vm="@{vm}" />
 
-            </LinearLayout>
+
+
+
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </ScrollView>
 
-        <ImageView
-            android:id="@+id/iconCoinGecko"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_coingecko_color"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textPowered" />
-
         <TextView
-            android:id="@+id/textPowered"
+            android:id="@+id/textPartners"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:gravity="center"
+            android:text="@string/about_partners"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerPartners"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPartners"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.coinGecko()}"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/about_powered"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="4dp"
+            app:viewModel="@{vm}"
+            app:data="@{vm.partners}"
+            app:layoutId="@{@layout/item_partner}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iconCoinGecko" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textVersion"

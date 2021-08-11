@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/recyclerCoins"
                 android:layout_marginTop="8dp"
-                android:hint="@string/wallet_private_name"
+                android:hint="@string/wallet_name"
                 android:id="@+id/inputName">
 
                 <com.google.android.material.textfield.TextInputEditText

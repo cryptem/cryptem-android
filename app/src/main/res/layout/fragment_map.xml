@@ -6,6 +6,9 @@
         <variable
             name="vm"
             type="io.cryptem.app.ui.map.MapVM" />
+        <variable
+            name="lifecycle"
+            type="androidx.lifecycle.LifecycleOwner" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -15,6 +18,136 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        app:cardCornerRadius="32dp"
+        android:layout_marginEnd="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:hint="@string/map_search"
+            android:padding="4dp"
+            android:text="@={vm.search}" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:layout_marginTop="4dp"
+        app:data="@{vm.categories}"
+        app:layoutId="@{@layout/item_poi_category}"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        app:lifecycle="@{lifecycle}"
+        app:viewModel="@{vm}" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:animationIn="@{@anim/slide_up_in}"
+        app:animationOut="@{@anim/slide_down_out}"
+        app:visibleOrGone="@{vm.selectedPoi != null}"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:contentPadding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutPoiDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:text="@{vm.selectedPoi.name}"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonGmaps"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Test POI" />
+
+        <ImageView
+            android:id="@+id/imageIcon"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textCategory"
+            app:layout_constraintTop_toTopOf="@+id/textCategory"
+            app:layout_constraintStart_toStartOf="parent"
+            app:imageResource="@{vm.selectedPoi.category.icon}"
+            app:tint="@color/textSecondary"
+            tools:src="@drawable/ic_poi_restaurant" />
+
+        <TextView
+            android:id="@+id/textCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{vm.selectedPoi.category.name}"
+            android:textSize="12sp"
+            android:textColor="@color/textSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/buttonGmaps"
+            app:layout_constraintStart_toEndOf="@id/imageIcon"
+            app:layout_constraintTop_toBottomOf="@+id/textName"
+            tools:text="Restaurant" />
+
+        <TextView
+            android:id="@+id/textAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@{vm.selectedPoi.address}"
+            app:layout_constraintEnd_toStartOf="@+id/buttonGmaps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCategory"
+            tools:text="Street 123, City" />
+
+        <ImageButton
+            android:id="@+id/buttonGmaps"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="4dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_gmaps"
+            android:background="@drawable/image_button_background"
+            android:onClick="@{() -> vm.showInGmaps(vm.selectedPoi)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/report_poi"
+            android:textSize="10sp"
+            android:onClick="@{() -> vm.report(vm.selectedPoi)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textAddress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

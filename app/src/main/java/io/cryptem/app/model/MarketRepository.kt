@@ -13,7 +13,7 @@ class MarketRepository @Inject constructor(
 
     private val marketCoins = ListCache(5, funLoad = this::loadMarketCoins)
     private val marketCoinsMap =
-        HashedCache(5, funLoadItem = this::loadMarketCoin, keyMapFun = { it.id })
+        HashedCache(15, funLoadItem = this::loadMarketCoin, keyMapFun = { it.id })
     private val marketGlobalData = Cache(60, funLoad = this::loadMarketGlobalData)
 
     private suspend fun loadMarketCoins(): List<Coin> {

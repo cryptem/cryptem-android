@@ -192,7 +192,7 @@
         android:layout_gravity="center"
         android:enabled="@{checkAcceptCrypto.checked}"
         android:onClick="@{() -> vm.send()}"
-        android:text="@string/poi_editor_send"
+        android:text="@string/send"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkAcceptCrypto"

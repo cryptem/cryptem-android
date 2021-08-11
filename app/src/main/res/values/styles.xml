@@ -14,10 +14,11 @@
     <style name="Button" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/button_background_selector</item>
         <item name="android:textColor">@color/black</item>
+        <item name="cornerRadius">24dp</item>
     </style>
 
     <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-
+        <item name="cornerRadius">24dp</item>
     </style>
 
     <style name="ImageButton" parent="Widget.MaterialComponents.Button">

@@ -35,4 +35,7 @@
     <color name="trend_up_light">#B8FF83</color>
     <color name="trend_down_light">#FF9393</color>
 
+    <color name="trezor">#02b758</color>
+    <color name="alza">#093266</color>
+
 </resources>

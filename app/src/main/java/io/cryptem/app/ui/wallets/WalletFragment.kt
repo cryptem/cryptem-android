@@ -62,7 +62,7 @@ class WalletFragment : BaseFragment<WalletVM, FragmentWalletBinding>(R.layout.fr
             captureActivity = QrScannerActivity::class.java
             setOrientationLocked(false)
             setPrompt(getString(R.string.scan_address_prompt, viewModel.wallet.value?.coin?.title))
-        }.initiateScan(IntentIntegrator.QR_CODE_TYPES)
+        }.initiateScan(listOf((IntentIntegrator.QR_CODE)))
     }
 
     private fun scanQr() {
