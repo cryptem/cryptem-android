@@ -18,7 +18,7 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
-class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository, private val remoteConfigRepo : RemoteConfigRepository, private val marketRepo : MarketRepository, private val portfolioRepo : PortfolioRepository) : BaseVM() {
+class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository, private val marketRepo : MarketRepository, private val portfolioRepo : PortfolioRepository) : BaseVM() {
 
     val loading = MutableLiveData(false)
     val loadingCoins = MutableLiveData(false)
@@ -29,42 +29,11 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     val addCoinMode = MutableLiveData(false)
     val trendTime = MutableLiveData(PercentTimeInterval.DAY)
     val layoutStrategy = PortfolioLayoutStrategy()
-    val depositEditor = SafeMutableLiveData(false)
-    var initFlag = true
-
-    val currency = MutableLiveData(portfolioRepo.getPortfolioCurrency())
-    val currencies = ObservableArrayList<Currency>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.PORTFOLIO)
-        loadCurrnecies()
-
-        currency.observeForever {
-            if (!initFlag) {
-                savePortfolio()
-                depositEditor.value = false
-            } else {
-                initFlag = false
-            }
-        }
         loadPortfolioFromDb()
-    }
-
-    private fun loadCurrnecies(){
-        viewModelScope.launch {
-            kotlin.runCatching {
-                remoteConfigRepo.getSupportedCurrencies()
-            }.onSuccess {
-                currencies.addAll(it)
-            }
-        }
-    }
-
-    fun savePortfolio(){
-        portfolioRepo.setPortfolioDeposit(deposit.value?.toLongOrNull() ?: 0L)
-        portfolioRepo.setPortfolioCurrency(currency.value!!)
-        loadPortfolio(force = true)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -123,10 +92,6 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         }
     }
 
-    fun toggleDepositEditor(){
-        depositEditor.value = !depositEditor.value!!
-    }
-
     fun toggleTrendTime(){
         trendTime.value = when(trendTime.value){
             PercentTimeInterval.DAY -> PercentTimeInterval.WEEK
@@ -141,8 +106,12 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     }
 
     fun showCoinDetail(coin: Coin){
-        addCoinMode.value = false
         navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin.id, coin.name))
+    }
+
+    fun addCoin(coin: Coin){
+        addCoinMode.value = false
+        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin.id, coin.name, addToPortfolio = true))
     }
 
     fun showTrezor(){

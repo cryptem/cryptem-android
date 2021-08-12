@@ -27,6 +27,9 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val LAST_PORTFOLIO_REFRESH = "LAST_PORTFOLIO_REFRESH"
         const val HOME_SCREEN = "HOME_SCREEN"
         const val BINANCE_REGISTERED = "BINANCE_REGISTERED"
+        const val BINANCE_SYNC = "BINANCE_SYNC"
+        const val BINANCE_API_KEY = "BINANCE_API_KEY"
+        const val BINANCE_SECRET_KEY = "BINANCE_SECRET_KEY"
         const val COUNTRY = "COUNTRY"
         const val SW_WALLET = "SW_WALLET"
     }
@@ -122,5 +125,29 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
 
     fun getDefaultSwWallet(): String {
         return prefs.getString(SW_WALLET, null) ?: SoftwareWallet.EXODUS.packageName
+    }
+
+    fun saveBinanceApiKey(apiKey: String?) {
+        prefs.edit().putString(BINANCE_API_KEY, apiKey).apply()
+    }
+
+    fun getBinanceApiKey(): String? {
+        return prefs.getString(BINANCE_API_KEY, null)
+    }
+
+    fun saveBinanceSecretKey(secretKey: String?) {
+        prefs.edit().putString(BINANCE_SECRET_KEY, secretKey).apply()
+    }
+
+    fun getBinanceSecretKey(): String? {
+        return prefs.getString(BINANCE_SECRET_KEY, null)
+    }
+
+    fun saveBinanceSync(enabled : Boolean) {
+        prefs.edit().putBoolean(BINANCE_SYNC, enabled).apply()
+    }
+
+    fun isBinanceSyncEnabled(): Boolean {
+        return prefs.getBoolean(BINANCE_SYNC, false)
     }
 }

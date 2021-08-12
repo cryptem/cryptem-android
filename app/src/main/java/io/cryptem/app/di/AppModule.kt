@@ -16,8 +16,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.cryptem.app.BuildConfig
-import io.cryptem.app.model.api.CryptemApiDef
+import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.api.MoshiDateAdapter
+import io.cryptem.app.model.binance.BinanceApiDef
+import io.cryptem.app.model.binance.BinanceInterceptor
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.db.PortfolioDatabase
 import io.cryptem.app.model.db.WalletDatabase
@@ -51,21 +53,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideApi(httpClient: OkHttpClient): CryptemApiDef {
-        return Retrofit.Builder()
-            .client(httpClient)
-            .baseUrl(BuildConfig.API_URL)
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-                )
-            )
-            .build()
-            .create(CryptemApiDef::class.java)
-    }
-
-    @Provides
-    @Singleton
     fun provideCoinGeckoApi(httpClient: OkHttpClient): CoinGeckoApiDef {
         return Retrofit.Builder()
             .client(httpClient)
@@ -82,8 +69,36 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideBinanceApi(loggingInterceptor : HttpLoggingInterceptor, binanceInterceptor: BinanceInterceptor): BinanceApiDef {
+        val httpClient = OkHttpClient().newBuilder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(binanceInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .client(httpClient)
+            .baseUrl("https://api.binance.com/")
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                )
+            )
+            .build()
+            .create(BinanceApiDef::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBinanceInterceptor(prefs : SharedPrefsRepository): BinanceInterceptor {
+        return BinanceInterceptor(prefs)
     }
 
     @Provides

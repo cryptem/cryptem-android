@@ -16,6 +16,7 @@ import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentWalletBinding
 import io.cryptem.app.model.ui.Wallet
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.ui.base.event.ScanQrEvent
 import io.cryptem.app.ui.qrscanner.QrScannerActivity
 import io.cryptem.app.ui.wallets.event.RemoveWalletEvent
 
@@ -41,7 +42,7 @@ class WalletFragment : BaseFragment<WalletVM, FragmentWalletBinding>(R.layout.fr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observe(ScanAddressEvent::class){
+        observe(ScanQrEvent::class){
             scanQr()
         }
         observe(RemoveWalletEvent::class){

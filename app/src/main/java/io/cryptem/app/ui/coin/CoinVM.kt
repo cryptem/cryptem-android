@@ -43,6 +43,7 @@ class CoinVM @Inject constructor(
     val currency = SafeMutableLiveData(portfolioRepo.getPortfolioCurrency())
     val simpleCoinVisible = MutableLiveData<Boolean>()
     val isInPortfolio = MutableLiveData(false)
+    var addToPortfolio = false
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
@@ -122,6 +123,9 @@ class CoinVM @Inject constructor(
             }.onSuccess {
                 priceCustom.value = it
                 recalculatePortfolio()
+                if (addToPortfolio){
+                    save()
+                }
             }.onFailure {
                 L.e(it)
             }

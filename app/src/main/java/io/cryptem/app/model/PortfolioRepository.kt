@@ -5,7 +5,9 @@ import io.cryptem.app.model.db.entity.PortfolioDbEntity
 import io.cryptem.app.model.db.toCoin
 import io.cryptem.app.model.db.toUiEntity
 import io.cryptem.app.model.ui.*
+import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.util.L
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,6 +16,7 @@ class PortfolioRepository @Inject constructor(
     val prefs: SharedPrefsRepository,
     val portfolioDb: PortfolioDatabase,
     val marketRepository: MarketRepository,
+    val binanceRepository: BinanceRepository
 ) {
 
     private val portfolio = Cache(5, this::loadPortfolio)
@@ -54,6 +57,14 @@ class PortfolioRepository @Inject constructor(
     private suspend fun loadPortfolio(): Portfolio {
         val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
         val portfolioItems = portfolioDb.dao().getPortfolioCoins()
+        val binanceAccount : BinanceAccount? = if (prefs.isBinanceSyncEnabled()){
+            try {
+                binanceRepository.getAccountSnapshot()
+            } catch (t : Throwable){
+                L.e(t)
+                null
+            }
+        } else null
 
         if (portfolioItems.isNotEmpty()) {
             try {
@@ -66,24 +77,30 @@ class PortfolioRepository @Inject constructor(
                     marketRepository.loadCoinsPrice(ids = coinIds, customCurrency = result.currency)
 
                 for (portfolioDbEntity in portfolioItems) {
-                    val coin = coinsBtc.find { it.id == portfolioDbEntity.id }
-                    coin?.priceUsd = coinsUsd.find { it.id == portfolioDbEntity.id }?.priceUsd
-                    coin?.priceCustom = CoinPrice(currentPrice = coinsCustom[coin?.id]?.get(result.currency.code.toLowerCase()))
+                    coinsBtc.find { it.id == portfolioDbEntity.id }?.let { coin ->
+                        coin.priceUsd = coinsUsd.find { it.id == portfolioDbEntity.id }?.priceUsd
+                        coin.priceCustom = CoinPrice(currentPrice = coinsCustom[coin.id]?.get(result.currency.code.toLowerCase(Locale.getDefault())))
 
-                    portfolioDbEntity.apply {
-                        currentPriceBtc = coin?.priceBtc?.currentPrice
-                        currentPriceUsd = coin?.priceUsd?.currentPrice
-                        currentPriceCustom = coin?.priceCustom?.currentPrice
-                        priceChangePercentage24hBtc = coin?.priceBtc?.percentChange24h
-                        priceChangePercentage7dBtc = coin?.priceBtc?.percentChange7d
-                        priceChangePercentage30dBtc = coin?.priceBtc?.percentChange30d
-                        priceChangePercentage24hUsd = coin?.priceUsd?.percentChange24h
-                        priceChangePercentage7dUsd = coin?.priceUsd?.percentChange7d
-                        priceChangePercentage30dUsd = coin?.priceUsd?.percentChange30d
+                        portfolioDbEntity.apply {
+                            currentPriceBtc = coin.priceBtc?.currentPrice
+                            currentPriceUsd = coin.priceUsd?.currentPrice
+                            currentPriceCustom = coin.priceCustom?.currentPrice
+                            priceChangePercentage24hBtc = coin.priceBtc?.percentChange24h
+                            priceChangePercentage7dBtc = coin.priceBtc?.percentChange7d
+                            priceChangePercentage30dBtc = coin.priceBtc?.percentChange30d
+                            priceChangePercentage24hUsd = coin.priceUsd?.percentChange24h
+                            priceChangePercentage7dUsd = coin.priceUsd?.percentChange7d
+                            priceChangePercentage30dUsd = coin.priceUsd?.percentChange30d
+                        }
+
+                        portfolioDbEntity.lastUpdate = System.currentTimeMillis()
+
+                        binanceAccount?.getBalance(coin.symbol)?.let {
+                            portfolioDbEntity.amountExchange = it
+                        }
+
+                        portfolioDb.dao().updatePortfolioCoin(portfolioDbEntity)
                     }
-
-                    portfolioDbEntity.lastUpdate = System.currentTimeMillis()
-                    portfolioDb.dao().updatePortfolioCoin(portfolioDbEntity)
                 }
             } catch (t : Throwable){
                 L.e(t)
@@ -125,6 +142,7 @@ class PortfolioRepository @Inject constructor(
 
     fun setPortfolioCurrency(currency: Currency) {
         prefs.savePortfolioCurrency(currency)
+        portfolio.clear()
     }
 
     fun getPortfolioDeposit(): Long {

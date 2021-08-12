@@ -9,17 +9,20 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+final VERSION_MAJOR = 1
+final VERSION_MINOR = 1
+final VERSION_PATCH = 0
+
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "io.cryptem.app"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.0.0"
-
+        //versionCode XYYYZZZ (X - Major, YYY - Minor, ZZZ - Patch)
+        versionCode Integer.parseInt(String.valueOf(VERSION_MAJOR) + String.valueOf(VERSION_MINOR).padLeft(3, "0") + String.valueOf(VERSION_PATCH).padLeft(3, "0"))
+        versionName "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -54,7 +57,6 @@ android {
             dimension "env"
             applicationIdSuffix ".dev"
             buildConfigField 'String', 'API_URL', '"https://cryptem.io/"'
-            signingConfig signingConfigs.debug
         }
         prod {
             dimension "env"

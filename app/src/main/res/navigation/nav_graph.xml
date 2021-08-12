@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_portfolioFragment_to_trezorFragment"
             app:destination="@id/trezorFragment" />
+        <action
+            android:id="@+id/action_portfolioFragment_to_portfolioSettingsFragment"
+            app:destination="@id/portfolioSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/marketFragment"
@@ -78,6 +81,10 @@
         <argument
             android:name="name"
             app:argType="string" />
+        <argument
+            android:name="addToPortfolio"
+            app:argType="boolean"
+            android:defaultValue="false"/>
         <action
             android:id="@+id/action_portfolioEditFragment_to_portfolioFragment"
             app:destination="@id/portfolioFragment"
@@ -131,4 +138,9 @@
             android:name="poi"
             app:argType="io.cryptem.app.model.ui.Poi" />
     </dialog>
+    <fragment
+        android:id="@+id/portfolioSettingsFragment"
+        android:name="io.cryptem.app.ui.portfolio.settings.PortfolioSettingsFragment"
+        tools:layout="@layout/fragment_portfolio_settings"
+        android:label="@string/portfolio_settings_title" />
 </navigation>

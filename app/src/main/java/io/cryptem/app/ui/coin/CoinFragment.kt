@@ -29,18 +29,12 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.id = args.id
+        viewModel.addToPortfolio = args.addToPortfolio
         setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val focusChangeListener = OnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) {
-                val imm: InputMethodManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(v.windowToken, 0)
-            }
-        }
 
         binding.editAmountExchange.setOnEditorActionListener { v, actionId, event ->
             viewModel.save()

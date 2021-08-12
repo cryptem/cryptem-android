@@ -8,7 +8,6 @@
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="settings">Settings</string>
-    <string name="edit">Edit</string>
     <string name="donate">Donate</string>
     <string name="send">Send</string>
     <string name="retry">Retry</string>
@@ -60,6 +59,14 @@
     <string name="portfolio_edit_wallet_amount">In Trezor</string>
 
     <string name="portfolio_exchange_warning">You have %s of your portfolio on exchanges, move your funds to safety.</string>
+
+    <string name="portfolio_settings_title">Portfolio Settings</string>
+    <string name="portfolio_settings_binance_sync">Sync with Binance</string>
+    <string name="portfolio_settings_binance_api_key">API Key</string>
+    <string name="portfolio_settings_binance_secret_key">Secret Key</string>
+    <string name="portfolio_settings_scan_binance_api_key">Scan your Binance API Key</string>
+    <string name="portfolio_settings_binance_test_success">Connection success!</string>
+    <string name="portfolio_settings_binance_test_failed">Connection failed, check the keys and try again.</string>
 
     <string name="coin_ath">All Time High</string>
     <string name="coin_marketcap">Marketcap</string>
