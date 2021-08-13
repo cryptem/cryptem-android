@@ -61,8 +61,8 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
     }
 
     private fun getSystemCurrency(): Currency {
-        val systemCurrency = java.util.Currency.getInstance(Locale.getDefault())
         return try {
+            val systemCurrency = java.util.Currency.getInstance(Locale.getDefault())
             Currency(systemCurrency.currencyCode.toUpperCase(Locale.getDefault()))
         } catch (t: Throwable) {
             Currency.USD
