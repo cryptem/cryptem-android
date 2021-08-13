@@ -64,7 +64,6 @@
     <string name="coin_current_price">Aktuálna cena</string>
     <string name="coin_sale">Zľava</string>
 
-    <string name="market_dominance">Dominancia:</string>
     <string name="market_altcoin_index">Altcoin sezóna: %s</string>
     <string name="market_marketcap">Kapitalizácia: %s</string>
     <string name="load_error">Nepodarilo sa načítať dáta, skontroluj pripojenie a skús to znova.</string>
