@@ -17,7 +17,7 @@ fun CoinsResponseItemDto.toUiEntity(currency: Currency? = null): Coin {
         priceBtc = if (currency?.isBtc() == true) this.toCoinPriceUiEntity() else null,
         priceUsd = if (currency?.isUsd() == true) this.toCoinPriceUiEntity() else null,
         priceCustom = if (currency != null && !currency.isBtc() && !currency.isUsd()) this.toCoinPriceUiEntity() else null,
-        marketCap = marketCap?.toDouble()
+        marketCap = marketCap
     )
 }
 

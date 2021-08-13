@@ -24,7 +24,7 @@ data class CoinsResponseItemDto(
     @Json(name = "current_price")
     val currentPrice: Double,
     @Json(name = "fully_diluted_valuation")
-    val fullyDilutedValuation: Long?,
+    val fullyDilutedValuation: Double?,
     @Json(name = "high_24h")
     val high24h: Double?,
     @Json(name = "id")
@@ -36,7 +36,7 @@ data class CoinsResponseItemDto(
     @Json(name = "low_24h")
     val low24h: Double?,
     @Json(name = "market_cap")
-    val marketCap: Long?,
+    val marketCap: Double?,
     @Json(name = "market_cap_change_24h")
     val marketCapChange24h: Double?,
     @Json(name = "market_cap_change_percentage_24h")

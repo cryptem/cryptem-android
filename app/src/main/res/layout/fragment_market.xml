@@ -27,8 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:refreshing="@{vm.loading}"
-        app:onRefresh="@{() -> vm.loadCoins()}"
+        app:refreshing="@{vm.reloading}"
+        app:onRefresh="@{() -> vm.loadCoins(true)}"
         app:layout_constraintBottom_toBottomOf="parent">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -73,6 +73,24 @@
             android:layout_marginBottom="8dp"
             android:onClick="@{() -> vm.retry()}"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:visibleOrGone="@{vm.loading}"
+        app:animationIn="@{@anim/fade_in}"
+        app:animationOut="@{@anim/fade_out}"
+        android:background="@drawable/loading_background"
+        android:layout_marginBottom="@dimen/screen_padding"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <ProgressBar
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
     </LinearLayout>
 
 

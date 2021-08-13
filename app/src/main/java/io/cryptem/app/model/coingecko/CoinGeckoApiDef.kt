@@ -12,7 +12,7 @@ interface CoinGeckoApiDef {
         @Query("vs_currency") currency: String,
         @Query("ids") ids: String? = null,
         @Query("price_change_percentage") priceChangePercentage: String = "24h,7d,30d",
-        @Query("per_page") perPage : Int? = 250,
+        @Query("per_page") perPage : Int? = PAGE_SIZE,
         @Query("page") page : Int? = null,
     ): List<CoinsResponseItemDto>
 
@@ -25,5 +25,7 @@ interface CoinGeckoApiDef {
     @GET("api/v3/global")
     suspend fun getGlobalMarketData() : GlobalResponseDto
 
-
+    companion object{
+        const val PAGE_SIZE = 100
+    }
 }

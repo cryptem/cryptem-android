@@ -11,31 +11,35 @@ class MarketRepository @Inject constructor(
     val coinGeckoApi: CoinGeckoApiDef,
 ) {
 
-    private val marketCoins = ListCache(5, funLoad = this::loadMarketCoins)
+    //private val marketCoins = ListCache(5, funLoad = this::loadMarketCoins)
     private val marketCoinsMap =
         HashedCache(15, funLoadItem = this::loadMarketCoin, keyMapFun = { it.id })
     private val marketGlobalData = Cache(60, funLoad = this::loadMarketGlobalData)
 
-    private suspend fun loadMarketCoins(): List<Coin> {
-        val resultUsd = coinGeckoApi.getCoins("USD")
-        val resultBtc = coinGeckoApi.getCoins("BTC")
+    val marketCoinsCache = ArrayList<Coin>()
+    var marketCoinsPage = 1
+    private set
+
+    suspend fun getCoinsNextPage(forceReload: Boolean = false): List<Coin> {
+        if (forceReload){
+            marketCoinsCache.clear()
+            marketCoinsPage = 1
+        }
+
+        val resultUsd = coinGeckoApi.getCoins(currency = "USD", page = marketCoinsPage)
+        val resultBtc = coinGeckoApi.getCoins(currency = "BTC", page = marketCoinsPage)
         val btcPriceMap = HashMap<String, CoinsResponseItemDto>()
 
         resultBtc.forEach {
             btcPriceMap[it.id] = it
         }
 
-        return resultUsd.map {
+        marketCoinsPage += 1
+        val result = resultUsd.map {
             it.toUiEntity(Currency.USD)
-                .apply { priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity() }
-        }
-    }
+                .apply { priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity() }}
 
-    suspend fun getCoins(force: Boolean = false): List<Coin> {
-        val result = marketCoins.get(force)
-        result.forEach {
-            marketCoinsMap.put(it)
-        }
+        marketCoinsCache.addAll(result)
         return result
     }
 
@@ -83,4 +87,5 @@ class MarketRepository @Inject constructor(
     private suspend fun loadMarketGlobalData(): MarketGlobalData? {
         return coinGeckoApi.getGlobalMarketData().data?.toUiEntity()
     }
+
 }

@@ -1,12 +1,9 @@
 package io.cryptem.app.model.binance
 
-import com.google.android.gms.common.util.Hex
 import okhttp3.internal.and
 import java.lang.Exception
-import java.lang.RuntimeException
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-
 
 object HmacUtil {
     fun hmac256(message: String, key: String) : String? {

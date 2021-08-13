@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingEnd="64dp"
-            android:inputType="textPassword"
+            android:inputType="textPassword|textNoSuggestions"
             android:imeOptions="actionNext"
             android:text="@={vm.binanceApiKey}" />
 
@@ -144,7 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:imeOptions="actionDone"
-            android:inputType="textPassword"
+            android:inputType="textPassword|textNoSuggestions"
             android:paddingEnd="64dp"
             android:text="@={vm.binanceSecretKey}" />
 

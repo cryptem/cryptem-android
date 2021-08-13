@@ -9,19 +9,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.*
 import io.cryptem.app.ui.base.BaseVM
-import io.cryptem.app.ui.base.event.UrlEvent
-import io.cryptem.app.ui.pay.PayFragmentDirections
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
 class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository, private val marketRepo : MarketRepository, private val portfolioRepo : PortfolioRepository) : BaseVM() {
 
     val loading = MutableLiveData(false)
-    val loadingCoins = MutableLiveData(false)
+    val loadingCoins = SafeMutableLiveData(false)
     val portfolio = MutableLiveData<Portfolio>()
     val deposit = MutableLiveData<String>()
     val items = ObservableArrayList<Any>()
@@ -34,13 +31,20 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.PORTFOLIO)
         loadPortfolioFromDb()
+        loadFromCache()
+        if (coins.isEmpty()){
+            loadCoins()
+        }
+    }
+
+    private fun loadFromCache(){
+        coins.addAll(marketRepo.marketCoinsCache)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
         L.i("onResume")
         loadPortfolio()
-        loadCoins()
     }
 
     fun loadPortfolioFromDb(){
@@ -76,14 +80,13 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         }
     }
 
-    private fun loadCoins(){
+    fun loadCoins(){
         loadingCoins.value = true
         viewModelScope.launch {
             kotlin.runCatching {
-                marketRepo.getCoins()
+                marketRepo.getCoinsNextPage()
             }.onSuccess {
                 loadingCoins.value = false
-                coins.clear()
                 coins.addAll(it)
             }.onFailure {
                 loadingCoins.value = false

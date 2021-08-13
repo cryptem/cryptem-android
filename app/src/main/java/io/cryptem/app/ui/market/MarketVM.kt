@@ -11,10 +11,12 @@ import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.HomeScreen
 import io.cryptem.app.model.MarketRepository
 import io.cryptem.app.model.SharedPrefsRepository
+import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.ui.MarketGlobalData
 import io.cryptem.app.model.ui.PercentTimeInterval
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.util.L
+import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -22,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val marketRepo: MarketRepository) : BaseVM() {
 
-    val loading = MutableLiveData(false)
+    val reloading = SafeMutableLiveData(false)
+    val loading = SafeMutableLiveData(false)
     val error = MutableLiveData(false)
     val items = ObservableArrayList<Coin>()
     val currency = MutableLiveData(prefs.getPortfolioCurrency())
@@ -35,34 +38,60 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.MARKET)
         loadMarketData()
-        loadCoins()
+        loadFromCache()
+        if (items.isEmpty()){
+            loadCoins(true)
+        }
     }
 
-    fun loadCoins(){
-        loading.value = true
+    private fun loadFromCache(){
+        items.addAll(marketRepo.marketCoinsCache)
+        if (items.isNotEmpty()){
+            calculateAltcoinIndex(items)
+        }
+    }
+
+    fun loadCoins(forceReload : Boolean = false){
+       startLoading(forceReload)
         viewModelScope.launch {
             kotlin.runCatching {
-                marketRepo.getCoins(false)
+                marketRepo.getCoinsNextPage(forceReload)
             }.onSuccess {
-                loading.value = false
-                items.clear()
+                stopLoading()
+                if (forceReload){
+                    items.clear()
+                    calculateAltcoinIndex(it)
+                }
                 items.addAll(it)
-                calculateAltcoinIndex(it)
             }.onFailure {
                 L.e(it)
                 error.value = true
-                loading.value = false
+                stopLoading()
             }
         }
+    }
+
+    private fun startLoading(forceReload : Boolean){
+        if(forceReload){
+            reloading.value = true
+        } else {
+            loading.value = true
+        }
+    }
+
+    private fun stopLoading(){
+        reloading.value = false
+        loading.value = false
     }
 
     fun calculateAltcoinIndex(data : List<Coin>){
         var betterThanBtc = 0
         var count = 0
-        val stableCoins = listOf("BTC","USDT", "USDC", "DAI", "BUSD", "WBTC", "UST", "HUSD", "TUSD")
+        val stableCoins = listOf("DAI", "UST")
 
-        for (i in 0 until 100){
-            if (!stableCoins.contains(data[i].symbol.toUpperCase(Locale.getDefault()))) {
+        for (i in 0 until CoinGeckoApiDef.PAGE_SIZE){
+            val symbol = data[i].symbol.toUpperCase(Locale.getDefault())
+            if (!stableCoins.contains(symbol) && !symbol.contains("BTC") && !symbol.contains("USD")) {
                 if (data[i].priceBtc?.percentChange30d ?: 0.0 > 0.0) {
                     betterThanBtc += 1
                 }
