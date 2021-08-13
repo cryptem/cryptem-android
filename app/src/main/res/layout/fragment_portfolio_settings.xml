@@ -100,7 +100,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingEnd="64dp"
-            android:inputType="textPassword|textNoSuggestions"
+            android:inputType="text"
+            android:maxLines="1"
             android:imeOptions="actionNext"
             android:text="@={vm.binanceApiKey}" />
 
@@ -145,10 +146,23 @@
             android:layout_height="match_parent"
             android:imeOptions="actionDone"
             android:inputType="textPassword|textNoSuggestions"
-            android:paddingEnd="64dp"
+            android:maxLines="1"
             android:text="@={vm.binanceSecretKey}" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputBinanceSecretKey"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/textSecondary"
+        android:text="@string/portfolio_settings_binance_keys_hint"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
