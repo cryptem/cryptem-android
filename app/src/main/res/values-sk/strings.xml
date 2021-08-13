@@ -50,6 +50,13 @@
 
     <string name="portfolio_exchange_warning">Máš %s portfólia na zmenárni svoje prostriedky do bezpečia.</string>
 
+    <string name="portfolio_settings_title">Nastavenie portfólia</string>
+    <string name="portfolio_settings_binance_sync">Synchronizovať zostatky z Binance</string>
+    <string name="portfolio_settings_binance_keys_hint">Svoje kľúče nájdeš na Binance pod Management API.</string>
+    <string name="portfolio_settings_scan_binance_api_key">Naskenuj svoj Binance API Key</string>
+    <string name="portfolio_settings_binance_test_success">Úspešne pripojené!</string>
+    <string name="portfolio_settings_binance_test_failed">Chyba, skontroluj kľúče a skús to znova.</string>
+
     <string name="buy">Kúpiť</string>
     <string name="coin_ath">Historické maximum</string>
     <string name="coin_marketcap">Trhová kapitalizácia</string>

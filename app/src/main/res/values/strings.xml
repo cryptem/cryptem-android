@@ -61,11 +61,12 @@
     <string name="portfolio_exchange_warning">You have %s of your portfolio on exchanges, move your funds to safety.</string>
 
     <string name="portfolio_settings_title">Portfolio Settings</string>
-    <string name="portfolio_settings_binance_sync">Sync with Binance</string>
-    <string name="portfolio_settings_binance_api_key">API Key</string>
-    <string name="portfolio_settings_binance_secret_key">Secret Key</string>
+    <string name="portfolio_settings_binance_sync">Sync balances from Binance</string>
+    <string name="portfolio_settings_binance_api_key" translatable="false">API Key</string>
+    <string name="portfolio_settings_binance_secret_key" translatable="false">Secret Key</string>
+    <string name="portfolio_settings_binance_keys_hint">You can find your keys on Binance in API Management.</string>
     <string name="portfolio_settings_scan_binance_api_key">Scan your Binance API Key</string>
-    <string name="portfolio_settings_binance_test_success">Connection success!</string>
+    <string name="portfolio_settings_binance_test_success">Successfully connected!</string>
     <string name="portfolio_settings_binance_test_failed">Connection failed, check the keys and try again.</string>
 
     <string name="coin_ath">All Time High</string>
