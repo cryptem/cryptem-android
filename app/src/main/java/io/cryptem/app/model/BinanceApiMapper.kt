@@ -8,9 +8,7 @@ fun AccountSnapshotResponseDto.toUiEntity(): BinanceAccount {
     snapshotVos?.sortedByDescending { it.updateTime }
         ?.firstOrNull { it.type == "spot" }?.data?.balances?.let {
         for (i in it) {
-            if (i.free + i.locked > 0.0) {
-                result.addAsset(i.asset, i.free + i.locked)
-            }
+            result.addAsset(i.asset, i.free + i.locked)
         }
     }
     return result
