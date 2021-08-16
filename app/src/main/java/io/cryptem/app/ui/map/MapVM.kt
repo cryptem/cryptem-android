@@ -17,15 +17,20 @@ import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.UrlEvent
-import io.cryptem.app.ui.map.event.LoadDataEvent
+import io.cryptem.app.ui.map.event.InvalidateOptionsMenuEvent
+import io.cryptem.app.ui.map.event.UnsupportedCountryEvent
 import io.cryptem.app.util.L
-import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class MapVM @Inject constructor (val locationClient : FusedLocationProviderClient, val firestoreRepository: FirestoreRepository, val prefs : SharedPrefsRepository, val remoteConfigRepository: RemoteConfigRepository) : BaseVM() {
+class MapVM @Inject constructor(
+    val locationClient: FusedLocationProviderClient,
+    val firestoreRepository: FirestoreRepository,
+    val prefs: SharedPrefsRepository,
+    val remoteConfigRepository: RemoteConfigRepository
+) : BaseVM() {
 
     val location = MutableLiveData<Location?>()
     val categories = ObservableArrayList<PoiCategory>()
@@ -33,93 +38,96 @@ class MapVM @Inject constructor (val locationClient : FusedLocationProviderClien
     val selectedCategory = MutableLiveData<PoiCategory?>()
     val selectedPoi = MutableLiveData<Poi?>()
     val countries = ArrayList<String>()
-    val country = SafeMutableLiveData(prefs.getCountry())
-    var countryInitFlag = false
+    var previousCountry: String? = null
+    val country = MutableLiveData<String>(null)
     val data = MutableLiveData<MapData>()
 
     val search = MutableLiveData<String?>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(){
+    fun onCreate() {
         //prefs.setHomeScreen(HomeScreen.MAP)
         loadCountries()
         country.observeForever {
-            if (countryInitFlag) {
+            if (previousCountry != it) {
+                previousCountry = it
                 prefs.saveCountry(it)
                 loadData()
-            } else {
-                countryInitFlag = true
             }
         }
         search.observeForever {
             it?.let {
-                if (data.value != null){
+                if (data.value != null) {
                     pois.value = data.value?.search(it, selectedCategory.value)
                 }
             }
         }
     }
 
-    private fun loadCountries(){
+    private fun loadCountries() {
         viewModelScope.launch {
             kotlin.runCatching {
                 remoteConfigRepository.getSupportedCountries()
             }.onSuccess {
                 countries.clear()
                 countries.addAll(it)
-                publish(LoadDataEvent())
+                country.value = prefs.getCountry()
+                publish(InvalidateOptionsMenuEvent())
             }
         }
     }
 
-    fun loadData(){
-        categories.clear()
-        viewModelScope.launch {
-            kotlin.runCatching {
-                firestoreRepository.getMapData(country.value)
-            }.onSuccess {
-                it?.let {
-                    data.value = it
-                    categories.addAll(it.categories)
-                    pois.value = it.pois
+    private fun loadData() {
+        country.value?.let { country ->
+            if (countries.contains(country)) {
+                categories.clear()
+                viewModelScope.launch {
+                    kotlin.runCatching {
+                        firestoreRepository.getMapData(country)
+                    }.onSuccess {
+                        it?.let {
+                            data.value = it
+                            categories.addAll(it.categories)
+                            pois.value = it.pois
+                        }
+                    }.onFailure {
+                        L.e(it)
+                    }
                 }
-            }.onFailure {
-                L.e(it)
+            } else {
+                publish(UnsupportedCountryEvent())
             }
         }
+
     }
 
-    fun applyFilter(category : PoiCategory){
-        if (selectedCategory.value == category){
+    fun applyFilter(category: PoiCategory) {
+        if (selectedCategory.value == category) {
             selectedCategory.value = null
         } else {
             selectedCategory.value = category
         }
-        pois.value = data.value?.getPois( selectedCategory.value)
+        pois.value = data.value?.getPois(selectedCategory.value)
     }
 
     @SuppressLint("MissingPermission")
-    fun getLastLocation(){
+    fun getLastLocation() {
         locationClient.lastLocation.addOnCompleteListener {
             location.value = it.result
         }
     }
 
-    fun isCountrySupported() : Boolean{
-        return countries.contains(prefs.getCountry())
-    }
-
-    fun getCountry() : String{
+    fun getCountry(): String {
         return prefs.getCountry()
     }
 
-    fun showInGmaps(poi : Poi){
+    fun showInGmaps(poi: Poi) {
         poi.url?.let {
             publish(UrlEvent(poi.url))
         }
     }
 
-    fun report(poi: Poi){
+    fun report(poi: Poi) {
         navigate(MapFragmentDirections.actionMapFragmentToReportPoiDialog(poi))
     }
 }

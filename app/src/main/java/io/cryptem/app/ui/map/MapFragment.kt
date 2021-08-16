@@ -25,7 +25,8 @@ import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.UrlEvent
-import io.cryptem.app.ui.map.event.LoadDataEvent
+import io.cryptem.app.ui.map.event.InvalidateOptionsMenuEvent
+import io.cryptem.app.ui.map.event.UnsupportedCountryEvent
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -58,9 +59,11 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         defaultMarker = createMarkerBitmap(R.drawable.ic_poi_other)
         initMap()
 
-        observe(LoadDataEvent::class){
+        observe(InvalidateOptionsMenuEvent::class){
             requireActivity().invalidateOptionsMenu()
-            loadData()
+        }
+        observe(UnsupportedCountryEvent::class){
+            showUnsupportedCountryDialog()
         }
         viewModel.location.observe(viewLifecycleOwner) {
             it?.let {
@@ -128,14 +131,6 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
                     true
                 } ?: false
             }
-        }
-    }
-
-    private fun loadData(){
-        if (viewModel.isCountrySupported()){
-            viewModel.loadData()
-        } else {
-            showUnsupportedCountryDialog()
         }
     }
 
@@ -216,7 +211,9 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         inflater.inflate(R.menu.map, menu)
         countryMenuItem = menu.findItem(R.id.action_country)
         val subMenu = countryMenuItem?.subMenu
-        subMenu?.add(viewModel.prefs.getCountry())
+        if (!viewModel.countries.contains(viewModel.prefs.getSystemCountry())){
+            subMenu?.add(viewModel.prefs.getSystemCountry().toUpperCase(Locale.getDefault()))
+        }
         viewModel.countries.forEach {
             subMenu?.add(it)
         }

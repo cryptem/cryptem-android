@@ -116,7 +116,11 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
     }
 
     fun getCountry(): String {
-        return prefs.getString(COUNTRY, null) ?: Locale.getDefault().country
+        return prefs.getString(COUNTRY, null) ?: getSystemCountry()
+    }
+
+    fun getSystemCountry(): String {
+        return Locale.getDefault().country
     }
 
     fun saveDefaultSwWallet(swWallet: SoftwareWallet) {
