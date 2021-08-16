@@ -42,16 +42,20 @@
         android:layout_marginTop="4dp"
         tools:text="10000 Kč" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/iconWallet"
+        style="@style/ImageButton.Outlined"
+        app:strokeColor="@color/colorSecondary"
         android:layout_width="@dimen/portfolio_icon"
         android:layout_height="@dimen/portfolio_icon"
-        android:scaleType="fitCenter"
-        android:padding="8dp"
-        android:src="@drawable/ic_wallet"
-        app:layout_constraintBottom_toBottomOf="@id/textHodlings"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:cornerRadius="24dp"
+        android:onClick="@{() -> vm.depositWithdraw()}"
+        app:icon="@drawable/ic_swap"
+        app:layout_constraintBottom_toBottomOf="@+id/textHodlings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textHodlings" />
+        app:layout_constraintTop_toTopOf="@+id/textDeposit" />
 
     <TextView
         android:id="@+id/textHodlings"
@@ -118,7 +122,6 @@
         android:layout_height="wrap_content"
         android:text="@{data.valuationPercentString}"
         android:textSize="18sp"
-        android:layout_marginEnd="8dp"
         app:visibleOrGone="@{vm.portfolio.deposit != 0}"
         app:layout_constraintBottom_toBottomOf="@+id/iconTrend"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,6 +140,7 @@
         android:insetBottom="0dp"
         android:minWidth="44dp"
         android:minHeight="0dp"
+        app:strokeColor="@color/colorSecondary"
         android:onClick="@{() -> vm.toggleTrendTime()}"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

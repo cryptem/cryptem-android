@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentPortfolioBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.UrlEvent
+import io.cryptem.app.ui.portfolio.depositwithdraw.DialogDepositWithdraw
 
 
 @AndroidEntryPoint
@@ -70,6 +72,19 @@ class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.
                 }
             }
         })
+        observeDepositWithdraw()
+    }
+
+    private fun observeDepositWithdraw(){
+        setFragmentResultListener(DialogDepositWithdraw.REQUEST_KEY){ key, bundle ->
+            val newValue = ((viewModel.depositNumber.value ?: 0L) + bundle.getLong(DialogDepositWithdraw.RESULT_VALUE))
+            if (newValue >= 0){
+                viewModel.depositNumber.value = newValue
+            } else {
+                viewModel.depositNumber.value = 0L
+            }
+            viewModel.savePortfolio()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

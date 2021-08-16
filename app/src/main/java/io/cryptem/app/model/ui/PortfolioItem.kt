@@ -68,7 +68,7 @@ class PortfolioItem(
     }
 
     fun getPortfolioPercentString(): String {
-        return portfolioFiatPercent.toPercentString(1)
+        return portfolioFiatPercent.toPercentString(0)
     }
 
     fun getPortfolioPercentInt(): Int {

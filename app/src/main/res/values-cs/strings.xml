@@ -57,6 +57,11 @@
     <string name="portfolio_settings_binance_test_success">Úspěšně připojeno!</string>
     <string name="portfolio_settings_binance_test_failed">Chyba, zkontroluj klíče a zkus to znovu.</string>
 
+    <string name="portfolio_transaction_title">Transakce</string>
+    <string name="portfolio_deposit">Vklad</string>
+    <string name="portfolio_withdraw">Výběr</string>
+    <string name="portfolio_amount">Částka (%s)</string>
+
     <string name="buy">Koupit</string>
     <string name="coin_ath">Historické maximum</string>
     <string name="coin_marketcap">Tržní kapitalizace</string>
@@ -64,7 +69,6 @@
     <string name="coin_current_price">Aktuální cena</string>
     <string name="coin_sale">Sleva</string>
 
-    <string name="market_altcoin_index">Altcoin sezóna: %s</string>
     <string name="market_marketcap">Kapitalizace: %s</string>
     <string name="load_error">Nepodařilo se načíst data, zkontroluj připojení a zkus to znovu.</string>
 

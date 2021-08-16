@@ -9,10 +9,10 @@
     <item android:id="@+id/mapFragment"
         android:title="@string/nav_map"
         android:icon="@drawable/ic_map"/>
-    <item android:id="@+id/payFragment"
-        android:title="@string/nav_pay"
-        android:icon="@drawable/ic_pay"/>
     <item android:id="@+id/requestFragment"
         android:title="@string/nav_request"
         android:icon="@drawable/ic_request"/>
+    <item android:id="@+id/payFragment"
+        android:title="@string/nav_pay"
+        android:icon="@drawable/ic_send"/>
 </menu>

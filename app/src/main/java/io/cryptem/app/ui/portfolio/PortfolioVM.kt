@@ -21,6 +21,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     val loadingCoins = SafeMutableLiveData(false)
     val portfolio = MutableLiveData<Portfolio>()
     val deposit = MutableLiveData<String>()
+    val depositNumber = MutableLiveData<Long>()
     val items = ObservableArrayList<Any>()
     val coins = ObservableArrayList<Coin>()
     val addCoinMode = MutableLiveData(false)
@@ -53,6 +54,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
                 portfolioRepo.getPortfolioFromDb()
             }.onSuccess {
                 portfolio.value = it
+                depositNumber.value = it.deposit
                 deposit.value = it.deposit.toString()
                 items.clear()
                 items.addAll(it.items.sortedByDescending { it.portfolioFiatPercent })
@@ -119,6 +121,15 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
 
     fun showTrezor(){
         navigate(PortfolioFragmentDirections.actionPortfolioFragmentToTrezorFragment())
+    }
+
+    fun savePortfolio(){
+        portfolioRepo.setPortfolioDeposit(depositNumber.value ?: 0L)
+        loadPortfolio(true)
+    }
+
+    fun depositWithdraw(){
+        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToDialogDepositWithdraw(portfolioRepo.getPortfolioCurrency().toString()))
     }
 
 }

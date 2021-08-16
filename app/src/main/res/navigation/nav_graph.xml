@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_portfolioFragment_to_portfolioSettingsFragment"
             app:destination="@id/portfolioSettingsFragment" />
+        <action
+            android:id="@+id/action_portfolioFragment_to_dialogDepositWithdraw"
+            app:destination="@id/dialogDepositWithdraw" />
     </fragment>
     <fragment
         android:id="@+id/marketFragment"
@@ -143,4 +146,14 @@
         android:name="io.cryptem.app.ui.portfolio.settings.PortfolioSettingsFragment"
         tools:layout="@layout/fragment_portfolio_settings"
         android:label="@string/portfolio_settings_title" />
+    <dialog
+        android:id="@+id/dialogDepositWithdraw"
+        android:name="io.cryptem.app.ui.portfolio.depositwithdraw.DialogDepositWithdraw"
+        android:label="DialogDepositWithdraw"
+        tools:layout="@layout/dialog_deposit_withdraw">
+        <argument
+            android:name="currency"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
 </navigation>

@@ -69,6 +69,11 @@
     <string name="portfolio_settings_binance_test_success">Successfully connected!</string>
     <string name="portfolio_settings_binance_test_failed">Connection failed, check the keys and try again.</string>
 
+    <string name="portfolio_transaction_title">Transaction</string>
+    <string name="portfolio_deposit">Deposit</string>
+    <string name="portfolio_withdraw">Withdrawal</string>
+    <string name="portfolio_amount">Amount (%s)</string>
+
     <string name="coin_ath">All Time High</string>
     <string name="coin_marketcap">Marketcap</string>
     <string name="coin_date">Date</string>
@@ -83,7 +88,7 @@
 
     <string name="market_btc_dominance" translatable="false" >BTC %s</string>
     <string name="market_eth_dominance" translatable="false" >ETH %s</string>
-    <string name="market_altcoin_index">Altcoin season: %s</string>
+    <string name="market_altcoin_index" translatable="false">Altcoin Index: %s</string>
     <string name="market_marketcap">Marketcap: %s</string>
     <string name="load_error">Load data failed, check your connection and try again.</string>
 

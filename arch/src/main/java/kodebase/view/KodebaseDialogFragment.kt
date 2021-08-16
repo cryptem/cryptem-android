@@ -1,9 +1,11 @@
 package kodebase.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
@@ -31,6 +33,7 @@ abstract class KodebaseDialogFragment<VM : KodebaseViewModel, B : ViewDataBindin
     DialogFragment() {
 
     abstract val viewModel : VM
+    protected lateinit var binding : B
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,7 @@ abstract class KodebaseDialogFragment<VM : KodebaseViewModel, B : ViewDataBindin
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding : ViewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         binding.lifecycleOwner = this
         binding.setVariable(BR.vm, viewModel)
         return binding.root
@@ -66,5 +69,18 @@ abstract class KodebaseDialogFragment<VM : KodebaseViewModel, B : ViewDataBindin
 
     protected fun navigate(directions: NavDirections, navOptions: NavOptions? = null) {
         navController().navigate(directions, navOptions)
+    }
+
+
+    protected fun hideKeyboard(v : View? = null){
+        v?.clearFocus()
+        val imm: InputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow((v ?: binding.root).windowToken, 0)
+    }
+
+    protected fun showKeyboard(v : View? = null){
+        v?.requestFocus()
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 }

@@ -101,13 +101,12 @@
         android:layout_height="wrap_content"
         android:text="@{@string/market_altcoin_index(vm.getAltcoinIndexString(vm.altcoinIndex))}"
         android:textColor="@color/white"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@+id/textEthDominance"
-        app:layout_constraintTop_toTopOf="@+id/textBtcDominanceTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btcDominanceIndicator"
         tools:text="@string/market_altcoin_index" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/altcoinSeasonIndicator"
+        android:id="@+id/altcoinIndexIndicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:progress="@{vm.altcoinIndexInt}"
@@ -121,7 +120,8 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton.Outlined"
+        style="@style/OutlinedButton"
+        app:strokeColor="@color/colorSecondary"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:minWidth="44dp"
@@ -139,7 +139,8 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ImageButton.Outlined"
+        style="@style/OutlinedButton"
+        app:strokeColor="@color/colorSecondary"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:minWidth="44dp"
