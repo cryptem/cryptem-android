@@ -1,5 +1,6 @@
 package io.cryptem.app.ui.base
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.LayoutRes
@@ -26,6 +27,8 @@ abstract class BaseFragment<VM : BaseVM, B : ViewDataBinding>(@LayoutRes layoutR
         if (intent != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+        } else {
+            throw ActivityNotFoundException()
         }
     }
 
