@@ -19,7 +19,7 @@ class PortfolioRepository @Inject constructor(
     val binanceRepository: BinanceRepository
 ) {
 
-    private val portfolio = Cache(5, this::loadPortfolio)
+    private var portfolio : Portfolio? = null
 
     suspend fun addPortfolioCoin(coin: Coin, amountExchange: Double, amountWallet : Double) {
         portfolioDb.dao().addPortfolioCoin(
@@ -42,24 +42,27 @@ class PortfolioRepository @Inject constructor(
                 amountWallet = amountWallet
             )
         )
-        portfolio.clear()
+        portfolio = null
     }
 
     suspend fun removePortfolioCoin(id: String) {
         portfolioDb.dao().removePortfolioCoin(id)
-        portfolio.clear()
+        portfolio = null
     }
 
     suspend fun getPortfolioCoin(id: String) : PortfolioItem?{
         return portfolioDb.dao().getPortfolioCoin(id)?.toUiEntity(prefs.getPortfolioCurrency())
     }
 
-    private suspend fun loadPortfolio(): Portfolio {
+    suspend fun getPortfolio(forceLoad : Boolean): Portfolio {
+        if (portfolio != null && !forceLoad){
+            return portfolio!!
+        }
         val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
         val portfolioItems = portfolioDb.dao().getPortfolioCoins()
         val binanceAccount : BinanceAccount? = if (prefs.isBinanceSyncEnabled()){
             try {
-                binanceRepository.getAccountSnapshot()
+                binanceRepository.getAll()
             } catch (t : Throwable){
                 L.e(t)
                 null
@@ -113,11 +116,9 @@ class PortfolioRepository @Inject constructor(
                 amountWallet = dbEntity.amountWallet,
                 currency = result.currency)
         }
-        return result.apply { recalculate() }
-    }
-
-    suspend fun getPortfolio(force: Boolean) : Portfolio{
-        return portfolio.get(force)
+        result.recalculate()
+        portfolio = result
+        return portfolio!!
     }
 
     suspend fun getPortfolioFromDb(): Portfolio {
@@ -142,7 +143,7 @@ class PortfolioRepository @Inject constructor(
 
     fun setPortfolioCurrency(currency: Currency) {
         prefs.savePortfolioCurrency(currency)
-        portfolio.clear()
+        portfolio = null
     }
 
     fun getPortfolioDeposit(): Long {

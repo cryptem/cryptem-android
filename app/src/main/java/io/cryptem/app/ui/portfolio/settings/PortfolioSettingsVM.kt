@@ -16,7 +16,6 @@ import io.cryptem.app.model.ui.BinanceKeys
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.ScanQrEvent
-import io.cryptem.app.ui.portfolio.depositwithdraw.DepositWithdrawMode
 import io.cryptem.app.ui.portfolio.settings.event.BinanceTestEvent
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
@@ -99,7 +98,7 @@ class PortfolioSettingsVM @Inject constructor(
         saveBinanceKeys()
         viewModelScope.launch {
             kotlin.runCatching {
-                binanceRepository.getAccountSnapshot()
+                binanceRepository.getAll()
             }.onSuccess {
                 prefs.saveBinanceSync(true)
                 publish(BinanceTestEvent(true))
