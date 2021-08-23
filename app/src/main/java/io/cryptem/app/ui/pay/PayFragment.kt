@@ -11,6 +11,7 @@ import io.cryptem.app.databinding.FragmentPayBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.InstallAppEvent
 import io.cryptem.app.ui.base.event.RunAppEvent
+import io.cryptem.app.util.L
 
 
 @AndroidEntryPoint
@@ -25,6 +26,10 @@ class PayFragment : BaseFragment<PayVM, FragmentPayBinding>(R.layout.fragment_pa
         observe(InstallAppEvent::class){
             installApp(it.packageName)
         }
-        runApp(viewModel.defaultWallet.value)
+        try {
+            runApp(viewModel.defaultWallet.value)
+        } catch (t : Throwable){
+            L.e(t)
+        }
     }
 }
