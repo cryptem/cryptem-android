@@ -34,8 +34,8 @@ class CoinVM @Inject constructor(
 
     val coin = MutableLiveData<Coin?>()
     val portfolioItem = MutableLiveData<PortfolioItem>()
-    val amountExchange = MutableLiveData<String>()
-    val amountWallet = MutableLiveData<String>()
+    val amountExchange = MutableLiveData("0")
+    val amountWallet = MutableLiveData("0")
     val amountTotal = MutableLiveData<String>()
     val amountTotalFiat = MutableLiveData<String>()
     val amountTotalBtc = MutableLiveData<String>()
@@ -45,6 +45,7 @@ class CoinVM @Inject constructor(
     val simpleCoinVisible = MutableLiveData<Boolean>()
     val isInPortfolio = MutableLiveData(false)
     var addToPortfolio = false
+    val editMode = SafeMutableLiveData(false)
     val loadingChart = MutableLiveData(false)
     val chartData = MutableLiveData<LineData>()
     val chartRadios =
@@ -189,6 +190,14 @@ class CoinVM @Inject constructor(
     }
 
     fun savePortfolio() {
+        editMode.value = false
+        if (amountExchange.value.isNullOrEmpty()){
+            amountExchange.value = "0"
+        }
+        if (amountWallet.value.isNullOrEmpty()){
+            amountWallet.value = "0"
+        }
+
         coin.value?.let {
             viewModelScope.launch {
                 kotlin.runCatching {
@@ -201,6 +210,7 @@ class CoinVM @Inject constructor(
                     )
                 }.onSuccess {
                     isInPortfolio.value = true
+                    recalculatePortfolio()
                 }.onFailure {
                     L.e(it)
                 }
@@ -213,6 +223,7 @@ class CoinVM @Inject constructor(
             kotlin.runCatching {
                 portfolioRepo.removePortfolioCoin(coin.value!!.id)
             }.onSuccess {
+                editMode.value = false
                 isInPortfolio.value = false
             }.onFailure {
                 L.e(it)

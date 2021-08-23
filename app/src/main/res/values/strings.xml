@@ -33,6 +33,7 @@
     <string name="trezor_t" translatable="false" >Trezor Model T</string>
 
     <string name="format_crypto_amount" translatable="false" >%.8f %s</string>
+    <string name="format_crypto_amount_string" translatable="false" >%s %s</string>
     <string name="format_rate" translatable="false" >1 %s = %s</string>
     <string name="request_no_addresses">Add your %s wallet to your app to generate a QR code for payment.</string>
     <string name="request_dont_have_wallet">I don\'t have a wallet</string>

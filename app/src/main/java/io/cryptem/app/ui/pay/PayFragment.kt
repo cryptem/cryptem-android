@@ -17,7 +17,6 @@ import io.cryptem.app.ui.base.event.RunAppEvent
 class PayFragment : BaseFragment<PayVM, FragmentPayBinding>(R.layout.fragment_pay){
     override val viewModel: PayVM by viewModels()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observe(RunAppEvent::class){
@@ -28,6 +27,4 @@ class PayFragment : BaseFragment<PayVM, FragmentPayBinding>(R.layout.fragment_pa
         }
         runApp(viewModel.defaultWallet.value)
     }
-
-
 }

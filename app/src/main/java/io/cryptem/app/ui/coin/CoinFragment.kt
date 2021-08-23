@@ -34,11 +34,6 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupChart()
-        binding.editAmountExchange.setOnEditorActionListener { v, actionId, event ->
-            viewModel.savePortfolio()
-            hideKeyboard(v)
-            return@setOnEditorActionListener true
-        }
 
         binding.editAmountWallet.setOnEditorActionListener { v, actionId, event ->
             viewModel.savePortfolio()
@@ -61,17 +56,13 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(if (viewModel.isInPortfolio.value == true) R.menu.coin_portfolio else R.menu.coin, menu)
+        inflater.inflate(R.menu.coin, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-            R.id.action_delete -> {
-                viewModel.remove()
-                true
-            }
-            R.id.action_portfolio -> {
-                viewModel.savePortfolio()
+            R.id.action_edit -> {
+                viewModel.editMode.value = !viewModel.editMode.value
                 true
             }
             else -> false

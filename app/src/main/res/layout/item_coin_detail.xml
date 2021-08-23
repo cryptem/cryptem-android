@@ -68,7 +68,7 @@
                 app:layout_constraintTop_toTopOf="@+id/icon" />
 
             <TextView
-                android:id="@+id/textAmount2"
+                android:id="@+id/textValuation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.amountString}"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.valuationBtcString}"
                 android:textColor="@color/colorSecondary"
-                app:layout_constraintEnd_toEndOf="@+id/textAmount2"
+                app:layout_constraintEnd_toEndOf="@+id/textValuation"
                 app:layout_constraintTop_toBottomOf="@+id/textValuationFiat"
                 tools:text="0,1 BTC" />
 
@@ -96,8 +96,8 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.valuationFiatString}"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/textAmount2"
-                app:layout_constraintTop_toBottomOf="@+id/textAmount2"
+                app:layout_constraintEnd_toEndOf="@+id/textValuation"
+                app:layout_constraintTop_toBottomOf="@+id/textValuation"
                 tools:text="10000 Kč" />
 
 
@@ -139,7 +139,7 @@
                 android:text="@{data.dcaString}"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/textAmount2"
+                app:layout_constraintEnd_toEndOf="@+id/textValuation"
                 app:layout_constraintTop_toBottomOf="@+id/textValuationBtc"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="@dimen/card_padding"

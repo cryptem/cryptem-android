@@ -16,36 +16,139 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineSidebar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.64" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutHeader"
+            android:id="@+id/layoutPortfolioHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:visibleOrGone="@{vm.isInPortfolio}"
-            android:minHeight="@dimen/portfolio_header_min_height"
+            android:background="@color/black"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
+            android:paddingBottom="8dp"
+            app:visibleOrGone="@{vm.isInPortfolio}"
             android:theme="@style/HodlTheme"
             app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iconExchange"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_swap"
+                app:layout_constraintBottom_toBottomOf="@id/textExchangeAmount"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iconTrezor"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_partner_trezor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iconExchange"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/textExchangeAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:visibleOrGone="@{vm.coin != null}"
+                android:text="@{@string/format_crypto_amount_string(vm.amountExchange, vm.coin.symbol)}"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iconExchange"
+                app:layout_constraintStart_toEndOf="@+id/iconExchange"
+                app:layout_constraintTop_toTopOf="@id/iconExchange"
+                tools:text="0.00000005" />
+
+            <TextView
+                android:id="@+id/textTrezorAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:visibleOrGone="@{vm.coin != null}"
+                android:text="@{@string/format_crypto_amount_string(vm.amountWallet, vm.coin.symbol)}"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iconTrezor"
+                app:layout_constraintStart_toEndOf="@+id/iconTrezor"
+                app:layout_constraintTop_toTopOf="@+id/iconTrezor"
+                tools:text="0.5" />
+
+            <TextView
+                android:id="@+id/textAmountTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.amountTotal}"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="0,1 BTC" />
+
+            <TextView
+                android:id="@+id/textAmountBtc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.amountTotalBtc}"
+                android:textColor="@color/colorSecondary"
+                app:layout_constraintEnd_toEndOf="@+id/textAmountTotal"
+                app:layout_constraintTop_toBottomOf="@+id/textAmountTotal"
+                tools:text="0,1 BTC" />
+
+            <TextView
+                android:id="@+id/textAmountFiat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.amountTotalFiat}"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/textAmountBtc"
+                app:layout_constraintTop_toBottomOf="@+id/textAmountBtc"
+                tools:text="10000 Kč" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:background="@color/colorPrimary"
+            app:visibleOrGone="@{vm.editMode}"
+            app:animationIn="@{@anim/slide_down_in}"
+            app:animationOut="@{@anim/slide_up_out}"
+            tools:visibility="visible"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:theme="@style/HodlTheme"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonDelete"
+                style="@style/ImageButton.Outlined"
+                android:layout_width="@dimen/portfolio_icon"
+                android:layout_height="@dimen/portfolio_icon"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:onClick="@{() -> vm.remove()}"
+                app:cornerRadius="24dp"
+                app:icon="@drawable/ic_delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/colorSecondary" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputAmountExchange"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/inputAmountWallet"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/buttonDelete"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -54,7 +157,7 @@
                     android:layout_height="match_parent"
                     android:digits="0123456789.,"
                     android:hint="@string/portfolio_edit_exchange_amount"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionNext"
                     android:inputType="numberDecimal"
                     android:maxLength="12"
                     android:text="@={vm.amountExchange}" />
@@ -68,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/layoutPortfolio"
+                app:layout_constraintEnd_toStartOf="@+id/buttonSave"
                 app:layout_constraintStart_toEndOf="@+id/inputAmountExchange"
                 app:layout_constraintTop_toTopOf="@+id/inputAmountExchange">
 
@@ -85,48 +188,27 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/layoutPortfolio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="vertical"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSave"
+                style="@style/ImageButton.Outlined"
+                android:layout_width="@dimen/portfolio_icon"
+                android:layout_height="@dimen/portfolio_icon"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:onClick="@{() -> vm.savePortfolio()}"
+                app:cornerRadius="24dp"
+                app:icon="@drawable/ic_check"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/textAmount2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{vm.amountTotal}"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    tools:text="0,1 BTC" />
-
-                <TextView
-                    android:id="@+id/textValuationFiat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{vm.amountTotalFiat}"
-                    android:textColor="@color/white"
-                    tools:text="10000 Kč" />
-
-                <TextView
-                    android:id="@+id/textValuationBtc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{vm.amountTotalBtc}"
-                    android:textColor="@color/colorSecondary"
-                    tools:text="0,1 BTC" />
-            </LinearLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/colorSecondary" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+            app:layout_constraintTop_toBottomOf="@id/layoutPortfolioHeader">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -136,38 +218,37 @@
                     android:id="@+id/radiosChart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/screen_padding"
-                    android:paddingEnd="@dimen/screen_padding"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/screen_padding"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:checked="@={vm.chartRadios[0]}"
-                        android:layout_marginEnd="16dp"
-                        android:text="@string/time_day"/>
+                        android:text="@string/time_day" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:checked="@={vm.chartRadios[1]}"
-                        android:layout_marginEnd="16dp"
-                        android:text="@string/time_week"/>
+                        android:text="@string/time_week" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="8dp"
                         android:checked="@={vm.chartRadios[2]}"
-                        android:text="@string/time_month"/>
+                        android:text="@string/time_month" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="@={vm.chartRadios[3]}"
-                        android:text="1y"/>
+                        android:text="1y" />
 
                 </RadioGroup>
 
@@ -459,9 +540,6 @@
                         app:constraint_referenced_ids="textCurrentPriceBtc, trendDayBtc, trendWeekBtc, trendMonthBtc, textAthBtc, textAthBtcDate, trendAthBtc"
                         app:visibleOrInvisible="@{!vm.coin.isBtc()}" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
