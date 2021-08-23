@@ -1,25 +1,23 @@
 package io.cryptem.app.ui.coin
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnFocusChangeListener
-import android.view.inputmethod.InputMethodManager
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import io.cryptem.app.AppConfig
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentCoinBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.UrlEvent
-import java.math.RoundingMode
 
 @AndroidEntryPoint
 class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment_coin){
@@ -35,15 +33,15 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupChart()
         binding.editAmountExchange.setOnEditorActionListener { v, actionId, event ->
-            viewModel.save()
+            viewModel.savePortfolio()
             hideKeyboard(v)
             return@setOnEditorActionListener true
         }
 
         binding.editAmountWallet.setOnEditorActionListener { v, actionId, event ->
-            viewModel.save()
+            viewModel.savePortfolio()
             hideKeyboard(v)
             return@setOnEditorActionListener true
         }
@@ -63,15 +61,17 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if (viewModel.isInPortfolio.value == true) {
-            inflater.inflate(R.menu.coin, menu)
-        }
+        inflater.inflate(if (viewModel.isInPortfolio.value == true) R.menu.coin_portfolio else R.menu.coin, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.action_delete -> {
                 viewModel.remove()
+                true
+            }
+            R.id.action_portfolio -> {
+                viewModel.savePortfolio()
                 true
             }
             else -> false
@@ -87,4 +87,37 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
         }.show()
     }
 
+    fun setupChart(){
+
+        viewModel.chartRadios.forEachIndexed { index, liveData ->
+            liveData.observe(viewLifecycleOwner){
+                if (it) {
+                    when (index) {
+                        0 -> binding.chart.xAxis.valueFormatter = TimeAxisFormatter()
+                        else -> binding.chart.xAxis.valueFormatter = DateAxisFormatter()
+                    }
+                }
+            }
+        }
+
+        val chart = binding.chart
+        chart.description.text = ""
+        val xAxis: XAxis = chart.xAxis
+        xAxis.textSize = 11f
+        xAxis.textColor = Color.BLACK
+        xAxis.setDrawGridLines(true)
+        xAxis.setDrawAxisLine(false)
+        xAxis.valueFormatter = DateAxisFormatter()
+
+        val leftAxis: YAxis = chart.axisLeft
+        leftAxis.textColor = ResourcesCompat.getColor(resources, R.color.black, null)
+        leftAxis.setDrawGridLines(true)
+        leftAxis.isGranularityEnabled = false
+
+        val rightAxis: YAxis = chart.axisRight
+        rightAxis.textColor = ResourcesCompat.getColor(resources, R.color.coin_bitcoin, null)
+        rightAxis.setDrawGridLines(false)
+        rightAxis.setDrawZeroLine(false)
+        rightAxis.isGranularityEnabled = false
+    }
 }

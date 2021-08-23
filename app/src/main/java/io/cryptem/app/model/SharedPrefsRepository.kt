@@ -18,13 +18,7 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val PORTFOLIO_CURRENCY = "PORTFOLIO_CURRENCY"
         const val PORTFOLIO_DEPOSIT = "PORTFOLIO_DEPOSIT"
         const val PORTFOLIO_WITHDRAWAL = "PORTFOLIO_WITHDRAWAL"
-        const val USE_SATS = "USE_SATS"
-        const val COIN = "COIN"
         const val DEFAULT_WALLET = "DEFAULT_WALLET"
-        const val ID = "ID"
-        const val LAST_MARKET_COINS_REFRESH = "LAST_MARKET_COINS_REFRESH"
-        const val LAST_MARKET_GLOBAL_DATA_REFRESH = "LAST_MARKET_GLOBAL_DATA_REFRESH"
-        const val LAST_PORTFOLIO_REFRESH = "LAST_PORTFOLIO_REFRESH"
         const val HOME_SCREEN = "HOME_SCREEN"
         const val BINANCE_REGISTERED = "BINANCE_REGISTERED"
         const val BINANCE_SYNC = "BINANCE_SYNC"
@@ -32,6 +26,7 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val BINANCE_SECRET_KEY = "BINANCE_SECRET_KEY"
         const val COUNTRY = "COUNTRY"
         const val SW_WALLET = "SW_WALLET"
+        const val COIN_PRICE_CHART_DAYS = "COIN_PRICE_CHART_DAYS"
     }
 
     fun saveDefaultWallet(id: Long?) {
@@ -153,5 +148,13 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
 
     fun isBinanceSyncEnabled(): Boolean {
         return prefs.getBoolean(BINANCE_SYNC, false)
+    }
+
+    fun saveChartDays(days: Int) {
+        prefs.edit().putInt(COIN_PRICE_CHART_DAYS, days).apply()
+    }
+
+    fun getChartDays(): Int {
+        return prefs.getInt(COIN_PRICE_CHART_DAYS, 7)
     }
 }

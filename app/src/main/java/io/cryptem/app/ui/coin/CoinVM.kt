@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
+import com.github.mikephil.charting.data.LineData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.ext.toAmountString
 import io.cryptem.app.ext.toBtcString
@@ -27,7 +28,7 @@ import javax.inject.Inject
 class CoinVM @Inject constructor(
     val marketRepo: MarketRepository,
     val portfolioRepo: PortfolioRepository,
-    val prefs : SharedPrefsRepository,
+    val prefs: SharedPrefsRepository,
     val remoteConfigRepository: RemoteConfigRepository
 ) : BaseVM() {
 
@@ -44,10 +45,14 @@ class CoinVM @Inject constructor(
     val simpleCoinVisible = MutableLiveData<Boolean>()
     val isInPortfolio = MutableLiveData(false)
     var addToPortfolio = false
+    val loadingChart = MutableLiveData(false)
+    val chartData = MutableLiveData<LineData>()
+    val chartRadios =
+        arrayOf(SafeMutableLiveData(false), SafeMutableLiveData(false), SafeMutableLiveData(false), SafeMutableLiveData(false))
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        loadCoin()
+        loadCoinDetails()
         loadPortfolio()
         loadCustomPrice()
 
@@ -61,25 +66,61 @@ class CoinVM @Inject constructor(
             recalculatePortfolio()
         }
         checkSimpleCoin()
+        setupChartRadios()
     }
 
-    private fun checkSimpleCoin(){
-        simpleCoinVisible.value = (id == "bitcoin" || id == "ethereum" || id == "litecoin" || id == "bitcoin-cash" || id == "ripple")
+    private fun setupChartRadios() {
+        chartRadios[0].observeForever {
+            if (it) {
+                loadChart(1)
+                prefs.saveChartDays(1)
+            }
+        }
+        chartRadios[1].observeForever {
+            if (it) {
+                loadChart(7)
+                prefs.saveChartDays(7)
+            }
+        }
+        chartRadios[2].observeForever {
+            if (it) {
+                loadChart(30)
+                prefs.saveChartDays(30)
+            }
+        }
+        chartRadios[3].observeForever {
+            if (it) {
+                loadChart(365)
+                prefs.saveChartDays(365)
+            }
+        }
+        when(prefs.getChartDays()){
+            1 -> chartRadios[0].value = true
+            7 -> chartRadios[1].value = true
+            30 -> chartRadios[2].value = true
+            365 -> chartRadios[3].value = true
+        }
     }
 
-    private fun recalculatePortfolio(){
+    private fun checkSimpleCoin() {
+        simpleCoinVisible.value =
+            (id == "bitcoin" || id == "ethereum" || id == "litecoin" || id == "bitcoin-cash" || id == "ripple")
+    }
+
+    private fun recalculatePortfolio() {
         val amountWallet = amountWallet.value?.replace(",", ".")?.toDoubleOrNull() ?: 0.0
         val amountExchange = amountExchange.value?.replace(",", ".")?.toDoubleOrNull() ?: 0.0
         amountTotal.value = (amountWallet + amountExchange).toAmountString(coin.value)
         priceCustom.value?.let {
-            amountTotalFiat.value = ((amountWallet + amountExchange)*it).toFiatString(currency.value, 0)
+            amountTotalFiat.value =
+                ((amountWallet + amountExchange) * it).toFiatString(currency.value, 0)
         }
         coin.value?.priceBtc?.currentPrice?.let {
-            amountTotalBtc.value = ((amountWallet + amountExchange)*it).toBtcString()
+            amountTotalBtc.value = ((amountWallet + amountExchange) * it).toBtcString()
         }
     }
 
-    fun loadCoin() {
+    fun loadCoinDetails() {
         viewModelScope.launch {
             kotlin.runCatching {
                 marketRepo.getCoin(id = id)
@@ -87,9 +128,26 @@ class CoinVM @Inject constructor(
                 it?.let {
                     coin.value = it
                     recalculatePortfolio()
+                    if (addToPortfolio) {
+                        savePortfolio()
+                    }
                 }
-
             }.onFailure {
+                L.e(it)
+            }
+        }
+    }
+
+    fun loadChart(days: Int) {
+        loadingChart.value = true
+        viewModelScope.launch {
+            kotlin.runCatching {
+                marketRepo.getChart(id, days)
+            }.onSuccess {
+                loadingChart.value = false
+                chartData.value = it
+            }.onFailure {
+                loadingChart.value = false
                 L.e(it)
             }
         }
@@ -100,12 +158,13 @@ class CoinVM @Inject constructor(
             kotlin.runCatching {
                 portfolioRepo.getPortfolioCoin(id = id)
             }.onSuccess {
-                if (it != null){
+                if (it != null) {
                     isInPortfolio.value = true
                     //coin.value = it.coin
                     val format = NumberFormat.getInstance(Locale.getDefault())
                     format.isGroupingUsed = false
-                    amountExchange.value = format.format(it.amountExchange).replace("\\s".toRegex(), "")
+                    amountExchange.value =
+                        format.format(it.amountExchange).replace("\\s".toRegex(), "")
                     amountWallet.value = format.format(it.amountWallet).replace("\\s".toRegex(), "")
                     priceCustom.value = it.coin.priceCustom?.currentPrice
                     recalculatePortfolio()
@@ -116,23 +175,20 @@ class CoinVM @Inject constructor(
         }
     }
 
-    fun loadCustomPrice(){
+    fun loadCustomPrice() {
         viewModelScope.launch {
             kotlin.runCatching {
                 marketRepo.loadCoinPrice(id = id, currency.value)
             }.onSuccess {
                 priceCustom.value = it
                 recalculatePortfolio()
-                if (addToPortfolio){
-                    save()
-                }
             }.onFailure {
                 L.e(it)
             }
         }
     }
 
-    fun save() {
+    fun savePortfolio() {
         coin.value?.let {
             viewModelScope.launch {
                 kotlin.runCatching {
@@ -144,7 +200,7 @@ class CoinVM @Inject constructor(
                             ?: 0.0
                     )
                 }.onSuccess {
-
+                    isInPortfolio.value = true
                 }.onFailure {
                     L.e(it)
                 }
@@ -157,14 +213,14 @@ class CoinVM @Inject constructor(
             kotlin.runCatching {
                 portfolioRepo.removePortfolioCoin(coin.value!!.id)
             }.onSuccess {
-                navigate(CoinFragmentDirections.actionPortfolioEditFragmentToPortfolioFragment())
+                isInPortfolio.value = false
             }.onFailure {
                 L.e(it)
             }
         }
     }
 
-    fun showSimpleCoin(){
+    fun showSimpleCoin() {
         publish(UrlEvent(remoteConfigRepository.getSimpleCoinLink()))
     }
 
@@ -180,7 +236,7 @@ class CoinVM @Inject constructor(
         publish(UrlEvent("https://www.binance.com/en/trade/${coin.value?.symbol}_USDT"))
     }
 
-    fun getBinanceLink() : String{
+    fun getBinanceLink(): String {
         return remoteConfigRepository.getBinanceLink()
     }
 }

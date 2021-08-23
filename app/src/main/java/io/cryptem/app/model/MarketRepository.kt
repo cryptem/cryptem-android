@@ -1,5 +1,11 @@
 package io.cryptem.app.model
 
+import android.graphics.Color
+import com.github.mikephil.charting.components.YAxis.AxisDependency
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.utils.ColorTemplate
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.coingecko.dto.CoinsResponseItemDto
 import io.cryptem.app.model.ui.*
@@ -88,4 +94,37 @@ class MarketRepository @Inject constructor(
         return coinGeckoApi.getGlobalMarketData().data?.toUiEntity()
     }
 
+    suspend fun getChart(id : String, days : Int) : LineData{
+        val responseUsd = coinGeckoApi.getMarketChart(id, "USD", days)
+        val responseBtc = coinGeckoApi.getMarketChart(id, "BTC", days)
+
+        val values1 = responseUsd.prices?.map {
+            Entry(it[0].toFloat(), it[1].toFloat())
+        }
+
+        val values2 = responseBtc.prices?.map {
+            Entry(it[0].toFloat(), it[1].toFloat())
+        }
+
+        val set1 = LineDataSet(values1, "USD")
+
+        set1.axisDependency = AxisDependency.LEFT
+        set1.color = Color.BLACK
+        set1.lineWidth = 2f
+        set1.setDrawCircles(false)
+        set1.setDrawValues(false)
+
+        val set2 = LineDataSet(values2, "BTC")
+        set2.axisDependency = AxisDependency.RIGHT
+        set2.color = Color.parseColor("#f7931a")
+        set2.lineWidth = 2f
+        set2.setDrawCircles(false)
+        set2.setDrawValues(false)
+
+        val data = LineData(set1, set2)
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTextSize(9f)
+
+        return data
+    }
 }
