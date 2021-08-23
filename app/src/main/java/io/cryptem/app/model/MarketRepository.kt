@@ -57,9 +57,9 @@ class MarketRepository @Inject constructor(
         val coinBtc = coinGeckoApi.getCoins(currency = "BTC", ids = id).firstOrNull()
         val coinUsd = coinGeckoApi.getCoins(currency = "USD", ids = id).firstOrNull()
 
-        return coinBtc?.toUiEntity()?.apply {
-            priceBtc = coinBtc.toCoinPriceUiEntity()
-            priceUsd = coinUsd?.toCoinPriceUiEntity()
+        return coinUsd?.toUiEntity()?.apply {
+            priceBtc = coinBtc?.toCoinPriceUiEntity()
+            priceUsd = coinUsd.toCoinPriceUiEntity()
         }
     }
 

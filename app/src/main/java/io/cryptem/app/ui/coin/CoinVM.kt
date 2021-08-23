@@ -121,7 +121,7 @@ class CoinVM @Inject constructor(
         }
     }
 
-    fun loadCoinDetails() {
+    private fun loadCoinDetails() {
         viewModelScope.launch {
             kotlin.runCatching {
                 marketRepo.getCoin(id = id)
@@ -139,7 +139,7 @@ class CoinVM @Inject constructor(
         }
     }
 
-    fun loadChart(days: Int) {
+    private fun loadChart(days: Int) {
         loadingChart.value = true
         viewModelScope.launch {
             kotlin.runCatching {
@@ -154,7 +154,7 @@ class CoinVM @Inject constructor(
         }
     }
 
-    fun loadPortfolio() {
+    private fun loadPortfolio() {
         viewModelScope.launch {
             kotlin.runCatching {
                 portfolioRepo.getPortfolioCoin(id = id)
@@ -176,7 +176,7 @@ class CoinVM @Inject constructor(
         }
     }
 
-    fun loadCustomPrice() {
+    private fun loadCustomPrice() {
         viewModelScope.launch {
             kotlin.runCatching {
                 marketRepo.loadCoinPrice(id = id, currency.value)
