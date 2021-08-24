@@ -53,7 +53,7 @@ class MarketRepository @Inject constructor(
         return marketCoinsMap.get(id)
     }
 
-    suspend fun loadMarketCoin(id: String): Coin? {
+    private suspend fun loadMarketCoin(id: String): Coin? {
         val coinBtc = coinGeckoApi.getCoins(currency = "BTC", ids = id).firstOrNull()
         val coinUsd = coinGeckoApi.getCoins(currency = "USD", ids = id).firstOrNull()
 

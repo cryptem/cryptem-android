@@ -41,8 +41,6 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible"
-        android:visibility="invisible"
         app:visibleOrInvisible="@{vm.marketGlobalData != null}"
         app:animationIn="@{@anim/fade_in}">
 
