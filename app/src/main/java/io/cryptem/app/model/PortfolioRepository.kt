@@ -133,6 +133,14 @@ class PortfolioRepository @Inject constructor(
         return result
     }
 
+    suspend fun isInPortfolio(id : String) : Boolean{
+        return if(portfolio != null){
+            portfolio?.items?.firstOrNull { it.coin.id == id } != null
+        } else {
+            portfolioDb.dao().getPortfolioCoin(id) != null
+        }
+    }
+
     fun getPortfolioCurrency(): Currency {
         return prefs.getPortfolioCurrency()
     }

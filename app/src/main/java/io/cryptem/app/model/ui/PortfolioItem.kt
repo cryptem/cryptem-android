@@ -40,20 +40,20 @@ class PortfolioItem(
     }
 
     fun getExchangeAmountString(): String {
-        return amountExchange.toAmountString(coin)
+        return amountExchange.toAmountString(coin.symbol)
     }
 
     fun getWalletAmountString(): String {
-        return amountWallet.toAmountString(coin)
+        return amountWallet.toAmountString(coin.symbol)
     }
 
     fun getAmountString() : String{
-        return (amountExchange + amountWallet).toAmountString(coin)
+        return (amountExchange + amountWallet).toAmountString(coin.symbol)
     }
 
 
     fun getAmountString(maxDecimals : Int) : String{
-        return (amountExchange + amountWallet).toAmountString(coin, maxDecimals)
+        return (amountExchange + amountWallet).toAmountString(coin.symbol, maxDecimals)
     }
 
     fun getAvgPriceString(): String {

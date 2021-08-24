@@ -54,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                app:visibleOrGone="@{vm.coin != null}"
                 android:text="@{@string/format_crypto_amount_string(vm.amountExchange, vm.coin.symbol)}"
                 android:textColor="@color/white"
                 android:layout_marginStart="8dp"
@@ -67,7 +66,6 @@
                 android:id="@+id/textTrezorAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:visibleOrGone="@{vm.coin != null}"
                 android:text="@{@string/format_crypto_amount_string(vm.amountWallet, vm.coin.symbol)}"
                 android:textColor="@color/white"
                 android:layout_marginStart="8dp"
@@ -257,6 +255,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/radiosChart"/>
 
+                <TextView
+                    android:id="@+id/textSymbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="BTC"
+                    android:text="@{vm.coin.symbol}"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/iconCoin"
+                    app:layout_constraintStart_toEndOf="@id/iconCoin"
+                    app:layout_constraintTop_toTopOf="@+id/iconCoin"
+                    android:layout_marginStart="8dp"/>
+
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
@@ -265,7 +276,10 @@
                     android:layout_marginEnd="@dimen/screen_padding_half"
                     android:layout_marginTop="8dp"
                     app:data="@{vm.chartData}"
+                    tools:visibility="visible"
+                    android:visibility="invisible"
                     app:visibleOrInvisible="@{!vm.loadingChart}"
+                    app:animationIn="@{@anim/fade_in}"
                     app:layout_constraintTop_toBottomOf="@id/radiosChart"/>
 
                 <ProgressBar
@@ -313,9 +327,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{vm.coin.usdPriceString}"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/textSecondary"
+                        style="@style/TextDollarPrice"
                         app:layout_constraintStart_toStartOf="@+id/title"
                         app:layout_constraintTop_toBottomOf="@+id/title"
                         tools:text="1000 USD" />
@@ -325,8 +337,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{vm.coin.btcPriceString}"
-                        android:textStyle="bold"
-                        android:textColor="@color/coin_bitcoin"
+                        style="@style/TextBitcoinPrice"
                         app:layout_constraintStart_toStartOf="@+id/textCurrentUsdPrice"
                         app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
                         tools:text="1 BTC" />
@@ -462,12 +473,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/coin_date"
                         android:textStyle="bold"
-
                         app:layout_constraintEnd_toEndOf="@+id/text24hTitle"
                         app:layout_constraintStart_toStartOf="@+id/text24hTitle"
                         app:layout_constraintTop_toTopOf="@+id/textAthTitle" />
-
-
 
                     <TextView
                         android:id="@+id/textAthUsdDate"
@@ -542,56 +550,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/textMarketcapTitle"
                         tools:text="1 000 000 000 000 USD" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonBinanceBtc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:enabled="@{!vm.coin.isBtc()}"
-                        android:onClick="@{() -> vm.showBinanceBtcTrade()}"
-                        android:text="@string/coin_trade_to_btc"
-                        android:textSize="12sp"
-                        android:layout_marginTop="8dp"
-                        app:icon="@drawable/ic_binance"
-                        app:iconSize="16dp"
-                        app:iconTint="@color/black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textMarketcap"
-                        tools:text="BTC" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonSimpleCoin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -> vm.showSimpleCoin()}"
-                        android:text="@string/buy"
-                        android:textSize="12sp"
-                        app:icon="@drawable/ic_simple_coin"
-                        app:iconSize="16dp"
-                        app:iconTint="@color/black"
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/buttonBinanceUsdt"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonBinanceUsdt"
-                        app:layout_constraintTop_toTopOf="@+id/buttonBinanceUsdt"
-                        app:visibleOrGone="@{vm.simpleCoinVisible}" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buttonBinanceUsdt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:onClick="@{() -> vm.showBinanceUsdtTrade()}"
-                        android:text="@string/coin_trade_to_usdt"
-                        android:textSize="12sp"
-                        android:layout_marginEnd="8dp"
-                        app:icon="@drawable/ic_binance"
-                        app:iconSize="16dp"
-                        app:iconTint="@color/black"
-                        app:layout_constraintBottom_toBottomOf="@+id/buttonBinanceBtc"
-                        app:layout_constraintEnd_toStartOf="@+id/buttonBinanceBtc"
-                        app:layout_constraintTop_toTopOf="@+id/buttonBinanceBtc"
-                        tools:text="USDT" />
-
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group"
                         android:layout_width="wrap_content"
@@ -599,6 +557,56 @@
                         app:constraint_referenced_ids="textCurrentPriceBtc, trendDayBtc, trendWeekBtc, trendMonthBtc, textAthBtc, textAthBtcDate, trendAthBtc"
                         app:visibleOrInvisible="@{!vm.coin.isBtc()}" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonBinanceBtc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="@{!vm.coin.isBtc()}"
+                    android:onClick="@{() -> vm.showBinanceBtcTrade()}"
+                    android:text="@string/coin_trade_to_btc"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="@dimen/screen_padding"
+                    app:icon="@drawable/ic_binance"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutData"
+                    tools:text="BTC" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonSimpleCoin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> vm.showSimpleCoin()}"
+                    android:text="@string/buy"
+                    android:textSize="12sp"
+                    app:icon="@drawable/ic_simple_coin"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/black"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/buttonBinanceUsdt"
+                    app:layout_constraintEnd_toStartOf="@+id/buttonBinanceUsdt"
+                    app:layout_constraintTop_toTopOf="@+id/buttonBinanceUsdt"
+                    app:visibleOrGone="@{vm.simpleCoinVisible}" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonBinanceUsdt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:onClick="@{() -> vm.showBinanceUsdtTrade()}"
+                    android:text="@string/coin_trade_to_usdt"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="8dp"
+                    app:icon="@drawable/ic_binance"
+                    app:iconSize="16dp"
+                    app:iconTint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="@+id/buttonBinanceBtc"
+                    app:layout_constraintEnd_toStartOf="@+id/buttonBinanceBtc"
+                    app:layout_constraintTop_toTopOf="@+id/buttonBinanceBtc"
+                    tools:text="USDT" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 

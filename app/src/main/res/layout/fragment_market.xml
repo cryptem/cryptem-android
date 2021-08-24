@@ -17,10 +17,11 @@
     <include
         android:id="@+id/header"
         layout="@layout/layout_market_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:vm="@{vm}"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        tools:layout_editor_absoluteX="0dp" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
@@ -37,7 +38,7 @@
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="64dp"
         android:clipToPadding="false"
         app:visibleOrGone="@{!vm.error}"
         app:data="@{vm.items}"

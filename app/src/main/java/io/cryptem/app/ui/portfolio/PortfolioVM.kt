@@ -111,12 +111,12 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     }
 
     fun showCoinDetail(coin: Coin){
-        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin.id, coin.name))
+        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin, coin.name))
     }
 
     fun addCoin(coin: Coin){
         addCoinMode.value = false
-        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin.id, coin.name, addToPortfolio = true))
+        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToCoinFragment(coin, coin.name, addToPortfolio = true))
     }
 
     fun showTrezor(){

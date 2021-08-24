@@ -26,14 +26,24 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.id = args.id
-        viewModel.addToPortfolio = args.addToPortfolio
+        viewModel.coin.value = args.coin
+        if (args.addToPortfolio){
+            viewModel.editMode.value = true
+        }
         setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupChart()
+
+        viewModel.editMode.observeForever {
+            if(it){
+                showKeyboard(binding.editAmountExchange)
+            } else {
+                hideKeyboard()
+            }
+        }
 
         binding.editAmountWallet.setOnEditorActionListener { v, actionId, event ->
             viewModel.savePortfolio()

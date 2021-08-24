@@ -5,7 +5,6 @@ import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.coingecko.dto.CoinsResponseItemDto
 import io.cryptem.app.model.ui.*
@@ -17,17 +16,16 @@ class MarketRepository @Inject constructor(
     val coinGeckoApi: CoinGeckoApiDef,
 ) {
 
-    //private val marketCoins = ListCache(5, funLoad = this::loadMarketCoins)
     private val marketCoinsMap =
         HashedCache(15, funLoadItem = this::loadMarketCoin, keyMapFun = { it.id })
     private val marketGlobalData = Cache(60, funLoad = this::loadMarketGlobalData)
 
     val marketCoinsCache = ArrayList<Coin>()
     var marketCoinsPage = 1
-    private set
+        private set
 
     suspend fun getCoinsNextPage(forceReload: Boolean = false): List<Coin> {
-        if (forceReload){
+        if (forceReload) {
             marketCoinsCache.clear()
             marketCoinsPage = 1
         }
@@ -43,8 +41,10 @@ class MarketRepository @Inject constructor(
         marketCoinsPage += 1
         val result = resultUsd.map {
             it.toUiEntity(Currency.USD)
-                .apply { priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity() }}
-
+                .apply { priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity() }
+        }.onEach { coin ->
+            marketCoinsMap.put(coin)
+        }
         marketCoinsCache.addAll(result)
         return result
     }
@@ -94,7 +94,7 @@ class MarketRepository @Inject constructor(
         return coinGeckoApi.getGlobalMarketData().data?.toUiEntity()
     }
 
-    suspend fun getChart(id : String, days : Int) : LineData{
+    suspend fun getChart(id: String, days: Int): LineData {
         val responseUsd = coinGeckoApi.getMarketChart(id, "USD", days)
         val responseBtc = coinGeckoApi.getMarketChart(id, "BTC", days)
 

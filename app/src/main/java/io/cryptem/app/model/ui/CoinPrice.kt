@@ -1,8 +1,11 @@
 package io.cryptem.app.model.ui
 
+import android.os.Parcelable
 import io.cryptem.app.ext.format
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
+@Parcelize
 class CoinPrice(
     val currentPrice: Double?,
     val percentChange24h: Double? = null,
@@ -11,7 +14,7 @@ class CoinPrice(
     val ath : Double? = null,
     val athPercent: Double? = null,
     val athDate : Date? = null
-) {
+) : Parcelable {
 
     fun getAthDateString() : String?{
         return athDate?.format()

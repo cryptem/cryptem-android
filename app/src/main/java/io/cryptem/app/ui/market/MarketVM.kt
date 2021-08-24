@@ -29,7 +29,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
     val error = MutableLiveData(false)
     val items = ObservableArrayList<Coin>()
     val currency = MutableLiveData(prefs.getPortfolioCurrency())
-    val marketGlobalData = MutableLiveData<MarketGlobalData>(MarketGlobalData())
+    val marketGlobalData = MutableLiveData<MarketGlobalData>()
     val altcoinIndex = MutableLiveData<Double>()
     val altcoinIndexInt = MutableLiveData<Int>()
     val percentInterval = listOf(MutableLiveData(PercentTimeInterval.DAY), MutableLiveData(PercentTimeInterval.WEEK))
@@ -119,7 +119,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
     }
 
     fun showCoin(coin : Coin){
-        navigate(MarketFragmentDirections.actionMarketFragmentToCoinFragment(coin.id, coin.name))
+        navigate(MarketFragmentDirections.actionMarketFragmentToCoinFragment(coin, coin.name))
     }
 
     fun toggleTrendTime(index : Int){
@@ -132,7 +132,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
     }
 
     fun getAltcoinIndexString(value : Double?) : String?{
-        return value?.toPercentString(0) ?: "..."
+        return value?.toPercentString(0) ?: "... %"
     }
 
     fun retry(){

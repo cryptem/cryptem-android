@@ -34,60 +34,83 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="1" />
 
-    <TextView
-        android:id="@+id/textMarketCapTitle"
+    <LinearLayout
+        android:id="@+id/layoutMarketCap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
-        tools:text="@string/market_marketcap"
-        android:text="@{@string/market_marketcap(vm.marketGlobalData.marketCapString)}"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"
+        android:visibility="invisible"
+        app:visibleOrInvisible="@{vm.marketGlobalData != null}"
+        app:animationIn="@{@anim/fade_in}">
 
-    <include layout="@layout/layout_trend_light"
-        android:id="@+id/viewMarketCapChange"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"
-        app:layout_constraintStart_toEndOf="@id/textMarketCapTitle"
-        android:layout_marginStart="4dp"/>
+        <TextView
+            android:id="@+id/textMarketCapTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            tools:text="$1 000 000 000 000 000"
+            android:text="@{vm.marketGlobalData.marketCapString}"/>
+
+        <include
+            android:id="@+id/viewMarketCapChange"
+            layout="@layout/layout_trend_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_gravity="center_vertical"
+            app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"
+            app:layout_constraintBottom_toBottomOf="@+id/textMarketCapTitle"
+            app:layout_constraintStart_toEndOf="@id/textMarketCapTitle"
+            app:layout_constraintTop_toTopOf="@+id/textMarketCapTitle" />
+
+    </LinearLayout>
+
 
     <TextView
-        android:id="@+id/textBtcDominanceTitle"
+        android:id="@+id/textBtcDominance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString)}"
+        android:text='@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString != null ? vm.marketGlobalData.btcDominanceString : "... %")}'
         android:textColor="@color/colorSecondary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textMarketCapTitle"
+        app:layout_constraintTop_toBottomOf="@id/layoutMarketCap"
         tools:text="@string/market_btc_dominance" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/btcDominanceIndicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:indeterminate="@{vm.marketGlobalData == null}"
         android:progress="@{vm.marketGlobalData.btcDominanceInt}"
         android:theme="@style/BtcIndicator"
-        app:layout_constraintEnd_toEndOf="@+id/textBtcDominanceTitle"
-        app:layout_constraintStart_toStartOf="@+id/textBtcDominanceTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textBtcDominanceTitle"
+        app:layout_constraintEnd_toEndOf="@+id/textBtcDominance"
+        app:layout_constraintStart_toStartOf="@+id/textBtcDominance"
+        app:layout_constraintTop_toBottomOf="@+id/textBtcDominance"
         tools:progress="50" />
 
     <TextView
         android:id="@+id/textEthDominance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{@string/market_eth_dominance(vm.marketGlobalData.ethDominanceString)}"
+        android:text='@{@string/market_eth_dominance(vm.marketGlobalData.ethDominanceString != null ? vm.marketGlobalData.ethDominanceString : "... %")}'
         android:layout_marginStart="8dp"
         android:textColor="@color/coin_ethereum_light"
-        app:layout_constraintStart_toEndOf="@+id/textBtcDominanceTitle"
-        app:layout_constraintTop_toBottomOf="@+id/textMarketCapTitle"
+        app:layout_constraintStart_toEndOf="@+id/textBtcDominance"
+        app:layout_constraintTop_toBottomOf="@+id/layoutMarketCap"
         tools:text="@string/market_eth_dominance" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/ethDominanceIndicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:indeterminate="@{vm.marketGlobalData == null}"
         android:progress="@{vm.marketGlobalData.ethDominanceInt}"
         android:theme="@style/EthIndicator"
         app:layout_constraintEnd_toEndOf="@+id/textEthDominance"
@@ -101,6 +124,7 @@
         android:layout_height="wrap_content"
         android:text="@{@string/market_altcoin_index(vm.getAltcoinIndexString(vm.altcoinIndex))}"
         android:textColor="@color/white"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btcDominanceIndicator"
         tools:text="@string/market_altcoin_index" />
@@ -109,6 +133,7 @@
         android:id="@+id/altcoinIndexIndicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:indeterminate="@{vm.altcoinIndex == null}"
         android:progress="@{vm.altcoinIndexInt}"
         android:theme="@style/DepositIndicator"
         app:layout_constraintTop_toBottomOf="@id/textAltcoinIndex"

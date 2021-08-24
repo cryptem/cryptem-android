@@ -1,9 +1,12 @@
 package io.cryptem.app.model.ui
 
+import android.os.Parcelable
 import io.cryptem.app.ext.toBtcString
 import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.ext.toSatString
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 class Coin(
     val id: String,
     val symbol: String,
@@ -14,7 +17,7 @@ class Coin(
     var priceUsd : CoinPrice? = null,
     var priceCustom : CoinPrice? = null,
     var marketCap : Double? = null,
-) {
+) : Parcelable {
 
     fun getPrice(currency : Currency) : Double?{
         return when (currency){
