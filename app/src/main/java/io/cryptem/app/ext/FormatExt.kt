@@ -58,9 +58,9 @@ fun Double.toPercentString(decimalDigits: Int = 2, abs: Boolean = false): String
     return format.format(if (abs) this.absoluteValue else this)
 }
 
-fun Double.toAmountString(coin: Coin? = null): String {
+fun Double.toAmountString(coin: Coin? = null, maxDecimals : Int = 8): String {
     val format: NumberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
-    format.maximumFractionDigits = 8
+    format.maximumFractionDigits = maxDecimals
     return if (coin != null) {
         "${format.format(this)} ${coin.symbol}"
     } else {

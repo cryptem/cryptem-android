@@ -43,14 +43,11 @@
         tools:text="10000 Kč" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonSave"
-        style="@style/ImageButton.Outlined"
+        android:id="@+id/buttonTransaction"
+        style="@style/ImageButton.Circle"
         app:strokeColor="@color/colorSecondary"
         android:layout_width="@dimen/portfolio_icon"
         android:layout_height="@dimen/portfolio_icon"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        app:cornerRadius="24dp"
         android:onClick="@{() -> vm.depositWithdraw()}"
         app:icon="@drawable/ic_swap"
         app:layout_constraintBottom_toBottomOf="@+id/textHodlings"
@@ -65,7 +62,7 @@
         android:textSize="18sp"
         android:layout_marginStart="8dp"
         android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/buttonSave"
+        app:layout_constraintStart_toEndOf="@+id/buttonTransaction"
         app:layout_constraintTop_toBottomOf="@+id/textDeposit"
         tools:text="20000 Kč" />
 
@@ -122,6 +119,7 @@
         android:layout_height="wrap_content"
         android:text="@{data.valuationPercentString}"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:visibleOrGone="@{vm.portfolio.deposit != 0}"
         app:layout_constraintBottom_toBottomOf="@+id/iconTrend"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +143,7 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:layout_marginEnd="8dp"
-        android:text="24h"
+        tools:text="@string/time_day"
         android:textAllCaps="false"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -51,6 +51,11 @@ class PortfolioItem(
         return (amountExchange + amountWallet).toAmountString(coin)
     }
 
+
+    fun getAmountString(maxDecimals : Int) : String{
+        return (amountExchange + amountWallet).toAmountString(coin, maxDecimals)
+    }
+
     fun getAvgPriceString(): String {
         return averagePrice.toFiatString(currency)
     }

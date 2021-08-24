@@ -97,7 +97,7 @@
                 android:id="@+id/textValuation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.amountString}"
+                android:text="@{data.getAmountString(4)}"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="@dimen/card_padding"
@@ -112,8 +112,9 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.valuationBtcString}"
                 android:textColor="@color/colorSecondary"
+                app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
                 app:layout_constraintEnd_toEndOf="@+id/textValuation"
-                app:layout_constraintTop_toBottomOf="@+id/textValuationFiat"
+                app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc"
                 tools:text="0,1 BTC" />
 
             <TextView
@@ -122,8 +123,9 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.valuationFiatString}"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintEnd_toEndOf="@+id/textValuation"
-                app:layout_constraintTop_toBottomOf="@+id/textValuation"
+                app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice"
                 tools:text="10000 Kč" />
 
 
@@ -132,7 +134,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{data.coin.usdPriceString}"
-                android:textColor="@color/textPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textSecondary"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:text="1000 USD" />
@@ -143,6 +147,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{data.coin.btcPriceString}"
                 android:textColor="@color/coin_bitcoin"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
                 tools:text="1 BTC" />

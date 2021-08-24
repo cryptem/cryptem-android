@@ -21,6 +21,7 @@
 
     <color name="black">#000</color>
     <color name="white">#fff</color>
+    <color name="light_grey">#eee</color>
     <color name="red">#D10000</color>
     <color name="coin_bitcoin">#f7931a</color>
     <color name="coin_litecoin">#345d9d</color>

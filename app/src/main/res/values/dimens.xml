@@ -6,6 +6,7 @@
     <dimen name="card_padding_half">4dp</dimen>
     <dimen name="card_radius">8dp</dimen>
 
+    <dimen name="circle_button">36dp</dimen>
     <dimen name="portfolio_icon">36dp</dimen>
     <dimen name="portfolio_header_min_height">90dp</dimen>
 </resources>

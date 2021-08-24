@@ -127,18 +127,14 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonDelete"
-                style="@style/ImageButton.Outlined"
-                android:layout_width="@dimen/portfolio_icon"
-                android:layout_height="@dimen/portfolio_icon"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
+                style="@style/ImageButton.Circle"
+                android:layout_width="@dimen/circle_button"
+                android:layout_height="@dimen/circle_button"
                 android:onClick="@{() -> vm.remove()}"
-                app:cornerRadius="24dp"
                 app:icon="@drawable/ic_delete"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/colorSecondary" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputAmountExchange"
@@ -171,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/buttonSave"
+                app:layout_constraintEnd_toStartOf="@+id/buttonTransaction"
                 app:layout_constraintStart_toEndOf="@+id/inputAmountExchange"
                 app:layout_constraintTop_toTopOf="@+id/inputAmountExchange">
 
@@ -189,19 +185,15 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonSave"
-                style="@style/ImageButton.Outlined"
-                android:layout_width="@dimen/portfolio_icon"
-                android:layout_height="@dimen/portfolio_icon"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
+                android:id="@+id/buttonTransaction"
+                style="@style/ImageButton.Circle"
+                android:layout_width="@dimen/circle_button"
+                android:layout_height="@dimen/circle_button"
                 android:onClick="@{() -> vm.savePortfolio()}"
-                app:cornerRadius="24dp"
                 app:icon="@drawable/ic_check"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="@color/colorSecondary" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
@@ -220,7 +212,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginStart="@dimen/screen_padding"
+                    android:background="@color/light_grey"
+                    android:gravity="end"
+                    android:paddingEnd="@dimen/screen_padding"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 
@@ -250,15 +244,26 @@
                         android:layout_height="wrap_content"
                         android:checked="@={vm.chartRadios[3]}"
                         android:text="1y" />
-
                 </RadioGroup>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iconCoin"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="@dimen/screen_padding_half"
+                    app:url="@{vm.coin.image}"
+                    android:src="@drawable/ic_coin_bitcoin"
+                    app:layout_constraintTop_toTopOf="@id/radiosChart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/radiosChart"/>
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="@dimen/screen_padding_half"
+                    android:layout_marginEnd="@dimen/screen_padding_half"
+                    android:layout_marginTop="8dp"
                     app:data="@{vm.chartData}"
                     app:visibleOrInvisible="@{!vm.loadingChart}"
                     app:layout_constraintTop_toBottomOf="@id/radiosChart"/>
@@ -308,7 +313,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{vm.coin.usdPriceString}"
-                        android:textColor="@color/textPrimary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textSecondary"
                         app:layout_constraintStart_toStartOf="@+id/title"
                         app:layout_constraintTop_toBottomOf="@+id/title"
                         tools:text="1000 USD" />
@@ -318,6 +325,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{vm.coin.btcPriceString}"
+                        android:textStyle="bold"
                         android:textColor="@color/coin_bitcoin"
                         app:layout_constraintStart_toStartOf="@+id/textCurrentUsdPrice"
                         app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
