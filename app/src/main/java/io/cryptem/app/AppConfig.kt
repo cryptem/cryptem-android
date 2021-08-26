@@ -2,6 +2,8 @@ package io.cryptem.app
 
 object AppConfig {
 
-    const val PORTFOLIO_REFRESH_MINS = 1
-    const val BINANCE_LINK = "https://www.binance.com/en/register?ref=XN7BY789"
+    const val MARKET_GLOBAL_DATA_CACHE_MINUTES = 10
+    const val COIN_CACHE_MINUTES = 1
+    const val COIN_CHART_CACHE_MINUTES = 10
+    const val PORTFOLIO_CACHE_MINUTES = 10
 }

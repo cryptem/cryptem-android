@@ -132,8 +132,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="gone"
         app:visibleOrGone="@{vm.addCoinMode}"
-        app:animationIn="@{@anim/fade_in}"
-        app:animationOut="@{@anim/fade_out}">
+        app:animationIn="@{@anim/slide_up_in}"
+        app:animationOut="@{@anim/slide_down_out}">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

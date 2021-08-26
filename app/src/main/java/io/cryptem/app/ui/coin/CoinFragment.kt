@@ -11,13 +11,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentCoinBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.UrlEvent
+import java.util.*
 
 @AndroidEntryPoint
 class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment_coin){
@@ -26,7 +29,8 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.coin.value = args.coin
+        viewModel.id = args.id
+        viewModel.symbol = args.symbol
         if (args.addToPortfolio){
             viewModel.editMode.value = true
         }
@@ -106,8 +110,9 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
         val xAxis: XAxis = chart.xAxis
         xAxis.textSize = 11f
         xAxis.textColor = Color.BLACK
-        xAxis.setDrawGridLines(true)
+        xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
+        xAxis.setDrawLabels(false)
         xAxis.valueFormatter = DateAxisFormatter()
 
         val leftAxis: YAxis = chart.axisLeft
@@ -120,5 +125,16 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
         rightAxis.setDrawGridLines(false)
         rightAxis.setDrawZeroLine(false)
         rightAxis.isGranularityEnabled = false
+
+        chart.setOnChartValueSelectedListener(object: OnChartValueSelectedListener{
+            override fun onValueSelected(e: Entry, h: Highlight) {
+                viewModel.setSelectedTimestamp(e.x.toLong())
+            }
+
+            override fun onNothingSelected() {
+                viewModel.chartSelectedDate.value = null
+            }
+
+        })
     }
 }

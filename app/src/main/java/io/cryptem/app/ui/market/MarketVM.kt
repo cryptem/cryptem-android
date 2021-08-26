@@ -37,15 +37,15 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.MARKET)
-        loadMarketData()
-        loadFromCache()
+        loadGlobalMarketData()
+        loadMarketFromCache()
         if (items.isEmpty()){
             loadCoins(true)
         }
     }
 
-    private fun loadFromCache(){
-        items.addAll(marketRepo.marketCoinsCache)
+    private fun loadMarketFromCache(){
+        items.addAll(marketRepo.getCoinsFromCache())
         if (items.isNotEmpty()){
             calculateAltcoinIndex(items)
         }
@@ -105,7 +105,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
         altcoinIndexInt.value = ((altcoinIndex.value ?: 0.0) * 100.0).toInt()
     }
 
-    fun loadMarketData(){
+    fun loadGlobalMarketData(){
         viewModelScope.launch {
             kotlin.runCatching {
                 marketRepo.getMarketGlobalData()
@@ -119,7 +119,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
     }
 
     fun showCoin(coin : Coin){
-        navigate(MarketFragmentDirections.actionMarketFragmentToCoinFragment(coin, coin.name))
+        navigate(MarketFragmentDirections.actionMarketFragmentToCoinFragment(coin.id, coin.symbol, coin.name))
     }
 
     fun toggleTrendTime(index : Int){
@@ -137,7 +137,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
 
     fun retry(){
         error.value = false
-        loadMarketData()
+        loadGlobalMarketData()
         loadCoins()
     }
 }

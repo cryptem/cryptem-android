@@ -7,4 +7,5 @@ import com.github.mikephil.charting.data.LineData
 @BindingAdapter("data")
 fun LineChart.bindData(data : LineData?) {
     setData(data)
+    invalidate()
 }

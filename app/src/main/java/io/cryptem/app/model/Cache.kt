@@ -1,6 +1,6 @@
 package io.cryptem.app.model
 
-class Cache<T>(private val timeoutMinutes : Long, private val funLoad : suspend () -> T){
+class Cache<T>(private val timeoutMinutes : Int, private val funLoad : suspend () -> T){
     private var updated : Long = 0
     private var value : T? = null
     get() {
@@ -29,5 +29,9 @@ class Cache<T>(private val timeoutMinutes : Long, private val funLoad : suspend 
 
     private fun isExpired() : Boolean{
         return System.currentTimeMillis() - updated > (timeoutMinutes * 60000)
+    }
+
+    fun hasData() : Boolean{
+        return value != null
     }
 }

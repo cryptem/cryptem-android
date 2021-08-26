@@ -79,8 +79,11 @@
         tools:layout="@layout/fragment_coin"
         android:label="{name}" >
         <argument
-            android:name="coin"
-            app:argType="io.cryptem.app.model.ui.Coin" />
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="symbol"
+            app:argType="string" />
         <argument
             android:name="name"
             app:argType="string" />

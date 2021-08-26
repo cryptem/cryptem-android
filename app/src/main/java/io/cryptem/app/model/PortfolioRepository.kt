@@ -1,5 +1,7 @@
 package io.cryptem.app.model
 
+import io.cryptem.app.AppConfig
+import io.cryptem.app.AppConfig.PORTFOLIO_CACHE_MINUTES
 import io.cryptem.app.model.db.PortfolioDatabase
 import io.cryptem.app.model.db.entity.PortfolioDbEntity
 import io.cryptem.app.model.db.toCoin
@@ -19,9 +21,9 @@ class PortfolioRepository @Inject constructor(
     val binanceRepository: BinanceRepository
 ) {
 
-    private var portfolio : Portfolio? = null
+    private var portfolio = Cache(PORTFOLIO_CACHE_MINUTES, this::loadPortfolio)
 
-    suspend fun addPortfolioCoin(coin: Coin, amountExchange: Double, amountWallet : Double) {
+    suspend fun addPortfolioCoin(coin: Coin, amountExchange: Double, amountWallet: Double) {
         portfolioDb.dao().addPortfolioCoin(
             PortfolioDbEntity(
                 id = coin.id,
@@ -42,28 +44,29 @@ class PortfolioRepository @Inject constructor(
                 amountWallet = amountWallet
             )
         )
-        portfolio = null
+        portfolio.clear()
     }
 
     suspend fun removePortfolioCoin(id: String) {
         portfolioDb.dao().removePortfolioCoin(id)
-        portfolio = null
+        portfolio.clear()
     }
 
-    suspend fun getPortfolioCoin(id: String) : PortfolioItem?{
+    suspend fun getPortfolioCoin(id: String): PortfolioItem? {
         return portfolioDb.dao().getPortfolioCoin(id)?.toUiEntity(prefs.getPortfolioCurrency())
     }
 
-    suspend fun getPortfolio(forceLoad : Boolean): Portfolio {
-        if (portfolio != null && !forceLoad){
-            return portfolio!!
-        }
+    suspend fun getPortfolio(forceLoad : Boolean) : Portfolio{
+        return portfolio.get(forceLoad)
+    }
+
+    private suspend fun loadPortfolio(): Portfolio {
         val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
         val portfolioItems = portfolioDb.dao().getPortfolioCoins()
-        val binanceAccount : BinanceAccount? = if (prefs.isBinanceSyncEnabled()){
+        val binanceAccount: BinanceAccount? = if (prefs.isBinanceSyncEnabled()) {
             try {
                 binanceRepository.getAll()
-            } catch (t : Throwable){
+            } catch (t: Throwable) {
                 L.e(t)
                 null
             }
@@ -72,18 +75,10 @@ class PortfolioRepository @Inject constructor(
         if (portfolioItems.isNotEmpty()) {
             try {
                 val coinIds = portfolioItems.joinToString(",") { it.id }
-                val coinsBtc =
-                    marketRepository.loadCoins(ids = coinIds, customCurrency = Currency.BTC)
-                val coinsUsd =
-                    marketRepository.loadCoins(ids = coinIds, customCurrency = Currency.USD)
-                val coinsCustom =
-                    marketRepository.loadCoinsPrice(ids = coinIds, customCurrency = result.currency)
+                val coins = marketRepository.loadPortfolioCoins(coinIds, result.currency)
 
                 for (portfolioDbEntity in portfolioItems) {
-                    coinsBtc.find { it.id == portfolioDbEntity.id }?.let { coin ->
-                        coin.priceUsd = coinsUsd.find { it.id == portfolioDbEntity.id }?.priceUsd
-                        coin.priceCustom = CoinPrice(currentPrice = coinsCustom[coin.id]?.get(result.currency.code.toLowerCase(Locale.getDefault())))
-
+                    coins.find { it.id == portfolioDbEntity.id }?.let { coin ->
                         portfolioDbEntity.apply {
                             currentPriceBtc = coin.priceBtc?.currentPrice
                             currentPriceUsd = coin.priceUsd?.currentPrice
@@ -96,46 +91,50 @@ class PortfolioRepository @Inject constructor(
                             priceChangePercentage30dUsd = coin.priceUsd?.percentChange30d
                         }
 
-                        portfolioDbEntity.lastUpdate = System.currentTimeMillis()
-
-                        binanceAccount?.getBalance(coin.symbol)?.let {
-                            portfolioDbEntity.amountExchange = it
+                        if (binanceAccount != null) {
+                            binanceAccount.getBalance(coin.symbol) ?: 0.0.let {
+                                portfolioDbEntity.amountExchange = it
+                            }
                         }
 
+                        portfolioDbEntity.lastUpdate = System.currentTimeMillis()
                         portfolioDb.dao().updatePortfolioCoin(portfolioDbEntity)
                     }
                 }
-            } catch (t : Throwable){
+            } catch (t: Throwable) {
                 L.e(t)
             }
         }
 
         result.items = portfolioItems.map { dbEntity ->
-            PortfolioItem(coin = dbEntity.toCoin(),
+            PortfolioItem(
+                coin = marketRepository.getCoinFromCache(dbEntity.id) ?: dbEntity.toCoin(),
                 amountExchange = dbEntity.amountExchange,
                 amountWallet = dbEntity.amountWallet,
-                currency = result.currency)
-        }
-        result.recalculate()
-        portfolio = result
-        return portfolio!!
-    }
-
-    suspend fun getPortfolioFromDb(): Portfolio {
-        val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
-        result.items = portfolioDb.dao().getPortfolioCoins().map { dbEntity ->
-            PortfolioItem(coin = dbEntity.toCoin(),
-                amountExchange = dbEntity.amountExchange,
-                amountWallet = dbEntity.amountWallet,
-                currency = result.currency)
+                currency = result.currency
+            )
         }
         result.recalculate()
         return result
     }
 
-    suspend fun isInPortfolio(id : String) : Boolean{
-        return if(portfolio != null){
-            portfolio?.items?.firstOrNull { it.coin.id == id } != null
+    suspend fun getPortfolioFromDb(): Portfolio {
+        val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
+        result.items = portfolioDb.dao().getPortfolioCoins().map { dbEntity ->
+            PortfolioItem(
+                coin = marketRepository.getCoinFromCache(dbEntity.id) ?: dbEntity.toCoin(),
+                amountExchange = dbEntity.amountExchange,
+                amountWallet = dbEntity.amountWallet,
+                currency = result.currency
+            )
+        }
+        result.recalculate()
+        return result
+    }
+
+    suspend fun isInPortfolio(id: String): Boolean {
+        return if (portfolio.hasData()) {
+            portfolio.get().items.firstOrNull { it.coin.id == id } != null
         } else {
             portfolioDb.dao().getPortfolioCoin(id) != null
         }
@@ -147,11 +146,12 @@ class PortfolioRepository @Inject constructor(
 
     fun setPortfolioDeposit(amount: Long) {
         prefs.savePortfolioDeposit(amount)
+        portfolio.clear()
     }
 
     fun setPortfolioCurrency(currency: Currency) {
         prefs.savePortfolioCurrency(currency)
-        portfolio = null
+        portfolio.clear()
     }
 
     fun getPortfolioDeposit(): Long {

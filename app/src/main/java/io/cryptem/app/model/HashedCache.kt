@@ -1,15 +1,15 @@
 package io.cryptem.app.model
 
 class HashedCache<K, T>(
-    private val timeoutMinutes: Long,
+    private val timeoutMinutes: Int,
     private val funLoadItem: (suspend (K) -> T?),
     private val keyMapFun: (T) -> K
 ) {
     private val updatedMap = HashMap<K, Long>()
     private val map = HashMap<K, T>()
 
-    suspend fun get(key: K, force: Boolean = false): T? {
-        if (force) {
+    suspend fun get(key: K, forceLoad: Boolean = false): T? {
+        if (forceLoad) {
             map.remove(key)
             updatedMap.remove(key)
         }
@@ -23,6 +23,10 @@ class HashedCache<K, T>(
         } else {
             map[key]
         }
+    }
+
+    fun peek(key: K): T?{
+        return map[key]
     }
 
     private fun addToMap(value: T) {
