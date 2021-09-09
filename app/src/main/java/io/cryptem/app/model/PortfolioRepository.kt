@@ -92,7 +92,7 @@ class PortfolioRepository @Inject constructor(
                         }
 
                         if (binanceAccount != null) {
-                            binanceAccount.getBalance(coin.symbol) ?: 0.0.let {
+                            (binanceAccount.getBalance(coin.symbol) ?: 0.0).let {
                                 portfolioDbEntity.amountExchange = it
                             }
                         }
