@@ -29,7 +29,7 @@ class PayFragment : BaseFragment<PayVM, FragmentPayBinding>(R.layout.fragment_pa
         try {
             runApp(viewModel.defaultWallet.value)
         } catch (t : Throwable){
-            L.e(t)
+            // Ignore
         }
     }
 }

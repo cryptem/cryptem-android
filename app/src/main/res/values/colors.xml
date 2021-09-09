@@ -29,6 +29,7 @@
     <color name="coin_ethereum">#564E81</color>
     <color name="coin_ethereum_light">#9F96D1</color>
     <color name="coin_cardano">#0033AD</color>
+    <color name="coin_solana">#9945ff</color>
 
     <color name="trend_up">#419700</color>
     <color name="trend_down">@color/red</color>

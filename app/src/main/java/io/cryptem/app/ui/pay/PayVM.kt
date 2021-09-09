@@ -32,8 +32,6 @@ class PayVM @Inject constructor(private val walletRepository: WalletRepository, 
             clear()
             add(SoftwareWallet.EXODUS)
             add(SoftwareWallet.COINOMI)
-            add(SoftwareWallet.MYCELIUM)
-            add(SoftwareWallet.YOROI)
         }
     }
 

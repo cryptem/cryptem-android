@@ -106,6 +106,13 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginEnd="8dp"
+                    app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.SOL)}"
+                    android:src="@drawable/ic_coin_solana" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
                     app:visibleOrGone="@{data.supportedCoins.contains(WalletCoin.LTC)}"
                     android:src="@drawable/ic_coin_litecoin" />
 

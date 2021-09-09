@@ -28,13 +28,13 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
     val adaAddress = MutableLiveData("")
     val ltcAddress = MutableLiveData("")
     val xmrAddress = MutableLiveData("")
+    val solAddress = MutableLiveData("")
 
     val partners = ObservableArrayList<Partner>().apply {
         add(Partner("CoinGecko", R.drawable.ic_partner_coingecko, "https://coingecko.com"))
         add(Partner("Binance", R.drawable.ic_partner_binance, remoteConfigRepository.getBinanceLink()))
         add(Partner("Trezor", R.drawable.ic_partner_trezor, remoteConfigRepository.getTrezorLink()))
         add(Partner("SimpleCoin", R.drawable.ic_partner_simplecoin, remoteConfigRepository.getSimpleCoinLink()))
-        add(Partner("Bitcoinovej Kanál", R.drawable.ic_partner_bitcoinovej_kanal, "https://www.youtube.com/channel/UCCegl13nmUvxUKMJqng1S-A"))
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -44,6 +44,7 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
         adaAddress.value = remoteConfigRepository.getDonateAddress("ADA")
         ltcAddress.value = remoteConfigRepository.getDonateAddress("LTC")
         xmrAddress.value = remoteConfigRepository.getDonateAddress("XMR")
+        solAddress.value = remoteConfigRepository.getDonateAddress("SOL")
     }
 
     fun copyAddress(address: String, coin : WalletCoin){

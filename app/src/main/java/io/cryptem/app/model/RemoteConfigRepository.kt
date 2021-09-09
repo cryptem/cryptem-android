@@ -53,6 +53,7 @@ class RemoteConfigRepository  @Inject constructor(){
             "XMR" -> DONATE_XMR
             "ETH" -> DONATE_ETH
             "ADA" -> DONATE_ADA
+            "SOL" -> DONATE_SOL
             else -> DONATE_BTC
         })
     }
@@ -102,5 +103,6 @@ class RemoteConfigRepository  @Inject constructor(){
         const val DONATE_XMR = "donateXmr"
         const val DONATE_ETH = "donateEth"
         const val DONATE_ADA = "donateAda"
+        const val DONATE_SOL = "donateSol"
     }
 }

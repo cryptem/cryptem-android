@@ -9,6 +9,7 @@ enum class WalletCoin(val id : String, val title : String, @ColorRes val color :
     LTC("litecoin", "Litecoin", R.color.coin_litecoin, R.drawable.ic_coin_litecoin),
     XMR("monero", "Monero", R.color.coin_monero, R.drawable.ic_coin_monero),
     ETH("ethereum", "Ethereum", R.color.coin_ethereum, R.drawable.ic_coin_ethereum),
-    ADA("cardano", "Cardano", R.color.coin_cardano, R.drawable.ic_coin_cardano);
+    ADA("cardano", "Cardano", R.color.coin_cardano, R.drawable.ic_coin_cardano),
+    SOL("solana", "Solana", R.color.coin_solana, R.drawable.ic_coin_solana);
 
 }

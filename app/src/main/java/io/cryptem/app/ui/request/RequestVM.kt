@@ -205,7 +205,6 @@ class RequestVM @Inject constructor(
             DecimalFormat("#.########", DecimalFormatSymbols.getInstance(Locale.US)).format(
                 cryptoAmount.value
             )
-        val name = wallet.value?.name
 
         if (address != null && amount != null && selectedCoin.value != null && currency.value != null) {
             qr.value = when (selectedCoin.value) {
@@ -214,6 +213,7 @@ class RequestVM @Inject constructor(
                 WalletCoin.XMR -> "monero:${address}?amount=${amount}"
                 WalletCoin.ETH -> "ethereum:${address}?amount=${amount}"
                 WalletCoin.ADA -> "cardano:${address}?amount=${amount}"
+                WalletCoin.SOL -> "solana:${address}?amount=${amount}"
                 else -> null
             }
         }

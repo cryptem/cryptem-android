@@ -88,6 +88,25 @@
                         app:vm="@{vm}" />
 
                     <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.ethAddress}"
+                    app:coin="@{WalletCoin.ETH}"
+                    app:vm="@{vm}" />
+
+                    <include
+                    layout="@layout/layout_donate_address"
+                    app:address="@{vm.adaAddress}"
+                    app:coin="@{WalletCoin.ADA}"
+                    app:vm="@{vm}" />
+
+                    <include
+                        layout="@layout/layout_donate_address"
+                        app:address="@{vm.solAddress}"
+                        app:coin="@{WalletCoin.SOL}"
+                        app:vm="@{vm}" />
+
+
+                    <include
                         layout="@layout/layout_donate_address"
                         app:address="@{vm.ltcAddress}"
                         app:coin="@{WalletCoin.LTC}"
@@ -99,17 +118,9 @@
                         app:coin="@{WalletCoin.XMR}"
                         app:vm="@{vm}" />
 
-                    <include
-                        layout="@layout/layout_donate_address"
-                        app:address="@{vm.ethAddress}"
-                        app:coin="@{WalletCoin.ETH}"
-                        app:vm="@{vm}" />
 
-                    <include
-                        layout="@layout/layout_donate_address"
-                        app:address="@{vm.adaAddress}"
-                        app:coin="@{WalletCoin.ADA}"
-                        app:vm="@{vm}" />
+
+
 
 
 

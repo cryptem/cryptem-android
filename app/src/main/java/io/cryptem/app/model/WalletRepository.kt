@@ -25,6 +25,7 @@ class WalletRepository @Inject constructor(
             WalletCoin.BTC,
             WalletCoin.ETH,
             WalletCoin.ADA,
+            WalletCoin.SOL,
             WalletCoin.LTC,
             WalletCoin.XMR
         )
@@ -70,23 +71,6 @@ class WalletRepository @Inject constructor(
     suspend fun getDefaultWallet() : Wallet? {
         return prefs.getDefaultWallet()?.let {
             return db.dao().getWallet(it)?.toUiEntity()
-        }
-    }
-
-
-    fun getPaymentUri(wallet : Wallet, amount: Double, description : String?): String {
-        return when (wallet.coin) {
-            WalletCoin.BTC -> {
-                "bitcoin:${wallet.address}?amount=${amount}"
-            }
-            WalletCoin.LTC -> {
-                "litecoin:${wallet.address}?amount=${amount}"
-            }
-            WalletCoin.XMR -> {
-                "monero:${wallet.address}?tx_amount=${amount}"
-            }
-            WalletCoin.ETH -> "ethereum:${wallet.address}?amount=${amount}"
-            WalletCoin.ADA -> "cardano:${wallet.address}?amount=${amount}"
         }
     }
 
