@@ -36,9 +36,6 @@ class FirestoreRepository @Inject constructor() {
         db.collection("poi")
             .add(data)
             .addOnSuccessListener {
-                poi.country?.let {
-                    clearMapDataCache(it)
-                }
                 cont.resumeWith(Result.success(it))
             }
             .addOnFailureListener {

@@ -12,7 +12,7 @@ import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.UrlEvent
 
 @AndroidEntryPoint
-class FragmentAbout : BaseFragment<AboutVM, FragmentAboutBinding>(R.layout.fragment_about) {
+class AboutFragment : BaseFragment<AboutVM, FragmentAboutBinding>(R.layout.fragment_about) {
     override val viewModel: AboutVM by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

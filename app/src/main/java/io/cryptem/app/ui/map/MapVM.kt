@@ -8,7 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.FirestoreRepository
 import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.SharedPrefsRepository
@@ -20,6 +22,7 @@ import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.ui.map.event.InvalidateOptionsMenuEvent
 import io.cryptem.app.ui.map.event.UnsupportedCountryEvent
 import io.cryptem.app.util.L
+import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -29,7 +32,8 @@ class MapVM @Inject constructor(
     val locationClient: FusedLocationProviderClient,
     val firestoreRepository: FirestoreRepository,
     val prefs: SharedPrefsRepository,
-    val remoteConfigRepository: RemoteConfigRepository
+    val remoteConfigRepository: RemoteConfigRepository,
+    private val analytics : AnalyticsRepository
 ) : BaseVM() {
 
     val location = MutableLiveData<Location?>()
@@ -41,6 +45,7 @@ class MapVM @Inject constructor(
     var previousCountry: String? = null
     val country = MutableLiveData<String>(null)
     val data = MutableLiveData<MapData>()
+    val mapType = SafeMutableLiveData(prefs.getMapType())
 
     val search = MutableLiveData<String?>()
 
@@ -62,6 +67,11 @@ class MapVM @Inject constructor(
                 }
             }
         }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
+        analytics.logMapScreen()
     }
 
     private fun loadCountries() {
@@ -129,5 +139,14 @@ class MapVM @Inject constructor(
 
     fun report(poi: Poi) {
         navigate(MapFragmentDirections.actionMapFragmentToReportPoiDialog(poi))
+    }
+
+    fun toggleMapType(){
+        if (mapType.value == GoogleMap.MAP_TYPE_NORMAL){
+            mapType.value = GoogleMap.MAP_TYPE_HYBRID
+        } else {
+            mapType.value = GoogleMap.MAP_TYPE_NORMAL
+        }
+        prefs.saveMapType(mapType.value)
     }
 }

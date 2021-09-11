@@ -7,6 +7,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.ext.toPercentString
+import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.HomeScreen
 import io.cryptem.app.model.MarketRepository
@@ -22,7 +23,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val marketRepo: MarketRepository) : BaseVM() {
+class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, private val marketRepo: MarketRepository, private val analytics: AnalyticsRepository) : BaseVM() {
 
     val reloading = SafeMutableLiveData(false)
     val loading = SafeMutableLiveData(false)
@@ -39,9 +40,12 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
         prefs.setHomeScreen(HomeScreen.MARKET)
         loadGlobalMarketData()
         loadMarketFromCache()
-        if (items.isEmpty()){
-            loadCoins(true)
-        }
+        loadCoins(true)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
+        analytics.logMarketScreen()
     }
 
     private fun loadMarketFromCache(){
@@ -90,7 +94,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
         val stableCoins = listOf("DAI", "UST")
 
         for (i in 0 until CoinGeckoApiDef.PAGE_SIZE){
-            val symbol = data[i].symbol.toUpperCase(Locale.getDefault())
+            val symbol = data[i].symbol.uppercase()
             if (!stableCoins.contains(symbol) && !symbol.contains("BTC") && !symbol.contains("USD")) {
                 if (data[i].priceBtc?.percentChange30d ?: 0.0 > 0.0) {
                     betterThanBtc += 1
@@ -131,7 +135,7 @@ class MarketVM @Inject constructor(val prefs : SharedPrefsRepository, val market
         }
     }
 
-    fun getAltcoinIndexString(value : Double?) : String?{
+    fun getAltcoinIndexString(value : Double?) : String{
         return value?.toPercentString(0) ?: "... %"
     }
 

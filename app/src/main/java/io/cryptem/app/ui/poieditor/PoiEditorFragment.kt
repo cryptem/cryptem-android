@@ -50,7 +50,7 @@ class PoiEditorFragment : BaseFragment<PoiEditorVM, FragmentPoiEditorBinding>(R.
             MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.map_unsupported_country_title)
                 .setMessage(getString(R.string.map_unsupported_country_message,  Locale(Locale.getDefault().language, it).displayCountry))
                 .setPositiveButton(R.string.ok){ _, _ -> }
-                .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.fragmentAbout)}.show()
+                .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.aboutFragment)}.show()
         }
     }
 

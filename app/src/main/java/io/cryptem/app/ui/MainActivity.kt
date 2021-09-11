@@ -51,7 +51,7 @@ class MainActivity : KodebaseActivity<MainActivityVM, ActivityMainBinding>(R.lay
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_about -> {
-                navigate(R.id.fragmentAbout)
+                navigate(R.id.aboutFragment)
                 return true
             }
         }

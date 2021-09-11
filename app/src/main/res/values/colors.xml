@@ -31,7 +31,7 @@
     <color name="coin_cardano">#0033AD</color>
     <color name="coin_solana">#9945ff</color>
 
-    <color name="trend_up">#419700</color>
+    <color name="trend_up">#4CA60D</color>
     <color name="trend_down">@color/red</color>
 
     <color name="trend_up_light">#B8FF83</color>

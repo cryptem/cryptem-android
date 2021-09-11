@@ -9,10 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.ext.toAmountString
 import io.cryptem.app.ext.toBtcString
 import io.cryptem.app.ext.toFiatString
-import io.cryptem.app.model.MarketRepository
-import io.cryptem.app.model.PortfolioRepository
-import io.cryptem.app.model.RemoteConfigRepository
-import io.cryptem.app.model.SharedPrefsRepository
+import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.ui.CoinPrice
 import io.cryptem.app.ui.base.BaseVM
@@ -27,10 +24,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinVM @Inject constructor(
-    val marketRepo: MarketRepository,
-    val portfolioRepo: PortfolioRepository,
+    private val marketRepo: MarketRepository,
+    private val portfolioRepo: PortfolioRepository,
     val prefs: SharedPrefsRepository,
-    val remoteConfigRepository: RemoteConfigRepository
+    private val remoteConfigRepository: RemoteConfigRepository,
+    private val analytics : AnalyticsRepository
 ) : BaseVM() {
 
     var id : String = ""
@@ -72,6 +70,7 @@ class CoinVM @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
+        analytics.logCoinScreen(symbol)
         loadData()
     }
 

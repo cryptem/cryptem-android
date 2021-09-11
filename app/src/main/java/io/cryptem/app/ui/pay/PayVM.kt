@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.WalletRepository
 import io.cryptem.app.model.ui.SoftwareWallet
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class PayVM @Inject constructor(private val walletRepository: WalletRepository, private val packageManager: PackageManager, private val prefs : SharedPrefsRepository): BaseVM() {
+class PayVM @Inject constructor(private val walletRepository: WalletRepository, private val packageManager: PackageManager, private val prefs : SharedPrefsRepository, private val analytics : AnalyticsRepository): BaseVM() {
 
     val defaultWallet = SafeMutableLiveData(prefs.getDefaultSwWallet())
     val wallets = ObservableArrayList<SoftwareWallet>()
@@ -28,6 +29,7 @@ class PayVM @Inject constructor(private val walletRepository: WalletRepository, 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
+        analytics.logPayScreen()
         wallets.apply {
             clear()
             add(SoftwareWallet.EXODUS)

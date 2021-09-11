@@ -12,4 +12,10 @@
         android:icon="@drawable/ic_action_add_poi"
         android:title="@string/add_poi"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_map_type"
+        android:icon="@drawable/ic_action_layers"
+        android:title="@string/map_type"
+        app:showAsAction="always" />
 </menu>

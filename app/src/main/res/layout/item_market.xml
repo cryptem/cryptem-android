@@ -33,14 +33,14 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="0.58" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelinePercentSecondary"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="1.0" />
+                app:layout_constraintGuide_percent="0.76" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon"
@@ -138,6 +138,17 @@
                 android:layout_height="wrap_content"
                 app:constraint_referenced_ids=" trendWeekBtc, trendMonthBtc"
                 app:visibleOrInvisible="@{!data.isBtc()}" />
+
+            <ImageView
+                android:id="@+id/imageSparkline"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guidelinePercentSecondary"
+                app:layout_constraintTop_toTopOf="@+id/trendWeekUsd"
+                app:svgUrl="@{data.sparkline}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

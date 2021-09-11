@@ -108,7 +108,7 @@ class PortfolioRepository @Inject constructor(
 
         result.items = portfolioItems.map { dbEntity ->
             PortfolioItem(
-                coin = marketRepository.getCoinFromCache(dbEntity.id) ?: dbEntity.toCoin(),
+                coin = dbEntity.toCoin(),
                 amountExchange = dbEntity.amountExchange,
                 amountWallet = dbEntity.amountWallet,
                 currency = result.currency
@@ -122,7 +122,7 @@ class PortfolioRepository @Inject constructor(
         val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
         result.items = portfolioDb.dao().getPortfolioCoins().map { dbEntity ->
             PortfolioItem(
-                coin = marketRepository.getCoinFromCache(dbEntity.id) ?: dbEntity.toCoin(),
+                coin = dbEntity.toCoin(),
                 amountExchange = dbEntity.amountExchange,
                 amountWallet = dbEntity.amountWallet,
                 currency = result.currency

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.ui.WalletCoin
 import io.cryptem.app.model.ui.CryptoAddress
 import io.cryptem.app.model.SharedPrefsRepository
@@ -18,12 +19,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WalletsVM @Inject constructor(val repo : WalletRepository) : BaseVM(), OnWalletSelectedListener {
+class WalletsVM @Inject constructor(val repo : WalletRepository, val analytics: AnalyticsRepository) : BaseVM(), OnWalletSelectedListener {
 
     val wallets = ObservableArrayList<Wallet>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
+        analytics.logWalletsScreen()
         loadWallets()
     }
 

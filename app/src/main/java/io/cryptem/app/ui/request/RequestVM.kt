@@ -28,7 +28,8 @@ class RequestVM @Inject constructor(
     private val walletRepository: WalletRepository,
     private val marketRepository: MarketRepository,
     private val prefs: SharedPrefsRepository,
-    private val remoteConfigRepo: RemoteConfigRepository
+    private val remoteConfigRepo: RemoteConfigRepository,
+    private val analytics : AnalyticsRepository
 ) : BaseVM(), OnWalletCoinSelectedListener, OnWalletSelectedListener {
 
     val loadingPrice = MutableLiveData(false)
@@ -78,6 +79,7 @@ class RequestVM @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
+        analytics.logRequestScreen()
         isInit = false
         init()
     }

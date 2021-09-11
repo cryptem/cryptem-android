@@ -113,6 +113,7 @@
     <string name="map_unsupported_country_title">We are not here yet</string>
     <string name="map_unsupported_country_message">Country %s is not supported yet, but we are working hard on it!</string>
     <string name="map_search">Search</string>
+    <string name="map_type">Map type</string>
 
     <string name="about_license">Open-Source License GNU GPL v3.0</string>
     <string name="about_url">https://cryptem.io</string>

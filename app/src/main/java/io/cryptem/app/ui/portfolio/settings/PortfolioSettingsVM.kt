@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.cryptem.app.model.BinanceRepository
-import io.cryptem.app.model.PortfolioRepository
-import io.cryptem.app.model.RemoteConfigRepository
-import io.cryptem.app.model.SharedPrefsRepository
+import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.BinanceKeys
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.ui.base.BaseVM
@@ -26,7 +23,8 @@ class PortfolioSettingsVM @Inject constructor(
     private val portfolioRepo: PortfolioRepository,
     private val remoteConfigRepo: RemoteConfigRepository,
     private val prefs: SharedPrefsRepository,
-    private val binanceRepository: BinanceRepository
+    private val binanceRepository: BinanceRepository,
+    private val analytics : AnalyticsRepository
 ) : BaseVM() {
 
     val deposit = MutableLiveData(portfolioRepo.getPortfolioDeposit().toString())
@@ -52,6 +50,11 @@ class PortfolioSettingsVM @Inject constructor(
             }
         }
         loadCurrnecies()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
+        analytics.logPortfolioSettingsScreen()
     }
 
     fun onSwitchClick() {

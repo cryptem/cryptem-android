@@ -11,6 +11,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.R
+import io.cryptem.app.model.AnalyticsRepository
+import io.cryptem.app.model.DonateAddress
 import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.ui.Partner
 import io.cryptem.app.model.ui.WalletCoin
@@ -21,7 +23,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val remoteConfigRepository: RemoteConfigRepository, val vibrator: Vibrator) : BaseVM() {
+class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val remoteConfigRepository: RemoteConfigRepository, val vibrator: Vibrator, val analytics: AnalyticsRepository) : BaseVM() {
 
     val btcAddress = MutableLiveData("")
     val ethAddress = MutableLiveData("")
@@ -30,25 +32,45 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
     val xmrAddress = MutableLiveData("")
     val solAddress = MutableLiveData("")
 
-    val partners = ObservableArrayList<Partner>().apply {
-        add(Partner("CoinGecko", R.drawable.ic_partner_coingecko, "https://coingecko.com"))
-        add(Partner("Binance", R.drawable.ic_partner_binance, remoteConfigRepository.getBinanceLink()))
-        add(Partner("Trezor", R.drawable.ic_partner_trezor, remoteConfigRepository.getTrezorLink()))
-        add(Partner("SimpleCoin", R.drawable.ic_partner_simplecoin, remoteConfigRepository.getSimpleCoinLink()))
-    }
+    val partners = ObservableArrayList<Partner>()
+    val donates = ObservableArrayList<DonateAddress>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
-        btcAddress.value = remoteConfigRepository.getDonateAddress("BTC")
-        ethAddress.value = remoteConfigRepository.getDonateAddress("ETH")
-        adaAddress.value = remoteConfigRepository.getDonateAddress("ADA")
-        ltcAddress.value = remoteConfigRepository.getDonateAddress("LTC")
-        xmrAddress.value = remoteConfigRepository.getDonateAddress("XMR")
-        solAddress.value = remoteConfigRepository.getDonateAddress("SOL")
+        initDonates()
+        initPartners()
     }
 
-    fun copyAddress(address: String, coin : WalletCoin){
-        val clip = ClipData.newPlainText("Cryptem Donate", address)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
+        analytics.logAboutScreen()
+    }
+
+    fun initPartners(){
+        partners.apply {
+            add(Partner("CoinGecko", R.drawable.ic_partner_coingecko, "https://coingecko.com"))
+            add(Partner("Binance", R.drawable.ic_partner_binance, remoteConfigRepository.getBinanceLink()))
+            add(Partner("Trezor", R.drawable.ic_partner_trezor, remoteConfigRepository.getTrezorLink()))
+            add(Partner("SimpleCoin", R.drawable.ic_partner_simplecoin, remoteConfigRepository.getSimpleCoinLink()))
+            add(Partner("Bitcoinovej Kanál", R.drawable.ic_partner_bitcoinovej_kanal, "https://www.youtube.com/channel/UCCegl13nmUvxUKMJqng1S-A"))
+        }
+    }
+
+    fun initDonates(){
+        donates.add(getDonateCoin(WalletCoin.BTC))
+        donates.add(getDonateCoin(WalletCoin.ETH))
+        donates.add(getDonateCoin(WalletCoin.ADA))
+        donates.add(getDonateCoin(WalletCoin.SOL))
+        donates.add(getDonateCoin(WalletCoin.LTC))
+        donates.add(getDonateCoin(WalletCoin.XMR))
+    }
+
+    private fun getDonateCoin(coin : WalletCoin) : DonateAddress{
+        return DonateAddress(coin, remoteConfigRepository.getDonateAddress(coin.name))
+    }
+
+    fun copyAddress(donate : DonateAddress){
+        val clip = ClipData.newPlainText("Cryptem Donate", donate.address)
         clipboardManager.setPrimaryClip(clip)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -57,7 +79,7 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
             vibrator.vibrate(50)
         }
 
-        publish(ClipboardEvent(coin))
+        publish(ClipboardEvent(donate.coin))
     }
 
     fun gitHub(){

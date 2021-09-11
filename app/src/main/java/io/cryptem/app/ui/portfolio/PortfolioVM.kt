@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository, private val marketRepo : MarketRepository, private val portfolioRepo : PortfolioRepository) : BaseVM() {
+class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository, private val marketRepo : MarketRepository, private val portfolioRepo : PortfolioRepository, private val analytics : AnalyticsRepository) : BaseVM() {
 
     val loading = MutableLiveData(false)
     val loadingCoins = SafeMutableLiveData(false)
@@ -44,7 +44,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
-        L.i("onResume")
+        analytics.logPortfolioScreen()
         loadPortfolio()
     }
 

@@ -16,10 +16,10 @@
 
         <ImageView
             android:id="@+id/imageLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:background="@color/black"
-            android:src="@drawable/cryptem_logo"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/cryptem_logo_ancap"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,106 +28,57 @@
             android:id="@+id/textLicense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/about_license"
             android:onClick="@{() -> vm.gitHub()}"
+            android:text="@string/about_license"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageLogo" />
+            app:layout_constraintTop_toTopOf="@+id/imageLogo" />
 
         <TextView
             android:id="@+id/textAbout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/about_url"
             android:onClick="@{() -> vm.gitHub()}"
-            android:textColor="#555"
+            android:text="@string/about_url"
+            android:textColor="@color/colorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageLogo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textLicense" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textSupportUs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/about_support_us"
             android:layout_marginStart="@dimen/screen_padding"
             android:layout_marginEnd="@dimen/screen_padding"
             android:gravity="center"
+            android:text="@string/about_support_us"
             android:textStyle="bold"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textAbout" />
+            app:layout_constraintTop_toBottomOf="@+id/imageLogo" />
 
-        <ScrollView
-            android:id="@+id/scrollAddresses"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:padding="4dp"
+            app:data="@{vm.donates}"
+            app:layoutId="@{@layout/item_donate}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/textPartners"
-            app:layout_constraintTop_toBottomOf="@+id/textSupportUs">
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:contentPadding="16dp">
-
-                <LinearLayout
-                    android:id="@+id/layoutDonateAddresses"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <include
-                        layout="@layout/layout_donate_address"
-                        app:address="@{vm.btcAddress}"
-                        app:coin="@{WalletCoin.BTC}"
-                        app:vm="@{vm}" />
-
-                    <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.ethAddress}"
-                    app:coin="@{WalletCoin.ETH}"
-                    app:vm="@{vm}" />
-
-                    <include
-                    layout="@layout/layout_donate_address"
-                    app:address="@{vm.adaAddress}"
-                    app:coin="@{WalletCoin.ADA}"
-                    app:vm="@{vm}" />
-
-                    <include
-                        layout="@layout/layout_donate_address"
-                        app:address="@{vm.solAddress}"
-                        app:coin="@{WalletCoin.SOL}"
-                        app:vm="@{vm}" />
-
-
-                    <include
-                        layout="@layout/layout_donate_address"
-                        app:address="@{vm.ltcAddress}"
-                        app:coin="@{WalletCoin.LTC}"
-                        app:vm="@{vm}" />
-
-                    <include
-                        layout="@layout/layout_donate_address"
-                        app:address="@{vm.xmrAddress}"
-                        app:coin="@{WalletCoin.XMR}"
-                        app:vm="@{vm}" />
-
-
-
-
-
-
-
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </ScrollView>
+            app:layout_constraintTop_toBottomOf="@+id/textSupportUs"
+            app:spanCount="2"
+            app:viewModel="@{vm}"
+            tools:listitem="@layout/item_donate" />
 
         <TextView
             android:id="@+id/textPartners"
@@ -165,7 +116,8 @@
             android:id="@+id/textVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
             android:text="@{BuildConfig.VERSION_NAME}"
             android:textColor="@color/colorSecondary"
             app:layout_constraintBottom_toBottomOf="@+id/imageLogo"

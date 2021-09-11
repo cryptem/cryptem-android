@@ -73,7 +73,7 @@
         android:id="@+id/recyclerCoins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="60dp"
+        android:minHeight="56dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:data="@{vm.coins}"

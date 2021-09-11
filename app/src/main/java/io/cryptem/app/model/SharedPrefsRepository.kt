@@ -1,6 +1,7 @@
 package io.cryptem.app.model
 
 import android.content.Context
+import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.model.ui.SoftwareWallet
@@ -27,6 +28,7 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val COUNTRY = "COUNTRY"
         const val SW_WALLET = "SW_WALLET"
         const val COIN_PRICE_CHART_DAYS = "COIN_PRICE_CHART_DAYS"
+        const val MAP_TYPE = "MAP_TYPE"
     }
 
     fun saveDefaultWallet(id: Long?) {
@@ -156,5 +158,14 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
 
     fun getChartDays(): Int {
         return prefs.getInt(COIN_PRICE_CHART_DAYS, 7)
+    }
+
+    fun saveMapType(type: Int) {
+        prefs.edit().putInt(MAP_TYPE, type).apply()
+    }
+
+
+    fun getMapType() : Int{
+        return prefs.getInt(MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL)
     }
 }

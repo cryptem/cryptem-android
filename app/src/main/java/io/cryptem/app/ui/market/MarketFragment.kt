@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentMarketBinding
+import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.ui.base.BaseFragment
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fragment_market){
@@ -39,5 +41,4 @@ class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fr
             }
         })
     }
-
 }

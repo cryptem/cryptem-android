@@ -127,8 +127,8 @@
             android:defaultValue="@null" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentAbout"
-        android:name="io.cryptem.app.ui.about.FragmentAbout"
+        android:id="@+id/aboutFragment"
+        android:name="io.cryptem.app.ui.about.AboutFragment"
         tools:layout="@layout/fragment_about"
         android:label="@string/about" />
     <fragment

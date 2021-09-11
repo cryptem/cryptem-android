@@ -77,6 +77,9 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         observe(UrlEvent::class){
             showUrl(it.url)
         }
+        viewModel.mapType.observe(viewLifecycleOwner){
+            map?.mapType = it
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (viewModel.selectedPoi.value != null){
@@ -124,6 +127,8 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     private fun initMap() {
         binding.mapView.getMapAsync { m ->
             map = m
+            map?.mapType = viewModel.mapType.value
+
             checkLocationPermission()
             map?.setOnMarkerClickListener { marker ->
                 return@setOnMarkerClickListener markersMap[marker]?.let {
@@ -145,7 +150,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
                 )
             )
             .setPositiveButton(R.string.ok){ _, _ -> }
-            .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.fragmentAbout)}
+            .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.aboutFragment)}
             .show()
     }
 
@@ -221,12 +226,9 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_add) {
-            navigate(R.id.action_mapFragment_to_poiEditorFragment)
-        }
-        if (item.itemId == 0){
-            viewModel.country.value = item.title.toString()
-            countryMenuItem?.title = item.title
+        when(item.itemId){
+            R.id.action_add -> navigate(R.id.action_mapFragment_to_poiEditorFragment)
+            R.id.action_map_type -> viewModel.toggleMapType()
         }
         return super.onOptionsItemSelected(item)
     }

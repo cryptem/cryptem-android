@@ -3,18 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="io.cryptem.app.model.ui.WalletCoin"
-/>        <variable
-            name="coin"
-            type="WalletCoin" />
         <variable
-            name="address"
-            type="String" />
+            name="data"
+            type="io.cryptem.app.model.DonateAddress" />
         <variable
             name="vm"
             type="io.cryptem.app.ui.about.AboutVM" />
     </data>
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        style="@style/Card.Clickable"
+        android:onClick="@{() -> vm.copyAddress(data)}">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -25,53 +27,48 @@
         android:layout_height="36dp"
         android:background="@android:color/transparent"
         android:scaleType="fitCenter"
-        app:imageResource="@{coin.icon}"
+        app:imageResource="@{data.coin.icon}"
         tools:src="@drawable/ic_coin_bitcoin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textTitle"
-        textColorResource="@{coin.color}"
-        android:layout_width="0dp"
+        textColorResource="@{data.coin.color}"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@{coin.title}"
+        android:text="@{data.coin.title}"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/buttonCopy"
         app:layout_constraintStart_toEndOf="@+id/imageIcon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Bitcoin" />
 
     <TextView
-        android:id="@+id/textAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:paddingBottom="4dp"
-        android:text="@{address}"
+        android:ellipsize="end"
+        android:text="@{data.address}"
         android:textSize="10sp"
+        android:lines="1"
         app:layout_constraintEnd_toStartOf="@+id/buttonCopy"
-        app:layout_constraintStart_toEndOf="@+id/imageIcon"
+        app:layout_constraintStart_toStartOf="@+id/textTitle"
         app:layout_constraintTop_toBottomOf="@+id/textTitle"
-        tools:text="qwertzuiopasdfghjklyxcvbnm" />
+        android:layout_marginEnd="4dp"
+        tools:text="123456789" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageView
         android:id="@+id/buttonCopy"
-        style="@style/ImageButton.Outlined"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:onClick="@{() -> vm.copyAddress(address, coin)}"
-        app:icon="@drawable/ic_copy"
-        app:iconTintResource="@{coin.color}"
+        android:padding="4dp"
+        android:src="@drawable/ic_action_donate"
+        app:tintResource="@{data.coin.color}"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

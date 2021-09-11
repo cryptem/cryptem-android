@@ -71,6 +71,11 @@ class Coin(
         }
     }
 
+    fun getSparkline() : String{
+        val id = image?.substringAfter("images/")?.substringBefore("/")
+        return "https://www.coingecko.com/coins/$id/sparkline"
+    }
+
     fun isBtc() : Boolean{
         return symbol.equals("BTC", ignoreCase = true)
     }

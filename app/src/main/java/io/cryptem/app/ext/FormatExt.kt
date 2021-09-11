@@ -17,7 +17,7 @@ object FormatUtils {
 
     @JvmStatic
     fun formatTrendPercent(value: Double): String {
-        return (value / 100.0).toPercentString(decimalDigits = 2, abs = true)
+        return (value / 100.0).toPercentString(decimalDigits = 1, abs = true)
     }
 }
 

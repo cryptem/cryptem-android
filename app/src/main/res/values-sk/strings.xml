@@ -92,6 +92,7 @@
     <string name="map_unsupported_country_title">Tu ešte niesme</string>
     <string name="map_unsupported_country_message">Krajina %s zatiaľ nieje podporovaná, ale usilovne na tom pracujeme!</string>
     <string name="map_search">Vyhľadávanie</string>
+    <string name="map_type">Typ mapy</string>
 
     <string name="about_license">Open-Source License GNU GPL v3.0</string>
     <string name="about_url">https://cryptem.io</string>

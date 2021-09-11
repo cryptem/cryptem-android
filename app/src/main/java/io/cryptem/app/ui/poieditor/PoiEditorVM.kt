@@ -8,6 +8,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.FirestoreRepository
 import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.ui.Poi
@@ -27,7 +28,8 @@ import javax.inject.Inject
 class PoiEditorVM @Inject constructor(
     val geocoder: Geocoder,
     val firestoreRepository: FirestoreRepository,
-    val remoteConfigRepository: RemoteConfigRepository
+    val remoteConfigRepository: RemoteConfigRepository,
+    val analytics: AnalyticsRepository
 ) : BaseVM() {
 
     val name = MutableLiveData<String?>()
@@ -43,6 +45,11 @@ class PoiEditorVM @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         loadCategories()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
+        analytics.logPoiEditorScreen()
     }
 
     fun showGoogleMaps() {
