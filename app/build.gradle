@@ -10,8 +10,8 @@ plugins {
 }
 
 final VERSION_MAJOR = 1
-final VERSION_MINOR = 2
-final VERSION_PATCH = 8
+final VERSION_MINOR = 3
+final VERSION_PATCH = 0
 
 android {
     compileSdkVersion 30
