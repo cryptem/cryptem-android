@@ -46,7 +46,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     private val markers = ArrayList<Marker>()
     private val markerIcons = HashMap<String, BitmapDescriptor?>()
     private var defaultMarker: BitmapDescriptor? = null
-    var countryMenuItem : MenuItem? = null
+    var countryMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,10 +59,10 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         defaultMarker = createMarkerBitmap(R.drawable.ic_poi_other)
         initMap()
 
-        observe(InvalidateOptionsMenuEvent::class){
+        observe(InvalidateOptionsMenuEvent::class) {
             requireActivity().invalidateOptionsMenu()
         }
-        observe(UnsupportedCountryEvent::class){
+        observe(UnsupportedCountryEvent::class) {
             showUnsupportedCountryDialog()
         }
         viewModel.location.observe(viewLifecycleOwner) {
@@ -74,15 +74,15 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         viewModel.pois.observe(viewLifecycleOwner) {
             addMarkers(it)
         }
-        observe(UrlEvent::class){
+        observe(UrlEvent::class) {
             showUrl(it.url)
         }
-        viewModel.mapType.observe(viewLifecycleOwner){
+        viewModel.mapType.observe(viewLifecycleOwner) {
             map?.mapType = it
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (viewModel.selectedPoi.value != null){
+            if (viewModel.selectedPoi.value != null) {
                 viewModel.selectedPoi.value = null
                 return@addCallback
             } else {
@@ -139,7 +139,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         }
     }
 
-    private fun showUnsupportedCountryDialog(){
+    private fun showUnsupportedCountryDialog() {
         MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.map_unsupported_country_title)
             .setMessage(
                 getString(
@@ -149,8 +149,8 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
                     ).displayCountry
                 )
             )
-            .setPositiveButton(R.string.ok){ _, _ -> }
-            .setNegativeButton(R.string.donate){ _, _ -> navigate(R.id.aboutFragment)}
+            .setPositiveButton(R.string.ok) { _, _ -> }
+            .setNegativeButton(R.string.donate) { _, _ -> navigate(R.id.aboutFragment) }
             .show()
     }
 
@@ -174,9 +174,9 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         }
     }
 
-    private fun getMarkerIcon(category: PoiCategory?) : BitmapDescriptor? {
+    private fun getMarkerIcon(category: PoiCategory?): BitmapDescriptor? {
         return category?.let {
-            if (!markerIcons.contains(category.id)){
+            if (!markerIcons.contains(category.id)) {
                 markerIcons[category.id] = createMarkerBitmap(category.getIcon())
             }
             return markerIcons[category.id] ?: defaultMarker
@@ -191,7 +191,12 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         return ContextCompat.getDrawable(requireContext(), vectorResId)?.run {
             val background = ContextCompat.getDrawable(requireContext(), R.drawable.ic_marker)
             background!!.setBounds(0, 0, size, size)
-            setBounds(sidePadding, sidePadding-topOffset, size - sidePadding, size - sidePadding - topOffset)
+            setBounds(
+                sidePadding,
+                sidePadding - topOffset,
+                size - sidePadding,
+                size - sidePadding - topOffset
+            )
             val bitmap = Bitmap.createBitmap(
                 size,
                 size,
@@ -216,7 +221,7 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
         inflater.inflate(R.menu.map, menu)
         countryMenuItem = menu.findItem(R.id.action_country)
         val subMenu = countryMenuItem?.subMenu
-        if (!viewModel.countries.contains(viewModel.prefs.getSystemCountry())){
+        if (!viewModel.countries.contains(viewModel.prefs.getSystemCountry())) {
             subMenu?.add(viewModel.prefs.getSystemCountry().toUpperCase(Locale.getDefault()))
         }
         viewModel.countries.forEach {
@@ -226,9 +231,13 @@ class MapFragment : BaseFragment<MapVM, FragmentMapBinding>(R.layout.fragment_ma
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.action_add -> navigate(R.id.action_mapFragment_to_poiEditorFragment)
             R.id.action_map_type -> viewModel.toggleMapType()
+            0 -> {
+                viewModel.country.value = item.title.toString()
+                countryMenuItem?.title = item.title
+            }
         }
         return super.onOptionsItemSelected(item)
     }
