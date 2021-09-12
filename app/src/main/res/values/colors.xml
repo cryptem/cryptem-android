@@ -22,20 +22,21 @@
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="light_grey">#eee</color>
-    <color name="red">#D10000</color>
-    <color name="coin_bitcoin">#f7931a</color>
+    <color name="red">#B30000</color>
+    <color name="green">#3E9700</color>
+    <color name="coin_bitcoin">#F7931A</color>
     <color name="coin_litecoin">#345d9d</color>
     <color name="coin_monero">#ff6600</color>
-    <color name="coin_ethereum">#564E81</color>
-    <color name="coin_ethereum_light">#9F96D1</color>
+    <color name="coin_ethereum">#454a75</color>
+    <color name="coin_ethereum_light">#ABB4DC</color>
     <color name="coin_cardano">#0033AD</color>
     <color name="coin_solana">#9945ff</color>
 
-    <color name="trend_up">#4CA60D</color>
+    <color name="trend_up">@color/green</color>
     <color name="trend_down">@color/red</color>
 
-    <color name="trend_up_light">#B8FF83</color>
-    <color name="trend_down_light">#FF9393</color>
+    <color name="trend_up_light">#84FF30</color>
+    <color name="trend_down_light">#FF2C2C</color>
 
     <color name="trezor">#02b758</color>
     <color name="alza">#093266</color>

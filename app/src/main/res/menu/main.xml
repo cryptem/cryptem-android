@@ -5,5 +5,5 @@
         android:title="@string/about"
         android:icon="@drawable/ic_action_about"
         android:orderInCategory="10"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.*
 import io.cryptem.app.ui.base.BaseVM
+import io.cryptem.app.ui.base.event.UpdateWidgetEvent
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
@@ -75,6 +76,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
                 deposit.value = it.deposit.toString()
                 items.clear()
                 items.addAll(it.items.sortedByDescending { it.portfolioFiatPercent })
+                publish(UpdateWidgetEvent())
             }.onFailure {
                 loading.value = false
                 L.e(it)

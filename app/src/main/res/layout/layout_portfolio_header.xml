@@ -83,7 +83,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:progress="@{data.btcProgressInt}"
-        android:theme="@style/BtcIndicator"
+        android:theme="@style/PorfolioIndicator"
         app:layout_constraintEnd_toEndOf="@+id/textHodlingsBtc"
         app:layout_constraintStart_toStartOf="@+id/textHodlingsBtc"
         app:layout_constraintTop_toBottomOf="@+id/textHodlingsBtc"
@@ -101,34 +101,14 @@
         app:layout_constraintTop_toBottomOf="@id/profitIndicator"
         tools:text="0,5 BTC" />
 
-    <ImageView
-        android:id="@+id/iconTrend"
-        android:layout_width="16dp"
-        android:layout_height="wrap_content"
-        android:src="@{data.valuationPercent >= 0 ? @drawable/ic_trend_up : @drawable/ic_trend_down}"
-        app:layout_constraintEnd_toStartOf="@+id/textValuationPercent"
-        app:layout_constraintTop_toTopOf="@id/textValuationPercent"
-        app:tintResource="@{data.valuationPercent >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
-        tools:src="@drawable/ic_trend_up"
-        tools:tint="@color/trend_up_light"
-        app:visibleOrGone="@{vm.portfolio.deposit != 0}"/>
-
-    <TextView
-        android:id="@+id/textValuationPercent"
+    <include
+        android:id="@+id/layoutValuationPercent"
+        layout="@layout/layout_trend_large_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{data.valuationPercentString}"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:visibleOrGone="@{vm.portfolio.deposit != 0}"
-        app:layout_constraintBottom_toBottomOf="@+id/iconTrend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:textColorResource="@{data.valuationPercent >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
-        tools:text="123 %"
-        tools:textColor="@color/trend_up_light" />
-
-
+        app:data="@{data.valuationPercent * 100}"/>
 
     <com.google.android.material.button.MaterialButton
         style="@style/OutlinedButton"

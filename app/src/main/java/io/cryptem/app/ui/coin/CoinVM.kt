@@ -178,6 +178,7 @@ class CoinVM @Inject constructor(
             }.onSuccess {
                 if (it != null) {
                     val format = NumberFormat.getInstance(Locale.getDefault())
+                    format.maximumFractionDigits = 8
                     format.isGroupingUsed = false
                     amountExchange.value =
                         format.format(it.amountExchange).replace("\\s".toRegex(), "")

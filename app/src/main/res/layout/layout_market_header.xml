@@ -34,41 +34,26 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.76" />
 
-    <LinearLayout
-        android:id="@+id/layoutMarketCap"
+    <TextView
+        android:id="@+id/textMarketCap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:text="@{vm.marketGlobalData.marketCapString}"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:visibleOrInvisible="@{vm.marketGlobalData != null}"
-        app:animationIn="@{@anim/fade_in}">
+        tools:text="$1 000 000 000 000 000" />
 
-        <TextView
-            android:id="@+id/textMarketCapTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            tools:text="$1 000 000 000 000 000"
-            android:text="@{vm.marketGlobalData.marketCapString}"/>
-
-        <include
-            android:id="@+id/viewMarketCapChange"
-            layout="@layout/layout_trend_light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_gravity="center_vertical"
-            app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"
-            app:layout_constraintBottom_toBottomOf="@+id/textMarketCapTitle"
-            app:layout_constraintStart_toEndOf="@id/textMarketCapTitle"
-            app:layout_constraintTop_toTopOf="@+id/textMarketCapTitle" />
-
-    </LinearLayout>
+    <include
+        android:id="@+id/layoutValuationPercent"
+        layout="@layout/layout_trend_large_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"/>
 
 
     <TextView
@@ -76,9 +61,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text='@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString != null ? vm.marketGlobalData.btcDominanceString : "... %")}'
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/coin_bitcoin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutMarketCap"
+        app:layout_constraintTop_toBottomOf="@id/textMarketCap"
         tools:text="@string/market_btc_dominance" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -101,7 +86,7 @@
         android:layout_marginStart="8dp"
         android:textColor="@color/coin_ethereum_light"
         app:layout_constraintStart_toEndOf="@+id/textBtcDominance"
-        app:layout_constraintTop_toBottomOf="@+id/layoutMarketCap"
+        app:layout_constraintTop_toBottomOf="@+id/textMarketCap"
         tools:text="@string/market_eth_dominance" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator

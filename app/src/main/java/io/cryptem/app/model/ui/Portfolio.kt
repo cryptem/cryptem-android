@@ -48,8 +48,8 @@ class Portfolio(var currency: Currency, val deposit: Long) {
         return valuationBtc.toBtcString()
     }
 
-    fun getValuationPercentString() : String{
-        return valuationPercent.toPercentString(2)
+    fun getValuationPercentStringAbs() : String{
+        return (valuationPercent).toPercentString(1, true)
     }
 
     fun getBtcProgressInt() : Int{

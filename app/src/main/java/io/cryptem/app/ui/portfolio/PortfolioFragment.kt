@@ -1,5 +1,7 @@
 package io.cryptem.app.ui.portfolio
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,23 +13,25 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentPortfolioBinding
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.ui.base.event.UpdateWidgetEvent
 import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.ui.portfolio.depositwithdraw.DialogDepositWithdraw
+import io.cryptem.app.ui.widgets.PortfolioWidgetProvider
 
 
 @AndroidEntryPoint
-class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.layout.fragment_portfolio){
+class PortfolioFragment :
+    BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
     override val viewModel: PortfolioVM by viewModels()
 
-    var firstVisibleItem:Int = 0
-    var visibleItemCount:Int = 0
-    var totalItemCount:Int = 0
+    var firstVisibleItem: Int = 0
+    var visibleItemCount: Int = 0
+    var totalItemCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,22 +42,26 @@ class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.
         super.onViewCreated(view, savedInstanceState)
         binding.recycler.itemAnimator = null
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object:
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object :
             OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.addCoinMode.value == true){
+                if (viewModel.addCoinMode.value == true) {
                     viewModel.addCoinMode.value = false
                     return
-                }else{
-                    if (!navController().navigateUp()){
+                } else {
+                    if (!navController().navigateUp()) {
                         activity?.finish()
                     }
                 }
             }
         })
 
-        observe(UrlEvent::class){
+        observe(UrlEvent::class) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.url)))
+        }
+
+        observe(UpdateWidgetEvent::class) {
+            updateWidget()
         }
 
         binding.recyclerCoins.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -75,10 +83,12 @@ class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.
         observeDepositWithdraw()
     }
 
-    private fun observeDepositWithdraw(){
-        setFragmentResultListener(DialogDepositWithdraw.REQUEST_KEY){ key, bundle ->
-            val newValue = ((viewModel.depositNumber.value ?: 0L) + bundle.getLong(DialogDepositWithdraw.RESULT_VALUE))
-            if (newValue >= 0){
+    private fun observeDepositWithdraw() {
+        setFragmentResultListener(DialogDepositWithdraw.REQUEST_KEY) { key, bundle ->
+            val newValue = ((viewModel.depositNumber.value ?: 0L) + bundle.getLong(
+                DialogDepositWithdraw.RESULT_VALUE
+            ))
+            if (newValue >= 0) {
                 viewModel.depositNumber.value = newValue
             } else {
                 viewModel.depositNumber.value = 0L
@@ -92,12 +102,21 @@ class PortfolioFragment : BaseFragment<PortfolioVM, FragmentPortfolioBinding>(R.
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.action_settings -> {
                 navigate(PortfolioFragmentDirections.actionPortfolioFragmentToPortfolioSettingsFragment())
             }
         }
         return false
+    }
+
+    private fun updateWidget() {
+        val intent = Intent(requireContext(), PortfolioWidgetProvider::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids: IntArray = AppWidgetManager.getInstance(requireContext())
+            .getAppWidgetIds(ComponentName(requireContext(), PortfolioWidgetProvider::class.java))
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        requireContext().sendBroadcast(intent)
     }
 
 }
