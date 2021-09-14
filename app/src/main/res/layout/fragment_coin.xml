@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="io.cryptem.app.model.ui.PercentTimeInterval" />
+        <import type="io.cryptem.app.model.ui.TimeInterval" />
 
         <variable
             name="vm"
@@ -373,7 +373,7 @@
                         layout="@layout/layout_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentUsd(PercentTimeInterval.DAY)}"
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.DAY)}"
                         app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                         app:layout_constraintEnd_toStartOf="@+id/guideline1"
                         app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
@@ -383,7 +383,7 @@
                         layout="@layout/layout_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentBtc(PercentTimeInterval.DAY)}"
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.DAY)}"
                         app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
                         app:layout_constraintEnd_toStartOf="@+id/guideline1"
                         app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
@@ -404,7 +404,7 @@
                         layout="@layout/layout_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentUsd(PercentTimeInterval.WEEK)}"
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.WEEK)}"
                         app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                         app:layout_constraintEnd_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
@@ -414,7 +414,7 @@
                         layout="@layout/layout_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentBtc(PercentTimeInterval.WEEK)}"
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.WEEK)}"
                         app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
                         app:layout_constraintEnd_toStartOf="@+id/guideline2"
                         app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
@@ -435,7 +435,7 @@
                         layout="@layout/layout_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentUsd(PercentTimeInterval.MONTH)}"
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.MONTH)}"
                         app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
@@ -445,7 +445,7 @@
                         layout="@layout/layout_trend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentBtc(PercentTimeInterval.MONTH)}"
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.MONTH)}"
                         app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
                         app:layout_constraintEnd_toEndOf="@+id/trendMonthUsd"
                         app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />

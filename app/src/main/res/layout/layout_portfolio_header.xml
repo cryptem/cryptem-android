@@ -48,7 +48,7 @@
         app:strokeColor="@color/colorSecondary"
         android:layout_width="@dimen/portfolio_icon"
         android:layout_height="@dimen/portfolio_icon"
-        android:onClick="@{() -> vm.depositWithdraw()}"
+        android:visibility="invisible"
         app:icon="@drawable/ic_swap"
         app:layout_constraintBottom_toBottomOf="@+id/textHodlings"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +112,7 @@
 
     <com.google.android.material.button.MaterialButton
         style="@style/OutlinedButton"
+        android:backgroundTint="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:insetTop="0dp"
@@ -128,7 +129,7 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
-        app:textResource="@{vm.trendTime.title}" />
+        app:textResource="@{vm.timeInterval.title}" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -2,22 +2,42 @@ package io.cryptem.app
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
+import io.cryptem.app.model.PortfolioDownloadWorker
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @HiltAndroidApp
-class App : Application() {
+class App : Application(), Configuration.Provider {
 
-    companion object{
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    companion object {
         @SuppressLint("StaticFieldLeak")
-        lateinit var instance : App
+        lateinit var instance: App
     }
+
+    override fun getWorkManagerConfiguration() = Configuration.Builder()
+        .setWorkerFactory(workerFactory)
+        .build()
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-    }
 
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "PortfolioWork",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            PeriodicWorkRequestBuilder<PortfolioDownloadWorker>(
+                1, TimeUnit.HOURS
+            ).setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            ).build()
+        )
+    }
 }

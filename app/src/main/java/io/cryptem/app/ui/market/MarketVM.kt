@@ -15,12 +15,11 @@ import io.cryptem.app.model.MarketRepository
 import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.ui.MarketGlobalData
-import io.cryptem.app.model.ui.PercentTimeInterval
+import io.cryptem.app.model.ui.TimeInterval
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,7 +34,7 @@ class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, pr
     val altcoinIndex = MutableLiveData<Double>()
     val altcoinIndexInt = MutableLiveData<Int>()
     val altcoinIndexColorRes = SafeMutableLiveData(R.color.white)
-    val percentInterval = listOf(MutableLiveData(PercentTimeInterval.DAY), MutableLiveData(PercentTimeInterval.WEEK))
+    val percentInterval = listOf(MutableLiveData(TimeInterval.DAY), MutableLiveData(TimeInterval.WEEK))
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
@@ -135,10 +134,10 @@ class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, pr
 
     fun toggleTrendTime(index : Int){
         percentInterval[index].value = when(percentInterval[index].value){
-            PercentTimeInterval.DAY -> PercentTimeInterval.WEEK
-            PercentTimeInterval.WEEK -> PercentTimeInterval.MONTH
-            PercentTimeInterval.MONTH -> PercentTimeInterval.DAY
-            null -> PercentTimeInterval.DAY
+            TimeInterval.DAY -> TimeInterval.WEEK
+            TimeInterval.WEEK -> TimeInterval.MONTH
+            TimeInterval.MONTH -> TimeInterval.DAY
+            null -> TimeInterval.DAY
         }
     }
 

@@ -24,6 +24,7 @@
     <color name="light_grey">#eee</color>
     <color name="red">#B30000</color>
     <color name="green">#3E9700</color>
+    <color name="orange_light">#FF8C00</color>
     <color name="coin_bitcoin">#F7931A</color>
     <color name="coin_litecoin">#345d9d</color>
     <color name="coin_monero">#ff6600</color>
@@ -37,6 +38,8 @@
 
     <color name="trend_up_light">#84FF30</color>
     <color name="trend_down_light">#FF2C2C</color>
+
+    <color name="worst_coin">@color/white</color>
 
     <color name="trezor">#02b758</color>
     <color name="alza">#093266</color>

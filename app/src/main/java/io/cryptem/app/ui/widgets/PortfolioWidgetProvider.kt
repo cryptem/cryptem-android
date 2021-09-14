@@ -12,9 +12,7 @@ import io.cryptem.app.R
 import io.cryptem.app.model.PortfolioRepository
 import io.cryptem.app.ui.MainActivity
 import io.cryptem.app.util.L
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -22,6 +20,7 @@ class PortfolioWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var repository: PortfolioRepository
+    private val externalScope: CoroutineScope = GlobalScope
 
     override fun onUpdate(
         context: Context,
@@ -29,7 +28,7 @@ class PortfolioWidgetProvider : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
 
-        GlobalScope.launch(Dispatchers.Main) {
+        externalScope.launch(Dispatchers.IO) {
             kotlin.runCatching {
                 repository.getPortfolio(false)
             }.onSuccess {
@@ -58,11 +57,10 @@ class PortfolioWidgetProvider : AppWidgetProvider() {
                 appWidgetIds.forEach { appWidgetId ->
                     appWidgetManager.updateAppWidget(appWidgetId, views)
                 }
+                L.d("Widget updated")
             }.onFailure {
                 L.e(it)
             }
         }
-
-
     }
 }

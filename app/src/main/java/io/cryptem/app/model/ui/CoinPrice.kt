@@ -19,4 +19,12 @@ class CoinPrice(
     fun getAthDateString() : String?{
         return athDate?.format()
     }
+
+    fun getPercentChange(interval: TimeInterval) : Double?{
+        return when (interval){
+            TimeInterval.DAY -> percentChange24h
+            TimeInterval.WEEK -> percentChange7d
+            TimeInterval.MONTH -> percentChange30d
+        }
+    }
 }

@@ -35,7 +35,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.6" />
+                app:layout_constraintGuide_percent="0.618" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon"
@@ -52,7 +52,6 @@
                 android:id="@+id/sidebar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -147,39 +146,45 @@
                 style="@style/TextBitcoinPrice"
                 app:layout_constraintStart_toStartOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
                 tools:text="1 BTC" />
 
             <TextView
-                android:id="@+id/textDcaTitle"
+                android:id="@+id/textDcaPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:text="DCA"
-                android:textColor="@color/white"
-                android:textSize="8dp"
-                app:layout_constraintBaseline_toBaselineOf="@id/textDca"
-                app:layout_constraintEnd_toStartOf="@+id/textDca" />
+                android:layout_marginStart="4dp"
+                android:text="@{data.dcaString}"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/colorSecondary"
+                app:layout_constraintEnd_toEndOf="@+id/textValuationBtc"
+                app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
+                app:visibleOrGone="@{data.coin.isBtc()}"
+                tools:text="1000 USD" />
 
             <TextView
                 android:id="@+id/textDca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{data.dcaString}"
+                android:text="DCA"
                 android:textColor="@color/white"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/textValuation"
-                app:layout_constraintTop_toBottomOf="@+id/textValuationBtc"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/card_padding"
-                tools:text="500 USD" />
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textDcaPrice"
+                app:layout_constraintEnd_toStartOf="@+id/textDcaPrice"
+                app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
+                app:visibleOrGone="@{data.coin.isBtc()}" />
 
             <include
                 android:id="@+id/trendDayBtc"
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                app:data="@{data.coin.getPercentBtc(vm.trendTime)}"
+                android:layout_marginEnd="8dp"
+                app:data="@{data.coin.getPercentBtc(vm.timeInterval)}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
@@ -189,16 +194,43 @@
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:data="@{data.coin.getPercentUsd(vm.trendTime)}"
+                app:data="@{data.coin.getPercentUsd(vm.timeInterval)}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
 
             <androidx.constraintlayout.widget.Group
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:visibleOrInvisible="@{!data.coin.isBtc()}"
-                app:constraint_referenced_ids="trendDayBtc, textCurrentPriceBtc"/>
+                app:constraint_referenced_ids="trendDayBtc, textCurrentPriceBtc, textValuationBtc"/>
+
+            <ImageView
+                android:id="@+id/iconTopCoin"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_crown"
+                app:visibleOrGone="@{data == vm.portfolio.topCoins.get(vm.timeInterval)}"
+                app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
+                app:layout_constraintStart_toStartOf="@+id/sidebar"
+                app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice"
+                app:tint="@color/colorSecondary" />
+
+            <ImageView
+                android:id="@+id/iconWorstCoin"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_flag"
+                app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
+                app:layout_constraintStart_toStartOf="@+id/sidebar"
+                app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice"
+                app:tint="@color/worst_coin"
+                app:visibleOrGone="@{vm.portfolio.items.size() > 2 &amp;&amp; data == vm.portfolio.worstCoins.get(vm.timeInterval)}" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

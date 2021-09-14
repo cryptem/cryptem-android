@@ -2,173 +2,191 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="vm"
             type="io.cryptem.app.ui.portfolio.settings.PortfolioSettingsVM" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewHeader"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/portfolio_header_min_height"
-        android:background="@color/black"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:minHeight="@dimen/portfolio_header_min_height"
-        android:orientation="horizontal"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:theme="@style/HodlTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputDeposit"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/portfolio_deposit_hint"
-        android:theme="@style/HodlTheme"
-        app:layout_constraintBottom_toBottomOf="@+id/viewHeader"
-        app:layout_constraintEnd_toStartOf="@+id/inputCurrency"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/viewHeader">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/viewHeader"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/portfolio_header_min_height"
+            android:background="@color/black"
+            android:elevation="2dp"
+            android:gravity="center"
+            android:minHeight="@dimen/portfolio_header_min_height"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:theme="@style/HodlTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editDeposit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:text="@={vm.deposit}" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputDeposit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/portfolio_deposit_hint"
+                android:theme="@style/HodlTheme"
+                app:layout_constraintBottom_toBottomOf="@+id/viewHeader"
+                app:layout_constraintEnd_toStartOf="@+id/inputCurrency"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/viewHeader">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editDeposit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:text="@={vm.deposit}" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputCurrency"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/request_currency_hint"
-        android:layout_marginStart="8dp"
-        android:inputType="none"
-        app:layout_constraintStart_toEndOf="@id/inputDeposit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/inputDeposit">
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputCurrency"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="@string/request_currency_hint"
+                android:inputType="none"
+                app:layout_constraintEnd_toStartOf="@+id/buttonTransaction"
+                app:layout_constraintStart_toEndOf="@id/inputDeposit"
+                app:layout_constraintTop_toTopOf="@+id/inputDeposit">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    app:data="@{vm.currencies}"
+                    app:layoutId="@{@layout/item_currency_dropdown}"
+                    app:selectedItem="@={vm.currency}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonTransaction"
+                style="@style/ImageButton.Circle"
+                android:layout_width="@dimen/portfolio_icon"
+                android:layout_height="@dimen/portfolio_icon"
+                android:layout_marginTop="4dp"
+                android:onClick="@{() -> vm.depositWithdraw()}"
+                app:icon="@drawable/ic_swap"
+                app:layout_constraintBottom_toBottomOf="@+id/inputCurrency"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/inputCurrency"
+                app:strokeColor="@color/colorSecondary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/textBinanceSyncTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            app:data="@{vm.currencies}"
-            app:layoutId="@{@layout/item_currency_dropdown}"
-            app:selectedItem="@={vm.currency}" />
+            android:checked="@={vm.binanceSync}"
+            android:onClick="@{() -> vm.onSwitchClick()}"
+            android:paddingStart="@dimen/screen_padding"
+            android:paddingEnd="@dimen/screen_padding"
+            android:text="@string/portfolio_settings_binance_sync"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewHeader" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputBinanceApiKey"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_weight="1"
+            android:enabled="@{vm.binanceSync}"
+            android:hint="@string/portfolio_settings_binance_api_key"
+            android:minWidth="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBinanceSyncTitle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editBinanceApiKey"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionNext"
+                android:inputType="text|textNoSuggestions"
+                android:maxLines="1"
+                android:paddingEnd="64dp"
+                android:text="@={vm.binanceApiKey}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ImageButton.Outlined"
+            android:layout_width="56dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:enabled="@{vm.binanceSync}"
+            android:onClick="@{() -> vm.scanBinanceApiKey()}"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            app:icon="@drawable/ic_scan_qr"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/inputBinanceApiKey"
+            app:layout_constraintTop_toTopOf="@+id/inputBinanceApiKey"
+            tools:iconTint="@color/black" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputBinanceSecretKey"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:layout_weight="1"
+            android:enabled="@{vm.binanceSync}"
+            android:hint="@string/portfolio_settings_binance_secret_key"
+            android:minWidth="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputBinanceApiKey">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editBinanceSecretKey"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword|textNoSuggestions"
+                android:maxLines="1"
+                android:text="@={vm.binanceSecretKey}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/portfolio_settings_binance_keys_hint"
+            android:textColor="@color/textSecondary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputBinanceSecretKey" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/textBinanceSyncTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/screen_padding"
-        android:paddingEnd="@dimen/screen_padding"
-        android:checked="@={vm.binanceSync}"
-        android:onClick="@{() -> vm.onSwitchClick()}"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/portfolio_settings_binance_sync"
-        app:layout_constraintTop_toBottomOf="@+id/viewHeader" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputBinanceApiKey"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="@string/portfolio_settings_binance_api_key"
-        android:minWidth="100dp"
-        android:enabled="@{vm.binanceSync}"
-        android:layout_marginStart="@dimen/screen_padding"
-        android:layout_marginEnd="@dimen/screen_padding"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBinanceSyncTitle">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editBinanceApiKey"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingEnd="64dp"
-            android:inputType="text|textNoSuggestions"
-            android:maxLines="1"
-            android:imeOptions="actionNext"
-            android:text="@={vm.binanceApiKey}" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="56dp"
-        android:layout_height="58dp"
-        style="@style/ImageButton.Outlined"
-        app:iconGravity="textStart"
-        android:enabled="@{vm.binanceSync}"
-        app:iconPadding="0dp"
-        app:icon="@drawable/ic_scan_qr"
-        tools:iconTint="@color/black"
-        android:layout_marginEnd="4dp"
-        android:scaleType="fitCenter"
-        android:padding="8dp"
-        android:layout_marginTop="4dp"
-        android:onClick="@{() -> vm.scanBinanceApiKey()}"
-        app:layout_constraintEnd_toEndOf="@+id/inputBinanceApiKey"
-        app:layout_constraintTop_toTopOf="@+id/inputBinanceApiKey" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputBinanceSecretKey"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/screen_padding"
-        android:layout_marginEnd="@dimen/screen_padding"
-        android:layout_weight="1"
-        android:enabled="@{vm.binanceSync}"
-        android:hint="@string/portfolio_settings_binance_secret_key"
-        android:minWidth="100dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputBinanceApiKey">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editBinanceSecretKey"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword|textNoSuggestions"
-            android:maxLines="1"
-            android:text="@={vm.binanceSecretKey}" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputBinanceSecretKey"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:textSize="12sp"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/textSecondary"
-        android:text="@string/portfolio_settings_binance_keys_hint"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

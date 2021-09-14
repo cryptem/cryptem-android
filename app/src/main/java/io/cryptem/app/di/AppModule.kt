@@ -107,7 +107,7 @@ class AppModule {
         return Room.databaseBuilder(
             context,
             PortfolioDatabase::class.java, "portfolio"
-        ).fallbackToDestructiveMigration().build()
+        ).addMigrations(PortfolioDatabase.MIGRATION_2_3).build()
     }
 
     @Provides

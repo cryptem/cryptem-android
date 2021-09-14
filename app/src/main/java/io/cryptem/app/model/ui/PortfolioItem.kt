@@ -69,7 +69,7 @@ class PortfolioItem(
     }
 
     fun getDcaString(): String {
-        return dca.toFiatString(Currency.USD)
+        return dca.toFiatString(Currency.USD, 0)
     }
 
     fun getPortfolioPercentString(): String {

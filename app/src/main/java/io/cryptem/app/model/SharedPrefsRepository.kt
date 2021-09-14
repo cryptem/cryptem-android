@@ -5,6 +5,7 @@ import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.model.ui.SoftwareWallet
+import io.cryptem.app.model.ui.TimeInterval
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,6 +20,7 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val PORTFOLIO_CURRENCY = "PORTFOLIO_CURRENCY"
         const val PORTFOLIO_DEPOSIT = "PORTFOLIO_DEPOSIT"
         const val PORTFOLIO_WITHDRAWAL = "PORTFOLIO_WITHDRAWAL"
+        const val PORTFOLIO_TIME_INTERVAL = "PORTFOLIO_TIME_INTERVAL"
         const val DEFAULT_WALLET = "DEFAULT_WALLET"
         const val HOME_SCREEN = "HOME_SCREEN"
         const val BINANCE_REGISTERED = "BINANCE_REGISTERED"
@@ -92,6 +94,14 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         return prefs.getLong(PORTFOLIO_WITHDRAWAL, 0)
     }
 
+    fun savePortfolioTimeInterval(interval: TimeInterval) {
+        prefs.edit().putString(PORTFOLIO_TIME_INTERVAL, interval.name).apply()
+    }
+
+    fun getPortfolioTimeInterval(): TimeInterval {
+        return TimeInterval.valueOf(prefs.getString(PORTFOLIO_TIME_INTERVAL, TimeInterval.DAY.name)!!)
+    }
+
     fun setHomeScreen(homeScreen: HomeScreen) {
         prefs.edit().putString(HOME_SCREEN, homeScreen.name).apply()
     }
@@ -163,7 +173,6 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
     fun saveMapType(type: Int) {
         prefs.edit().putInt(MAP_TYPE, type).apply()
     }
-
 
     fun getMapType() : Int{
         return prefs.getInt(MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL)
