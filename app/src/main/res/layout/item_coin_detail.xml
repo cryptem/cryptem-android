@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-<import type="io.cryptem.app.model.ui.PercentTimeInterval"/>
+<import type="io.cryptem.app.model.ui.TimeInterval"/>
         <variable
             name="data"
             type="io.cryptem.app.model.ui.PortfolioItem" />
@@ -151,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                app:data="@{data.coin.getPercentBtc(PercentTimeInterval.DAY)}"
+                app:data="@{data.coin.getPercentBtc(TimeInterval.DAY)}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
@@ -161,7 +161,7 @@
                 layout="@layout/layout_trend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:data="@{data.coin.getPercentUsd(PercentTimeInterval.DAY)}"
+                app:data="@{data.coin.getPercentUsd(TimeInterval.DAY)}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />

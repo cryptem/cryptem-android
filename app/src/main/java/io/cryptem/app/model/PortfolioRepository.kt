@@ -1,15 +1,21 @@
 package io.cryptem.app.model
 
-import io.cryptem.app.AppConfig
+import android.graphics.Color
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import io.cryptem.app.AppConfig.PORTFOLIO_CACHE_MINUTES
 import io.cryptem.app.model.db.PortfolioDatabase
 import io.cryptem.app.model.db.entity.PortfolioDbEntity
+import io.cryptem.app.model.db.entity.PortfolioSnapshotEntity
 import io.cryptem.app.model.db.toCoin
 import io.cryptem.app.model.db.toUiEntity
 import io.cryptem.app.model.ui.*
-import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.util.L
-import java.util.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +26,7 @@ class PortfolioRepository @Inject constructor(
     val marketRepository: MarketRepository,
     val binanceRepository: BinanceRepository
 ) {
-
+    private val mutex = Mutex()
     private var portfolio = Cache(PORTFOLIO_CACHE_MINUTES, this::loadPortfolio)
 
     suspend fun addPortfolioCoin(coin: Coin, amountExchange: Double, amountWallet: Double) {
@@ -56,8 +62,11 @@ class PortfolioRepository @Inject constructor(
         return portfolioDb.dao().getPortfolioCoin(id)?.toUiEntity(prefs.getPortfolioCurrency())
     }
 
-    suspend fun getPortfolio(forceLoad : Boolean) : Portfolio{
-        return portfolio.get(forceLoad)
+    suspend fun getPortfolio(forceLoad: Boolean): Portfolio {
+        // Mutex is necessary to proper sync app with work manager
+        mutex.withLock {
+            return portfolio.get(forceLoad)
+        }
     }
 
     private suspend fun loadPortfolio(): Portfolio {
@@ -73,7 +82,6 @@ class PortfolioRepository @Inject constructor(
         } else null
 
         if (portfolioItems.isNotEmpty()) {
-            try {
                 val coinIds = portfolioItems.joinToString(",") { it.id }
                 val coins = marketRepository.loadPortfolioCoins(coinIds, result.currency)
 
@@ -101,9 +109,6 @@ class PortfolioRepository @Inject constructor(
                         portfolioDb.dao().updatePortfolioCoin(portfolioDbEntity)
                     }
                 }
-            } catch (t: Throwable) {
-                L.e(t)
-            }
         }
 
         result.items = portfolioItems.map { dbEntity ->
@@ -115,7 +120,22 @@ class PortfolioRepository @Inject constructor(
             )
         }
         result.recalculate()
+        saveSnapshot(result)
         return result
+    }
+
+    private suspend fun saveSnapshot(portfolio: Portfolio) {
+        if (System.currentTimeMillis() - (portfolioDb.dao().getLastSnapshot()
+                ?: 0) >= TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
+        ) {
+            portfolioDb.dao().addSnapshot(
+                PortfolioSnapshotEntity(
+                    fiat = portfolio.valuationFiat,
+                    btc = portfolio.valuationBtc,
+                    percent = portfolio.valuationPercent
+                )
+            )
+        }
     }
 
     suspend fun getPortfolioFromDb(): Portfolio {
@@ -156,6 +176,53 @@ class PortfolioRepository @Inject constructor(
 
     fun getPortfolioDeposit(): Long {
         return prefs.getPortfolioDeposit()
+    }
+
+    suspend fun getChart(interval: TimeInterval): LineData {
+
+        val fiatData = ArrayList<Entry>()
+        val btcData = ArrayList<Entry>()
+
+        val snapshots =
+            portfolioDb.dao().getSnapshots(System.currentTimeMillis() - interval.miliseconds)
+
+        var previousTimestamp = 0L
+        snapshots.forEach {
+            if (it.timestamp > previousTimestamp + (interval.miliseconds / 50)) {
+                fiatData.add(Entry(it.timestamp.toFloat(), it.fiat.toFloat()))
+                btcData.add(Entry(it.timestamp.toFloat(), it.btc.toFloat()))
+                previousTimestamp = it.timestamp
+            }
+        }
+
+        val startTime = System.currentTimeMillis() - interval.miliseconds
+        if (fiatData.isNotEmpty()) {
+            fiatData.add(0, fiatData[0].copy().apply { x = startTime.toFloat() })
+            btcData.add(0, btcData[0].copy().apply { x = startTime.toFloat() })
+        }
+
+        val set1 = LineDataSet(fiatData, "USD")
+
+        set1.axisDependency = YAxis.AxisDependency.LEFT
+        set1.color = Color.WHITE
+        set1.lineWidth = 1f
+        set1.setDrawCircles(false)
+        set1.setDrawValues(false)
+        set1.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+
+        val set2 = LineDataSet(btcData, "BTC")
+        set2.axisDependency = YAxis.AxisDependency.RIGHT
+        set2.color = Color.parseColor("#FFC800")
+        set2.lineWidth = 1f
+        set2.setDrawCircles(false)
+        set2.setDrawValues(false)
+        set2.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+        val data = LineData(set1, set2)
+
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTextSize(9f)
+        data.isHighlightEnabled = false
+        return data
     }
 
 }

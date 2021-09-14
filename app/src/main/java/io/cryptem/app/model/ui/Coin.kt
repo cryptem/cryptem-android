@@ -19,7 +19,7 @@ class Coin(
     var marketCap : Double? = null,
 ) : Parcelable {
 
-    fun getPrice(currency : Currency) : Double?{
+    fun getPriceDouble(currency : Currency) : Double?{
         return when (currency){
             Currency.BTC -> priceBtc?.currentPrice
             Currency.USD -> priceUsd?.currentPrice
@@ -27,8 +27,16 @@ class Coin(
         }
     }
 
+    fun getCoinPrice(currency : Currency) : CoinPrice?{
+        return when (currency){
+            Currency.BTC -> priceBtc
+            Currency.USD -> priceUsd
+            else -> priceCustom
+        }
+    }
+
     fun getPriceString(currency : Currency) : String?{
-        return getPrice(currency)?.toFiatString(currency)
+        return getPriceDouble(currency)?.toFiatString(currency)
     }
 
     fun getUsdPriceString() : String?{
@@ -36,11 +44,11 @@ class Coin(
     }
 
     fun getBtcPriceString() : String?{
-        return getPrice(Currency.BTC)?.toBtcString()
+        return getPriceDouble(Currency.BTC)?.toBtcString()
     }
 
     fun getSatPriceString() : String?{
-        return getPrice(Currency.BTC)?.toSatString()
+        return getPriceDouble(Currency.BTC)?.toSatString()
     }
 
     fun getAthUsdString() : String?{
@@ -55,19 +63,19 @@ class Coin(
         return marketCap?.toFiatString(Currency.USD, 0)
     }
 
-    fun getPercentBtc(time : PercentTimeInterval) : Double?{
+    fun getPercentBtc(time : TimeInterval) : Double?{
         return when(time){
-            PercentTimeInterval.DAY -> priceBtc?.percentChange24h
-            PercentTimeInterval.WEEK -> priceBtc?.percentChange7d
-            PercentTimeInterval.MONTH -> priceBtc?.percentChange30d
+            TimeInterval.DAY -> priceBtc?.percentChange24h
+            TimeInterval.WEEK -> priceBtc?.percentChange7d
+            TimeInterval.MONTH -> priceBtc?.percentChange30d
         }
     }
 
-    fun getPercentUsd(time : PercentTimeInterval) : Double?{
+    fun getPercentUsd(time : TimeInterval) : Double?{
         return when(time){
-            PercentTimeInterval.DAY -> priceUsd?.percentChange24h
-            PercentTimeInterval.WEEK -> priceUsd?.percentChange7d
-            PercentTimeInterval.MONTH -> priceUsd?.percentChange30d
+            TimeInterval.DAY -> priceUsd?.percentChange24h
+            TimeInterval.WEEK -> priceUsd?.percentChange7d
+            TimeInterval.MONTH -> priceUsd?.percentChange30d
         }
     }
 

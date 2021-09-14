@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
+import com.github.mikephil.charting.data.LineData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.*
@@ -26,14 +27,19 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     val items = ObservableArrayList<Any>()
     val coins = ObservableArrayList<Coin>()
     val addCoinMode = MutableLiveData(false)
-    val trendTime = MutableLiveData(PercentTimeInterval.DAY)
+    val timeInterval = SafeMutableLiveData(prefs.getPortfolioTimeInterval())
     val layoutStrategy = PortfolioLayoutStrategy()
+
+    val chartData = MutableLiveData<LineData>()
+    val topCoin = MutableLiveData<PortfolioItem>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.PORTFOLIO)
         loadPortfolioFromDb()
         loadFromCache()
+        loadChart()
+
         if (coins.isEmpty()){
             loadCoins()
         }
@@ -49,16 +55,12 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         loadPortfolio()
     }
 
-    fun loadPortfolioFromDb(){
+    private fun loadPortfolioFromDb(){
         viewModelScope.launch {
             kotlin.runCatching {
                 portfolioRepo.getPortfolioFromDb()
             }.onSuccess {
-                portfolio.value = it
-                depositNumber.value = it.deposit
-                deposit.value = it.deposit.toString()
-                items.clear()
-                items.addAll(it.items.sortedByDescending { it.portfolioFiatPercent })
+                showPortfolio(it)
             }.onFailure {
                 L.e(it)
             }
@@ -72,16 +74,21 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
                 portfolioRepo.getPortfolio(force)
             }.onSuccess {
                 loading.value = false
-                portfolio.value = it
-                deposit.value = it.deposit.toString()
-                items.clear()
-                items.addAll(it.items.sortedByDescending { it.portfolioFiatPercent })
+                showPortfolio(it)
                 publish(UpdateWidgetEvent())
             }.onFailure {
                 loading.value = false
                 L.e(it)
             }
         }
+    }
+
+    private fun showPortfolio(newPortfolio : Portfolio){
+        portfolio.value = newPortfolio
+        deposit.value = newPortfolio.deposit.toString()
+        items.clear()
+        items.addAll(newPortfolio.items.sortedByDescending { it.portfolioFiatPercent })
+        loadChart()
     }
 
     fun loadCoins(){
@@ -99,13 +106,27 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         }
     }
 
-    fun toggleTrendTime(){
-        trendTime.value = when(trendTime.value){
-            PercentTimeInterval.DAY -> PercentTimeInterval.WEEK
-            PercentTimeInterval.WEEK -> PercentTimeInterval.MONTH
-            PercentTimeInterval.MONTH -> PercentTimeInterval.DAY
-            null -> PercentTimeInterval.DAY
+    fun loadChart(){
+        viewModelScope.launch {
+            kotlin.runCatching {
+                portfolioRepo.getChart(timeInterval.value)
+            }.onSuccess {
+                chartData.value = it
+            }.onFailure {
+                L.e(it)
+            }
         }
+    }
+
+    fun toggleTrendTime(){
+        timeInterval.value = when(timeInterval.value){
+            TimeInterval.DAY -> TimeInterval.WEEK
+            TimeInterval.WEEK -> TimeInterval.MONTH
+            TimeInterval.MONTH -> TimeInterval.DAY
+            null -> TimeInterval.DAY
+        }
+        prefs.savePortfolioTimeInterval(timeInterval.value)
+        loadChart()
     }
 
     fun showCoinDetail(){
@@ -129,9 +150,4 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         portfolioRepo.setPortfolioDeposit(depositNumber.value ?: 0L)
         loadPortfolio(true)
     }
-
-    fun depositWithdraw(){
-        navigate(PortfolioFragmentDirections.actionPortfolioFragmentToDialogDepositWithdraw(portfolioRepo.getPortfolioCurrency().toString()))
-    }
-
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="io.cryptem.app.model.ui.PercentTimeInterval"/>
+        <import type="io.cryptem.app.model.ui.TimeInterval"/>
         <variable
             name="data"
             type="io.cryptem.app.model.ui.Coin" />

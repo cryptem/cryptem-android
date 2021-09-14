@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.64" />
+        app:layout_constraintGuide_percent="0.618" />
 
     <View
         android:id="@+id/sidebar"
@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include layout="@layout/layout_portfolio_header"
+    <include layout="@layout/layout_portfolio_chart_header"
         android:id="@+id/header"
         app:data="@{vm.portfolio}"
         app:vm="@{vm}"/>

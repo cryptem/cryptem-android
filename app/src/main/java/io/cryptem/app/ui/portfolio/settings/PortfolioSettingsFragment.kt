@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +17,7 @@ import io.cryptem.app.databinding.FragmentPortfolioSettingsBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.ScanQrEvent
 import io.cryptem.app.ui.portfolio.depositwithdraw.DepositWithdrawMode
+import io.cryptem.app.ui.portfolio.depositwithdraw.DialogDepositWithdraw
 import io.cryptem.app.ui.portfolio.settings.event.BinanceTestEvent
 import io.cryptem.app.ui.qrscanner.QrScannerActivity
 import io.cryptem.app.ui.wallets.WalletFragment
@@ -48,6 +50,21 @@ class PortfolioSettingsFragment : BaseFragment<PortfolioSettingsVM, FragmentPort
             } else {
                 Toast.makeText(requireContext(), R.string.portfolio_settings_binance_test_failed, Toast.LENGTH_LONG).show()
             }
+        }
+        observeDepositWithdraw()
+    }
+
+    private fun observeDepositWithdraw() {
+        setFragmentResultListener(DialogDepositWithdraw.REQUEST_KEY) { key, bundle ->
+            val newValue = ((viewModel.deposit.value?.toLongOrNull() ?: 0L) + bundle.getLong(
+                DialogDepositWithdraw.RESULT_VALUE
+            ))
+            if (newValue >= 0) {
+                viewModel.deposit.value = newValue.toString()
+            } else {
+                viewModel.deposit.value = "0"
+            }
+            viewModel.savePortfolio()
         }
     }
 

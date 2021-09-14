@@ -2,6 +2,7 @@ package io.cryptem.app.model.db
 
 import androidx.room.*
 import io.cryptem.app.model.db.entity.PortfolioDbEntity
+import io.cryptem.app.model.db.entity.PortfolioSnapshotEntity
 
 @Dao
 interface PortfolioDao {
@@ -19,4 +20,17 @@ interface PortfolioDao {
 
     @Query("DELETE FROM portfolio WHERE id = :id")
     suspend fun removePortfolioCoin(id: String)
+
+    @Query("SELECT MAX(timestamp) FROM snapshot")
+    suspend fun getLastSnapshot(): Long?
+
+    @Query("SELECT * FROM snapshot WHERE timestamp > :since ORDER BY timestamp ASC")
+    suspend fun getSnapshots(since : Long): List<PortfolioSnapshotEntity>
+
+    @Insert
+    suspend fun addSnapshot(coin : PortfolioSnapshotEntity)
+
+    @Query("DELETE FROM snapshot")
+    suspend fun clearSnapshots()
+
 }
