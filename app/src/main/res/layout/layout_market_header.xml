@@ -106,10 +106,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{@string/market_altcoin_index(vm.getAltcoinIndexString(vm.altcoinIndex))}"
-        android:textColor="@color/white"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btcDominanceIndicator"
+        app:textColorResource="@{vm.altcoinIndexColorRes}"
+        app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutValuationPercent"
         tools:text="@string/market_altcoin_index" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -118,7 +117,7 @@
         android:layout_height="wrap_content"
         app:indeterminate="@{vm.altcoinIndex == null}"
         android:progress="@{vm.altcoinIndexInt}"
-        android:theme="@style/DepositIndicator"
+        app:tintResource="@{vm.altcoinIndexColorRes}"
         app:layout_constraintTop_toBottomOf="@id/textAltcoinIndex"
         app:layout_constraintEnd_toEndOf="@+id/textAltcoinIndex"
         app:layout_constraintStart_toStartOf="@+id/textAltcoinIndex"

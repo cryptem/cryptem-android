@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.cryptem.app.R
 import io.cryptem.app.ext.toPercentString
 import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.ui.Coin
@@ -33,6 +34,7 @@ class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, pr
     val marketGlobalData = MutableLiveData<MarketGlobalData>()
     val altcoinIndex = MutableLiveData<Double>()
     val altcoinIndexInt = MutableLiveData<Int>()
+    val altcoinIndexColorRes = SafeMutableLiveData(R.color.white)
     val percentInterval = listOf(MutableLiveData(PercentTimeInterval.DAY), MutableLiveData(PercentTimeInterval.WEEK))
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -107,6 +109,11 @@ class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, pr
         }
         altcoinIndex.value = betterThanBtc / 50.0
         altcoinIndexInt.value = ((altcoinIndex.value ?: 0.0) * 100.0).toInt()
+        altcoinIndexColorRes.value = when{
+            ((altcoinIndexInt.value?:0) < 25) -> R.color.trend_down_light
+            ((altcoinIndexInt.value?:0) > 75) -> R.color.trend_up_light
+            else -> R.color.white
+        }
     }
 
     fun loadGlobalMarketData(){
