@@ -13,7 +13,6 @@ import io.cryptem.app.model.ui.BinanceKeys
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.ScanQrEvent
-import io.cryptem.app.ui.portfolio.PortfolioFragmentDirections
 import io.cryptem.app.ui.portfolio.settings.event.BinanceTestEvent
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch

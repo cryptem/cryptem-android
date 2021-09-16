@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include layout="@layout/layout_portfolio_chart_header"
+    <include layout="@layout/layout_portfolio_header"
         android:id="@+id/header"
         app:data="@{vm.portfolio}"
         app:vm="@{vm}"/>
@@ -90,7 +90,7 @@
         android:clipToPadding="false"
         app:data="@{vm.items}"
         app:viewModel="@{vm}"
-        app:layoutStrategy="@{vm.layoutStrategy}"
+        app:layoutId="@{@layout/item_portfolio}"
         app:lifecycle="@{lifecycle}"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

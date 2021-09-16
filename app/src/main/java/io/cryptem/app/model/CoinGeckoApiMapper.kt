@@ -11,7 +11,7 @@ fun CoinsResponseItemDto.toUiEntity(currency: Currency? = null): Coin {
     return Coin(
         id = id,
         name = name,
-        symbol = symbol.toUpperCase(),
+        symbol = symbol.uppercase(),
         image = image,
         rank = marketCapRank,
         priceBtc = if (currency?.isBtc() == true) this.toCoinPriceUiEntity() else null,

@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:background="@color/black"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingEnd="8dp"
             android:paddingBottom="8dp"
             app:visibleOrGone="@{vm.isInPortfolio}"
             android:theme="@style/HodlTheme"
@@ -31,36 +31,46 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iconExchange"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_swap"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_partner_binance"
                 app:layout_constraintBottom_toBottomOf="@id/textExchangeAmount"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/iconTotal"
+                app:layout_constraintStart_toStartOf="@+id/iconTotal"
                 app:layout_constraintTop_toTopOf="@id/textExchangeAmount"
-                app:tint="@color/white" />
+                app:tint="@color/binance" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iconTrezor"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_partner_trezor"
+                app:layout_constraintBottom_toBottomOf="@id/textTrezorAmount"
+                app:layout_constraintEnd_toEndOf="@+id/iconTotal"
+                app:layout_constraintStart_toStartOf="@+id/iconTotal"
+                app:layout_constraintTop_toTopOf="@+id/textTrezorAmount"
+                app:tint="@color/trezor" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iconTotal"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:padding="2dp"
-                android:src="@drawable/ic_partner_trezor"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iconExchange"
+                android:src="@drawable/ic_wallet"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/textExchangeAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:text="@{@string/format_crypto_amount_string(vm.amountExchange, vm.coin.symbol)}"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:layout_marginStart="8dp"
+                android:textColor="@color/binance"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/iconExchange"
-                app:layout_constraintStart_toEndOf="@+id/iconExchange"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textAmountTotal"
+                app:layout_constraintTop_toBottomOf="@+id/textAmountTotal"
                 tools:text="0.00000005" />
 
             <TextView
@@ -68,23 +78,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{@string/format_crypto_amount_string(vm.amountWallet, vm.coin.symbol)}"
-                android:textColor="@color/white"
-                android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/iconTrezor"
-                app:layout_constraintStart_toEndOf="@+id/iconTrezor"
-                app:layout_constraintTop_toTopOf="@+id/iconTrezor"
+                android:textColor="@color/trezor"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/textAmountTotal"
+                app:layout_constraintTop_toBottomOf="@+id/textExchangeAmount"
                 tools:text="0.5" />
 
             <TextView
                 android:id="@+id/textAmountTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:text="@{vm.amountTotal}"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iconExchange"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="0,1 BTC" />
 
@@ -93,9 +102,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{vm.amountTotalBtc}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
                 android:textColor="@color/colorSecondary"
-                app:layout_constraintEnd_toEndOf="@+id/textAmountTotal"
-                app:layout_constraintTop_toBottomOf="@+id/textAmountTotal"
+                app:layout_constraintStart_toEndOf="@+id/textAmountFiat"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="0,1 BTC" />
 
             <TextView
@@ -104,8 +116,10 @@
                 android:layout_height="wrap_content"
                 android:text="@{vm.amountTotalFiat}"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/textAmountBtc"
-                app:layout_constraintTop_toBottomOf="@+id/textAmountBtc"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="10000 Kč" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -139,6 +153,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputAmountExchange"
+                android:theme="@style/BinanceTheme"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -163,6 +178,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputAmountWallet"
+                android:theme="@style/TrezorTheme"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

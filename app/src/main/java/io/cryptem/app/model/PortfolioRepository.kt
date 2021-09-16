@@ -21,16 +21,16 @@ import javax.inject.Singleton
 
 @Singleton
 class PortfolioRepository @Inject constructor(
-    val prefs: SharedPrefsRepository,
-    val portfolioDb: PortfolioDatabase,
-    val marketRepository: MarketRepository,
-    val binanceRepository: BinanceRepository
+    private val prefs: SharedPrefsRepository,
+    private val db: PortfolioDatabase,
+    private val marketRepo: MarketRepository,
+    private val binanceRepo: BinanceRepository
 ) {
     private val mutex = Mutex()
     private var portfolio = Cache(PORTFOLIO_CACHE_MINUTES, this::loadPortfolio)
 
     suspend fun addPortfolioCoin(coin: Coin, amountExchange: Double, amountWallet: Double) {
-        portfolioDb.dao().addPortfolioCoin(
+        db.dao().addPortfolioCoin(
             PortfolioDbEntity(
                 id = coin.id,
                 symbol = coin.symbol,
@@ -50,16 +50,17 @@ class PortfolioRepository @Inject constructor(
                 amountWallet = amountWallet
             )
         )
+        prefs.setPortfolioLastAdd()
         portfolio.clear()
     }
 
     suspend fun removePortfolioCoin(id: String) {
-        portfolioDb.dao().removePortfolioCoin(id)
+        db.dao().removePortfolioCoin(id)
         portfolio.clear()
     }
 
     suspend fun getPortfolioCoin(id: String): PortfolioItem? {
-        return portfolioDb.dao().getPortfolioCoin(id)?.toUiEntity(prefs.getPortfolioCurrency())
+        return db.dao().getPortfolioCoin(id)?.toUiEntity(prefs.getPortfolioCurrency())
     }
 
     suspend fun getPortfolio(forceLoad: Boolean): Portfolio {
@@ -71,10 +72,10 @@ class PortfolioRepository @Inject constructor(
 
     private suspend fun loadPortfolio(): Portfolio {
         val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
-        val portfolioItems = portfolioDb.dao().getPortfolioCoins()
+        val portfolioItems = db.dao().getPortfolioCoins()
         val binanceAccount: BinanceAccount? = if (prefs.isBinanceSyncEnabled()) {
             try {
-                binanceRepository.getAll()
+                binanceRepo.getAll()
             } catch (t: Throwable) {
                 L.e(t)
                 null
@@ -82,33 +83,33 @@ class PortfolioRepository @Inject constructor(
         } else null
 
         if (portfolioItems.isNotEmpty()) {
-                val coinIds = portfolioItems.joinToString(",") { it.id }
-                val coins = marketRepository.loadPortfolioCoins(coinIds, result.currency)
+            val coinIds = portfolioItems.joinToString(",") { it.id }
+            val coins = marketRepo.loadPortfolioCoins(coinIds, result.currency)
 
-                for (portfolioDbEntity in portfolioItems) {
-                    coins.find { it.id == portfolioDbEntity.id }?.let { coin ->
-                        portfolioDbEntity.apply {
-                            currentPriceBtc = coin.priceBtc?.currentPrice
-                            currentPriceUsd = coin.priceUsd?.currentPrice
-                            currentPriceCustom = coin.priceCustom?.currentPrice
-                            priceChangePercentage24hBtc = coin.priceBtc?.percentChange24h
-                            priceChangePercentage7dBtc = coin.priceBtc?.percentChange7d
-                            priceChangePercentage30dBtc = coin.priceBtc?.percentChange30d
-                            priceChangePercentage24hUsd = coin.priceUsd?.percentChange24h
-                            priceChangePercentage7dUsd = coin.priceUsd?.percentChange7d
-                            priceChangePercentage30dUsd = coin.priceUsd?.percentChange30d
-                        }
-
-                        if (binanceAccount != null) {
-                            (binanceAccount.getBalance(coin.symbol) ?: 0.0).let {
-                                portfolioDbEntity.amountExchange = it
-                            }
-                        }
-
-                        portfolioDbEntity.lastUpdate = System.currentTimeMillis()
-                        portfolioDb.dao().updatePortfolioCoin(portfolioDbEntity)
+            for (portfolioDbEntity in portfolioItems) {
+                coins.find { it.id == portfolioDbEntity.id }?.let { coin ->
+                    portfolioDbEntity.apply {
+                        currentPriceBtc = coin.priceBtc?.currentPrice
+                        currentPriceUsd = coin.priceUsd?.currentPrice
+                        currentPriceCustom = coin.priceCustom?.currentPrice
+                        priceChangePercentage24hBtc = coin.priceBtc?.percentChange24h
+                        priceChangePercentage7dBtc = coin.priceBtc?.percentChange7d
+                        priceChangePercentage30dBtc = coin.priceBtc?.percentChange30d
+                        priceChangePercentage24hUsd = coin.priceUsd?.percentChange24h
+                        priceChangePercentage7dUsd = coin.priceUsd?.percentChange7d
+                        priceChangePercentage30dUsd = coin.priceUsd?.percentChange30d
                     }
+
+                    if (binanceAccount != null) {
+                        (binanceAccount.getBalance(coin.symbol) ?: 0.0).let {
+                            portfolioDbEntity.amountExchange = it
+                        }
+                    }
+
+                    portfolioDbEntity.lastUpdate = System.currentTimeMillis()
+                    db.dao().updatePortfolioCoin(portfolioDbEntity)
                 }
+            }
         }
 
         result.items = portfolioItems.map { dbEntity ->
@@ -125,22 +126,32 @@ class PortfolioRepository @Inject constructor(
     }
 
     private suspend fun saveSnapshot(portfolio: Portfolio) {
-        if (System.currentTimeMillis() - (portfolioDb.dao().getLastSnapshot()
-                ?: 0) >= TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
-        ) {
-            portfolioDb.dao().addSnapshot(
+        if (canSaveSnapshot(portfolio)) {
+            db.dao().addSnapshot(
                 PortfolioSnapshotEntity(
-                    fiat = portfolio.valuationFiat,
+                    deposit = portfolio.deposit,
+                    fiat = portfolio.valuationFiat.toLong(),
                     btc = portfolio.valuationBtc,
-                    percent = portfolio.valuationPercent
+                    percent = portfolio.valuationPercent,
                 )
             )
         }
     }
 
+    // Avoid chart glitches during initial portfolio setup
+    private suspend fun canSaveSnapshot(portfolio: Portfolio): Boolean {
+        val lastPortfolioAdd = prefs.getPortfolioLastAdd()
+        val minimumSnapshotIntervalOk = System.currentTimeMillis() - (db.dao().getLastSnapshot() ?: 0) >= TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
+        val minimumAddCoinIntervalOk = System.currentTimeMillis() - lastPortfolioAdd > TimeUnit.MILLISECONDS.convert(
+            30,
+            TimeUnit.MINUTES)
+
+        return portfolio.items.isNotEmpty() && minimumSnapshotIntervalOk && (lastPortfolioAdd == 0L || minimumAddCoinIntervalOk)
+    }
+
     suspend fun getPortfolioFromDb(): Portfolio {
         val result = Portfolio(prefs.getPortfolioCurrency(), prefs.getPortfolioDeposit())
-        result.items = portfolioDb.dao().getPortfolioCoins().map { dbEntity ->
+        result.items = db.dao().getPortfolioCoins().map { dbEntity ->
             PortfolioItem(
                 coin = dbEntity.toCoin(),
                 amountExchange = dbEntity.amountExchange,
@@ -156,7 +167,7 @@ class PortfolioRepository @Inject constructor(
         return if (portfolio.hasData()) {
             portfolio.get().items.firstOrNull { it.coin.id == id } != null
         } else {
-            portfolioDb.dao().getPortfolioCoin(id) != null
+            db.dao().getPortfolioCoin(id) != null
         }
     }
 
@@ -184,7 +195,7 @@ class PortfolioRepository @Inject constructor(
         val btcData = ArrayList<Entry>()
 
         val snapshots =
-            portfolioDb.dao().getSnapshots(System.currentTimeMillis() - interval.miliseconds)
+            db.dao().getSnapshots(System.currentTimeMillis() - interval.miliseconds)
 
         var previousTimestamp = 0L
         snapshots.forEach {
@@ -225,4 +236,7 @@ class PortfolioRepository @Inject constructor(
         return data
     }
 
+    suspend fun clearChart() {
+        db.dao().clearSnapshots()
+    }
 }

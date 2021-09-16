@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_edit"
-        android:title="@string/remove"
+        android:title="@string/edit_amounts"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_edit" />
+        android:icon="@drawable/ic_action_wallet" />
 </menu>

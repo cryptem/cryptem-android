@@ -7,6 +7,7 @@ import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.model.ui.SoftwareWallet
 import io.cryptem.app.model.ui.TimeInterval
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,8 +20,8 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val CURRENCY = "CURRENCY"
         const val PORTFOLIO_CURRENCY = "PORTFOLIO_CURRENCY"
         const val PORTFOLIO_DEPOSIT = "PORTFOLIO_DEPOSIT"
-        const val PORTFOLIO_WITHDRAWAL = "PORTFOLIO_WITHDRAWAL"
         const val PORTFOLIO_TIME_INTERVAL = "PORTFOLIO_TIME_INTERVAL"
+        const val PORTFOLIO_LAST_ADD = "PORTFOLIO_LAST_ADD"
         const val DEFAULT_WALLET = "DEFAULT_WALLET"
         const val HOME_SCREEN = "HOME_SCREEN"
         const val BINANCE_REGISTERED = "BINANCE_REGISTERED"
@@ -86,20 +87,20 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         return prefs.getLong(PORTFOLIO_DEPOSIT, 0)
     }
 
-    fun savePortfolioWithdrawal(buyIn: Long) {
-        prefs.edit().putLong(PORTFOLIO_WITHDRAWAL, buyIn).apply()
-    }
-
-    fun getPortfolioWithdrawal(): Long {
-        return prefs.getLong(PORTFOLIO_WITHDRAWAL, 0)
-    }
-
     fun savePortfolioTimeInterval(interval: TimeInterval) {
         prefs.edit().putString(PORTFOLIO_TIME_INTERVAL, interval.name).apply()
     }
 
     fun getPortfolioTimeInterval(): TimeInterval {
         return TimeInterval.valueOf(prefs.getString(PORTFOLIO_TIME_INTERVAL, TimeInterval.DAY.name)!!)
+    }
+
+    fun setPortfolioLastAdd() {
+        prefs.edit().putLong(PORTFOLIO_LAST_ADD, System.currentTimeMillis()).apply()
+    }
+
+    fun getPortfolioLastAdd() : Long{
+        return prefs.getLong(PORTFOLIO_LAST_ADD, 0L)
     }
 
     fun setHomeScreen(homeScreen: HomeScreen) {

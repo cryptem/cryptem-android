@@ -86,6 +86,7 @@
 
     <string name="coin_current_price">Current Price</string>
     <string name="coin_sale">Sale</string>
+    <string name="edit_amounts">Edit amounts</string>
 
     <string name="market_btc_dominance" translatable="false" >BTC %s</string>
     <string name="market_eth_dominance" translatable="false" >ETH %s</string>

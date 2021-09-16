@@ -43,6 +43,27 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
+    </style>
 
+    <style name="BinanceTheme" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/binance</item>
+        <item name="colorPrimaryVariant">@color/binance</item>
+        <item name="colorSecondary">@color/binance</item>
+        <item name="colorSecondaryVariant">@color/binance</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="TrezorTheme" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorPrimary">@color/trezor</item>
+        <item name="colorPrimaryVariant">@color/trezor</item>
+        <item name="colorSecondary">@color/trezor</item>
+        <item name="colorSecondaryVariant">@color/trezor</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 </resources>

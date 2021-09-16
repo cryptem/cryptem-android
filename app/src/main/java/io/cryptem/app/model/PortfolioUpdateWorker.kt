@@ -7,23 +7,22 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.cryptem.app.util.L
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @HiltWorker
-class PortfolioDownloadWorker @AssistedInject constructor(
+class PortfolioUpdateWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     val portfolioRepository: PortfolioRepository
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        L.d("Portfolio Worker executed")
+        L.d("PortfolioUpdateWorker started")
         return try {
             portfolioRepository.getPortfolio(false)
-            L.d("Portfolio Worker success!")
+            L.d("PortfolioUpdateWorker success")
             Result.success()
         } catch (t: Throwable) {
+            L.d("PortfolioUpdateWorker failure")
             L.e(t)
             Result.failure()
         }

@@ -24,6 +24,9 @@ interface PortfolioDao {
     @Query("SELECT MAX(timestamp) FROM snapshot")
     suspend fun getLastSnapshot(): Long?
 
+    @Query("SELECT COUNT(*) FROM snapshot")
+    suspend fun getSnapshotsCount(): Long?
+
     @Query("SELECT * FROM snapshot WHERE timestamp > :since ORDER BY timestamp ASC")
     suspend fun getSnapshots(since : Long): List<PortfolioSnapshotEntity>
 
@@ -32,5 +35,8 @@ interface PortfolioDao {
 
     @Query("DELETE FROM snapshot")
     suspend fun clearSnapshots()
+
+    //@Query("DELETE FROM snapshot WHERE timestamp == (SELECT MIN(timestamp) FROM snapshot)")
+    //suspend fun deleteFirstSnapshot()
 
 }

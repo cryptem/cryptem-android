@@ -212,24 +212,25 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="4dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_crown"
                 app:visibleOrGone="@{data == vm.portfolio.topCoins.get(vm.timeInterval)}"
+                android:src="@{data.coin.getPercentUsd(vm.timeInterval) > 0.0 ? @drawable/ic_rocket : @drawable/ic_parachute}"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintStart_toStartOf="@+id/sidebar"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice"
-                app:tint="@color/colorSecondary" />
+                app:tint="@color/top_coin" />
 
             <ImageView
                 android:id="@+id/iconWorstCoin"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_flag"
+                tools:src="@drawable/ic_falling"
                 app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
                 app:layout_constraintStart_toStartOf="@+id/sidebar"
                 app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice"
                 app:tint="@color/worst_coin"
-                app:visibleOrGone="@{vm.portfolio.items.size() > 2 &amp;&amp; data == vm.portfolio.worstCoins.get(vm.timeInterval)}" />
+                app:visibleOrGone="@{vm.portfolio.items.size() > 1 &amp;&amp; data == vm.portfolio.worstCoins.get(vm.timeInterval)}"
+                android:src="@{data.coin.getPercentUsd(vm.timeInterval) > 0.0 ? @drawable/ic_snail : @drawable/ic_falling}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -18,52 +18,26 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:theme="@style/HodlTheme"
-    android:minHeight="@dimen/portfolio_header_min_height"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
+    android:minHeight="@dimen/portfolio_header_min_height">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineSidebar"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.64" />
-
-    <TextView
-        android:id="@+id/textDeposit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@{data.depositString}"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/textHodlings"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="4dp"
-        tools:text="10000 Kč" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonTransaction"
-        style="@style/ImageButton.Circle"
-        app:strokeColor="@color/colorSecondary"
-        android:layout_width="@dimen/portfolio_icon"
-        android:layout_height="@dimen/portfolio_icon"
-        android:visibility="invisible"
-        app:icon="@drawable/ic_swap"
-        app:layout_constraintBottom_toBottomOf="@+id/textHodlings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textDeposit" />
+        app:layout_constraintGuide_percent="0.618" />
 
     <TextView
         android:id="@+id/textHodlings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{data.valuationFiatString}"
-        android:textSize="18sp"
-        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:textColor="@color/white"
-        app:layout_constraintStart_toEndOf="@+id/buttonTransaction"
-        app:layout_constraintTop_toBottomOf="@+id/textDeposit"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="20000 Kč" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -72,6 +46,7 @@
             android:layout_height="wrap_content"
             android:progress="@{data.profitProgressInt}"
             android:theme="@style/DepositIndicator"
+
             app:layout_constraintEnd_toEndOf="@+id/textHodlings"
             app:layout_constraintStart_toStartOf="@+id/textHodlings"
             app:layout_constraintTop_toBottomOf="@+id/textHodlings"
@@ -97,8 +72,10 @@
         android:text="@{data.valuationBtcString}"
         android:textColor="@color/colorSecondary"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/textHodlings"
-        app:layout_constraintTop_toBottomOf="@id/profitIndicator"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/textHodlings"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="0,5 BTC" />
 
     <include
@@ -106,30 +83,134 @@
         layout="@layout/layout_trend_large_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:visible="@{data.items.size > 0}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="16dp"
         app:data="@{data.valuationPercent * 100}"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonTimeInterval"
         style="@style/OutlinedButton"
-        android:backgroundTint="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:minWidth="44dp"
         android:minHeight="0dp"
-        app:strokeColor="@color/colorSecondary"
         android:onClick="@{() -> vm.toggleTrendTime()}"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:layout_marginEnd="8dp"
-        tools:text="@string/time_day"
         android:textAllCaps="false"
-        android:textSize="12sp"
+        android:layout_margin="4dp"
+        app:iconSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintTop_toTopOf="@+id/chart"
+        app:strokeColor="@color/colorSecondary"
+        app:textResource="@{vm.timeInterval.title}"
+        tools:text="@string/time_day" />
+
+    <include
+        android:id="@+id/layoutIntervalPercent"
+        layout="@layout/layout_trend_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:data="@{data.percentGains.get(vm.timeInterval)}"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonTimeInterval"
+        app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
+        app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval"
+        app:visible="@{!data.items.empty}" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="4dp"
+        app:data="@{vm.chartData}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
-        app:textResource="@{vm.timeInterval.title}" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BtcIndicator" />
+
+    <ImageView
+        android:id="@+id/iconCrown"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:src="@{vm.portfolio.topCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval) > 0.0 ? @drawable/ic_rocket : @drawable/ic_parachute}"
+        tools:src="@drawable/ic_rocket"
+        app:layout_constraintBottom_toBottomOf="@+id/textTopCoin"
+        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintTop_toTopOf="@+id/textTopCoin"
+        app:tint="@color/top_coin" />
+
+    <TextView
+        android:id="@+id/textTopCoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:textStyle="bold"
+        android:text="@{vm.portfolio.topCoins.get(vm.timeInterval).coin.symbol}"
+        android:textColor="@color/top_coin"
+        app:layout_constraintBottom_toTopOf="@id/textTopCoin"
+        app:layout_constraintStart_toEndOf="@+id/iconCrown"
+        tools:text="BTC" />
+
+    <include
+        android:id="@+id/layoutTopCoinPercent"
+        layout="@layout/layout_trend_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:data="@{vm.portfolio.topCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval)}"
+        app:layout_constraintBottom_toBottomOf="@+id/textTopCoin"
+        app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
+        app:layout_constraintTop_toTopOf="@+id/textTopCoin"
+        app:visible="@{!data.items.empty}" />
+
+    <ImageView
+        android:id="@+id/iconThumbDown"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@{vm.portfolio.worstCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval) > 0.0 ? @drawable/ic_snail : @drawable/ic_falling}"
+        tools:src="@drawable/ic_falling"
+        app:layout_constraintBottom_toBottomOf="@+id/textWorstCoin"
+        app:layout_constraintEnd_toEndOf="@+id/iconCrown"
+        app:layout_constraintTop_toTopOf="@+id/textWorstCoin"
+        app:tint="@color/worst_coin" />
+
+    <TextView
+        android:id="@+id/textWorstCoin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="@{vm.portfolio.worstCoins.get(vm.timeInterval).coin.symbol}"
+        android:textColor="@color/worst_coin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textTopCoin"
+        app:layout_constraintTop_toBottomOf="@+id/textTopCoin"
+        android:layout_marginBottom="4dp"
+        tools:text="ETH" />
+
+    <include
+        android:id="@+id/layoutWorstCoinPercent"
+        layout="@layout/layout_trend_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:data="@{vm.portfolio.worstCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval)}"
+        app:layout_constraintBottom_toBottomOf="@+id/textWorstCoin"
+        app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
+        app:layout_constraintTop_toTopOf="@+id/textWorstCoin"
+        app:visible="@{!data.items.empty}" />
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:visibleOrInvisible="@{!vm.portfolio.items.empty}"
+        app:constraint_referenced_ids="iconCrown, textTopCoin, iconThumbDown, textWorstCoin, buttonTimeInterval"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

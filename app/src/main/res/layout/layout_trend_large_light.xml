@@ -7,11 +7,14 @@
         <variable
             name="data"
             type="Double" />
+        <variable
+            name="visible"
+            type="Boolean" />
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:visibleOrInvisible="@{data != null}"
+    app:visibleOrInvisible="@{visible}"
     android:gravity="center">
 
     <ImageView

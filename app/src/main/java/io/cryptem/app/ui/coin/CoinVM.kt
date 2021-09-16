@@ -230,9 +230,9 @@ class CoinVM @Inject constructor(
                             ?: 0.0
                     )
                 }.onSuccess {
-                    isInPortfolio.value = true
                     loadCustomPrice()
                     recalculatePortfolio()
+                    isInPortfolio.value = true
                 }.onFailure {
                     L.e(it)
                 }

@@ -56,7 +56,9 @@ class CoinFragment : BaseFragment<CoinVM, FragmentCoinBinding>(R.layout.fragment
         }
 
         viewModel.isInPortfolio.observe(viewLifecycleOwner){
-            activity?.invalidateOptionsMenu()
+            if (it && args.addToPortfolio){
+                navController().navigateUp()
+            }
         }
 
         observe(UrlEvent::class){

@@ -14,11 +14,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
-    android:theme="@style/HodlTheme"
-    android:minHeight="@dimen/portfolio_header_min_height"
-    android:paddingStart="@dimen/screen_padding"
-    android:paddingEnd="@dimen/screen_padding"
-    android:paddingBottom="@dimen/screen_padding_half">
+    android:theme="@style/HodlTheme">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelinePercent1"
@@ -42,6 +38,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:layout_marginStart="@dimen/screen_padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="$1 000 000 000 000 000" />
@@ -53,6 +50,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="@dimen/screen_padding"
+        app:visible="@{vm.marketGlobalData.marketCapPercentChange24h != 0}"
         app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"/>
 
 
@@ -62,7 +61,7 @@
         android:layout_height="wrap_content"
         android:text='@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString != null ? vm.marketGlobalData.btcDominanceString : "... %")}'
         android:textColor="@color/coin_bitcoin"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textMarketCap"
         app:layout_constraintTop_toBottomOf="@id/textMarketCap"
         tools:text="@string/market_btc_dominance" />
 
@@ -115,6 +114,7 @@
         android:id="@+id/altcoinIndexIndicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:theme="@style/DepositIndicator"
         app:indeterminate="@{vm.altcoinIndex == null}"
         android:progress="@{vm.altcoinIndexInt}"
         app:tintResource="@{vm.altcoinIndexColorRes}"
@@ -125,10 +125,11 @@
         tools:progress="50" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonTimeInterval1"
+        style="@style/OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/OutlinedButton"
-        app:strokeColor="@color/colorSecondary"
+        android:layout_marginEnd="8dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:minWidth="44dp"
@@ -138,16 +139,20 @@
         android:paddingEnd="8dp"
         android:text="24h"
         android:textAllCaps="false"
-        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTimeInterval2"
+        app:layout_constraintTop_toBottomOf="@+id/altcoinIndexIndicator"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelinePercent1"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:strokeColor="@color/colorSecondary"
         app:textResource="@{vm.percentInterval.get(0).title}" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonTimeInterval2"
+        style="@style/OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/OutlinedButton"
-        app:strokeColor="@color/colorSecondary"
+        android:layout_marginBottom="8dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:minWidth="44dp"
@@ -157,9 +162,9 @@
         android:paddingEnd="8dp"
         android:text="7d"
         android:textAllCaps="false"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelinePercent2"
+        app:layout_constraintEnd_toEndOf="@+id/textAltcoinIndex"
+        app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval1"
+        app:strokeColor="@color/colorSecondary"
         app:textResource="@{vm.percentInterval.get(1).title}" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
-import io.cryptem.app.model.PortfolioDownloadWorker
+import io.cryptem.app.model.PortfolioUpdateWorker
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ class App : Application(), Configuration.Provider {
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "PortfolioWork",
             ExistingPeriodicWorkPolicy.REPLACE,
-            PeriodicWorkRequestBuilder<PortfolioDownloadWorker>(
+            PeriodicWorkRequestBuilder<PortfolioUpdateWorker>(
                 1, TimeUnit.HOURS
             ).setConstraints(
                 Constraints.Builder()

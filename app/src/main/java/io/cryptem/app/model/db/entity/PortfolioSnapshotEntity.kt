@@ -9,9 +9,11 @@ class PortfolioSnapshotEntity(
     @PrimaryKey
     @ColumnInfo(name = "timestamp")
     val timestamp: Long =  System.currentTimeMillis(),
+    @ColumnInfo(name = "deposit")
+    var deposit: Long,
     @ColumnInfo(name = "fiat")
-    val fiat: Double,
+    val fiat: Long,
     @ColumnInfo(name = "btc")
     var btc: Double,
     @ColumnInfo(name = "percent")
-    var percent: Double?)
+    var percent: Double)

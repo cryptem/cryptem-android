@@ -36,8 +36,6 @@ class PortfolioFragment :
     var visibleItemCount: Int = 0
     var totalItemCount: Int = 0
 
-    var intervalMenuItem : MenuItem? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -69,10 +67,6 @@ class PortfolioFragment :
             updateWidget()
         }
 
-        viewModel.timeInterval.observe(viewLifecycleOwner){
-            intervalMenuItem?.setTitle(it.title)
-        }
-
         binding.recyclerCoins.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
@@ -94,17 +88,12 @@ class PortfolioFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.portfolio, menu)
-        intervalMenuItem = menu.findItem(R.id.action_interval)
-        intervalMenuItem?.setTitle(viewModel.timeInterval.value.title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
                 navigate(PortfolioFragmentDirections.actionPortfolioFragmentToPortfolioSettingsFragment())
-            }
-            R.id.action_interval -> {
-                viewModel.toggleTrendTime()
             }
         }
         return false

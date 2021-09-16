@@ -68,6 +68,7 @@
     <string name="coin_date">Datum</string>
     <string name="coin_current_price">Aktuální cena</string>
     <string name="coin_sale">Sleva</string>
+    <string name="edit_amounts">Upravit množství</string>
 
     <string name="market_marketcap">Kapitalizace: %s</string>
     <string name="load_error">Nepodařilo se načíst data, zkontroluj připojení a zkus to znovu.</string>
