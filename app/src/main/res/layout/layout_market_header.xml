@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text='@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString != null ? vm.marketGlobalData.btcDominanceString : "... %")}'
-        android:textColor="@color/coin_bitcoin"
+        android:textColor="@color/colorSecondary"
         app:layout_constraintStart_toStartOf="@+id/textMarketCap"
         app:layout_constraintTop_toBottomOf="@id/textMarketCap"
         tools:text="@string/market_btc_dominance" />

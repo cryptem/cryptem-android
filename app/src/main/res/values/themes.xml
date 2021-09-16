@@ -23,7 +23,7 @@
     </style>
 
     <style name="BtcIndicator" parent="ThemeOverlay.MaterialComponents">
-        <item name="colorPrimary">@color/coin_bitcoin</item>
+        <item name="colorPrimary">@color/colorSecondary</item>
     </style>
 
     <style name="PorfolioIndicator" parent="ThemeOverlay.MaterialComponents">

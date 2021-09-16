@@ -6,7 +6,6 @@ import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.ext.toSatString
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
 class Coin(
     val id: String,
     val symbol: String,
@@ -17,7 +16,7 @@ class Coin(
     var priceUsd : CoinPrice? = null,
     var priceCustom : CoinPrice? = null,
     var marketCap : Double? = null,
-) : Parcelable {
+) {
 
     fun getPriceDouble(currency : Currency) : Double?{
         return when (currency){
@@ -64,19 +63,11 @@ class Coin(
     }
 
     fun getPercentBtc(time : TimeInterval) : Double?{
-        return when(time){
-            TimeInterval.DAY -> priceBtc?.percentChange24h
-            TimeInterval.WEEK -> priceBtc?.percentChange7d
-            TimeInterval.MONTH -> priceBtc?.percentChange30d
-        }
+        return priceBtc?.getPercentChange(time)
     }
 
     fun getPercentUsd(time : TimeInterval) : Double?{
-        return when(time){
-            TimeInterval.DAY -> priceUsd?.percentChange24h
-            TimeInterval.WEEK -> priceUsd?.percentChange7d
-            TimeInterval.MONTH -> priceUsd?.percentChange30d
-        }
+        return priceUsd?.getPercentChange(time)
     }
 
     fun getSparkline() : String{

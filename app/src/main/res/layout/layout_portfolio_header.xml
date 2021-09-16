@@ -121,7 +121,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/buttonTimeInterval"
         app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
         app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval"
-        app:visibleOrInvisible="@{!data.items.empty}" />
+        app:invisible="@{data.items.empty}" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
@@ -166,7 +166,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:data="@{vm.portfolio.topCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval)}"
-        app:visibleOrInvisible="@{vm.portfolio.topCoins.get(vm.timeInterval) != null}"
+        app:invisible="@{vm.portfolio.topCoins.get(vm.timeInterval) == null}"
         app:layout_constraintBottom_toBottomOf="@+id/textTopCoin"
         app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
         app:layout_constraintTop_toTopOf="@+id/textTopCoin" />
@@ -201,7 +201,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:data="@{vm.portfolio.worstCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval)}"
-        app:visibleOrInvisible="@{vm.portfolio.worstCoins.get(vm.timeInterval) != null}"
+        app:invisible="@{vm.portfolio.worstCoins.get(vm.timeInterval) == null}"
         app:layout_constraintBottom_toBottomOf="@+id/textWorstCoin"
         app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
         app:layout_constraintTop_toTopOf="@+id/textWorstCoin" />

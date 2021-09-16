@@ -97,7 +97,7 @@ class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, pr
         for (i in 0 until CoinGeckoApiDef.PAGE_SIZE){
             val symbol = data[i].symbol.uppercase()
             if (!stableCoins.contains(symbol) && !symbol.contains("BTC") && !symbol.contains("USD")) {
-                if (data[i].priceBtc?.percentChange30d ?: 0.0 > 0.0) {
+                if (data[i].getPercentBtc(TimeInterval.MONTH) ?: 0.0 > 0.0) {
                     betterThanBtc += 1
                 }
                 count+=1
@@ -136,7 +136,8 @@ class MarketVM @Inject constructor(private val prefs : SharedPrefsRepository, pr
         percentInterval[index].value = when(percentInterval[index].value){
             TimeInterval.DAY -> TimeInterval.WEEK
             TimeInterval.WEEK -> TimeInterval.MONTH
-            TimeInterval.MONTH -> TimeInterval.DAY
+            TimeInterval.MONTH -> TimeInterval.YEAR
+            TimeInterval.YEAR -> TimeInterval.DAY
             null -> TimeInterval.DAY
         }
     }

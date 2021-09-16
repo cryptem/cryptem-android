@@ -57,6 +57,8 @@ data class CoinsResponseItemDto(
     val priceChangePercentage30dInCurrency: Double?,
     @Json(name = "price_change_percentage_7d_in_currency")
     val priceChangePercentage7dInCurrency: Double?,
+    @Json(name = "price_change_percentage_1y_in_currency")
+    val priceChangePercentage1yInCurrency: Double?,
     @Json(name = "roi")
     val roi: RoiDto?,
     @Json(name = "symbol")

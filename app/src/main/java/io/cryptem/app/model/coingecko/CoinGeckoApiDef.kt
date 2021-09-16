@@ -13,7 +13,7 @@ interface CoinGeckoApiDef {
     suspend fun getCoins(
         @Query("vs_currency") currency: String,
         @Query("ids") ids: String? = null,
-        @Query("price_change_percentage") priceChangePercentage: String = "24h,7d,30d",
+        @Query("price_change_percentage") priceChangePercentage: String = "24h,7d,30d,1y",
         @Query("per_page") perPage : Int? = PAGE_SIZE,
         @Query("page") page : Int? = null,
     ): List<CoinsResponseItemDto>

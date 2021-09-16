@@ -4,27 +4,32 @@ import android.os.Parcelable
 import io.cryptem.app.ext.format
 import kotlinx.parcelize.Parcelize
 import java.util.*
+import kotlin.collections.HashMap
 
-@Parcelize
 class CoinPrice(
     val currentPrice: Double?,
-    val percentChange24h: Double? = null,
-    val percentChange7d: Double? = null,
-    val percentChange30d: Double? = null,
+    percentChange24h: Double? = null,
+    percentChange7d: Double? = null,
+    percentChange30d: Double? = null,
+    percentChange1y: Double? = null,
     val ath : Double? = null,
     val athPercent: Double? = null,
     val athDate : Date? = null
-) : Parcelable {
+) {
+    private val percentChange = HashMap<TimeInterval, Double?>()
+
+    init {
+        percentChange[TimeInterval.DAY] = percentChange24h
+        percentChange[TimeInterval.WEEK] = percentChange7d
+        percentChange[TimeInterval.MONTH] = percentChange30d
+        percentChange[TimeInterval.YEAR] = percentChange1y
+    }
 
     fun getAthDateString() : String?{
         return athDate?.format()
     }
 
     fun getPercentChange(interval: TimeInterval) : Double?{
-        return when (interval){
-            TimeInterval.DAY -> percentChange24h
-            TimeInterval.WEEK -> percentChange7d
-            TimeInterval.MONTH -> percentChange30d
-        }
+        return percentChange[interval]
     }
 }

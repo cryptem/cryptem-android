@@ -27,6 +27,7 @@ fun CoinsResponseItemDto.toCoinPriceUiEntity(): CoinPrice {
         percentChange24h = priceChangePercentage24hInCurrency,
         percentChange7d = priceChangePercentage7dInCurrency,
         percentChange30d = priceChangePercentage30dInCurrency,
+        percentChange1y = priceChangePercentage1yInCurrency,
         ath = ath,
         athPercent = athChangePercentage,
         athDate = athDate

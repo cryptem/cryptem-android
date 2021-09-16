@@ -40,12 +40,14 @@ class PortfolioRepository @Inject constructor(
                 currentPriceBtc = coin.priceBtc?.currentPrice,
                 currentPriceUsd = coin.priceUsd?.currentPrice,
                 currentPriceCustom = coin.priceCustom?.currentPrice,
-                priceChangePercentage24hBtc = coin.priceBtc?.percentChange24h,
-                priceChangePercentage7dBtc = coin.priceBtc?.percentChange7d,
-                priceChangePercentage30dBtc = coin.priceBtc?.percentChange30d,
-                priceChangePercentage24hUsd = coin.priceUsd?.percentChange24h,
-                priceChangePercentage7dUsd = coin.priceUsd?.percentChange7d,
-                priceChangePercentage30dUsd = coin.priceUsd?.percentChange30d,
+                priceChangePercentage24hBtc = coin.getPercentBtc(TimeInterval.DAY),
+                priceChangePercentage7dBtc = coin.getPercentBtc(TimeInterval.WEEK),
+                priceChangePercentage30dBtc = coin.getPercentBtc(TimeInterval.MONTH),
+                priceChangePercentage1yBtc = coin.getPercentBtc(TimeInterval.YEAR),
+                priceChangePercentage24hUsd = coin.getPercentUsd(TimeInterval.DAY),
+                priceChangePercentage7dUsd = coin.getPercentUsd(TimeInterval.WEEK),
+                priceChangePercentage30dUsd = coin.getPercentUsd(TimeInterval.MONTH),
+                priceChangePercentage1yUsd = coin.getPercentUsd(TimeInterval.YEAR),
                 amountExchange = amountExchange,
                 amountWallet = amountWallet
             )
@@ -92,12 +94,14 @@ class PortfolioRepository @Inject constructor(
                         currentPriceBtc = coin.priceBtc?.currentPrice
                         currentPriceUsd = coin.priceUsd?.currentPrice
                         currentPriceCustom = coin.priceCustom?.currentPrice
-                        priceChangePercentage24hBtc = coin.priceBtc?.percentChange24h
-                        priceChangePercentage7dBtc = coin.priceBtc?.percentChange7d
-                        priceChangePercentage30dBtc = coin.priceBtc?.percentChange30d
-                        priceChangePercentage24hUsd = coin.priceUsd?.percentChange24h
-                        priceChangePercentage7dUsd = coin.priceUsd?.percentChange7d
-                        priceChangePercentage30dUsd = coin.priceUsd?.percentChange30d
+                        priceChangePercentage24hBtc = coin.getPercentBtc(TimeInterval.DAY)
+                        priceChangePercentage7dBtc = coin.getPercentBtc(TimeInterval.WEEK)
+                        priceChangePercentage30dBtc = coin.getPercentBtc(TimeInterval.MONTH)
+                        priceChangePercentage1yBtc = coin.getPercentBtc(TimeInterval.YEAR)
+                        priceChangePercentage24hUsd = coin.getPercentUsd(TimeInterval.DAY)
+                        priceChangePercentage7dUsd = coin.getPercentUsd(TimeInterval.WEEK)
+                        priceChangePercentage30dUsd = coin.getPercentUsd(TimeInterval.MONTH)
+                        priceChangePercentage1yUsd = coin.getPercentUsd(TimeInterval.YEAR)
                     }
 
                     if (binanceAccount != null) {

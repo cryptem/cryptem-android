@@ -37,7 +37,7 @@
     <color name="trend_down">@color/red</color>
 
     <color name="trend_up_light">#84FF30</color>
-    <color name="trend_down_light">#FF2C2C</color>
+    <color name="trend_down_light">#FF0000</color>
 
     <color name="top_coin">@color/colorSecondary</color>
     <color name="worst_coin">@color/white</color>

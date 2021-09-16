@@ -125,8 +125,8 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         timeInterval.value = when(timeInterval.value){
             TimeInterval.DAY -> TimeInterval.WEEK
             TimeInterval.WEEK -> TimeInterval.MONTH
-            TimeInterval.MONTH -> TimeInterval.DAY
-            null -> TimeInterval.DAY
+            TimeInterval.MONTH -> TimeInterval.YEAR
+            TimeInterval.YEAR -> TimeInterval.DAY
         }
         prefs.savePortfolioTimeInterval(timeInterval.value)
         loadChart()

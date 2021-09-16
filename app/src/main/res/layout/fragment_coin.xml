@@ -33,10 +33,10 @@
                 android:id="@+id/iconExchange"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
+                android:layout_marginEnd="4dp"
                 android:src="@drawable/ic_partner_binance"
                 app:layout_constraintBottom_toBottomOf="@id/textExchangeAmount"
-                app:layout_constraintEnd_toEndOf="@+id/iconTotal"
-                app:layout_constraintStart_toStartOf="@+id/iconTotal"
+                app:layout_constraintEnd_toStartOf="@id/textTrezorAmount"
                 app:layout_constraintTop_toTopOf="@id/textExchangeAmount"
                 app:tint="@color/binance" />
 
@@ -46,20 +46,9 @@
                 android:layout_height="16dp"
                 android:src="@drawable/ic_partner_trezor"
                 app:layout_constraintBottom_toBottomOf="@id/textTrezorAmount"
-                app:layout_constraintEnd_toEndOf="@+id/iconTotal"
-                app:layout_constraintStart_toStartOf="@+id/iconTotal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textTrezorAmount"
                 app:tint="@color/trezor" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iconTotal"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:padding="2dp"
-                android:src="@drawable/ic_wallet"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/textExchangeAmount"
@@ -68,8 +57,9 @@
                 android:text="@{@string/format_crypto_amount_string(vm.amountExchange, vm.coin.symbol)}"
                 android:textColor="@color/binance"
                 android:textSize="14sp"
+                android:layout_marginEnd="4dp"
                 app:layout_constraintBottom_toBottomOf="@+id/iconExchange"
-                app:layout_constraintEnd_toEndOf="@+id/textAmountTotal"
+                app:layout_constraintEnd_toStartOf="@+id/iconExchange"
                 app:layout_constraintTop_toBottomOf="@+id/textAmountTotal"
                 tools:text="0.00000005" />
 
@@ -77,23 +67,25 @@
                 android:id="@+id/textTrezorAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:text="@{@string/format_crypto_amount_string(vm.amountWallet, vm.coin.symbol)}"
                 android:textColor="@color/trezor"
                 android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textExchangeAmount"
                 app:layout_constraintEnd_toEndOf="@+id/textAmountTotal"
-                app:layout_constraintTop_toBottomOf="@+id/textExchangeAmount"
+                app:layout_constraintEnd_toStartOf="@+id/iconTrezor"
+                app:layout_constraintTop_toTopOf="@+id/textExchangeAmount"
                 tools:text="0.5" />
 
             <TextView
                 android:id="@+id/textAmountTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
                 android:text="@{vm.amountTotal}"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/iconExchange"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="0,1 BTC" />
 
@@ -219,99 +211,225 @@
             android:paddingBottom="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutPortfolioHeader"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintVertical_bias="0.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <RadioGroup
-                    android:id="@+id/radiosChart"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/windowBackground"
-                    android:gravity="end"
-                    android:orientation="horizontal"
-                    android:paddingEnd="@dimen/screen_padding"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:theme="@style/HodlTheme"
+                    android:background="@color/black"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.radiobutton.MaterialRadioButton
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline24h"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.39" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline7d"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.57" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline30d"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.76" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iconCoin"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="@dimen/screen_padding"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_coin_bitcoin"
+                        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/radiosChart"
+                        app:url="@{vm.coin.image}" />
+
+                    <TextView
+                        android:id="@+id/textSymbol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{vm.coin.symbol}"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/radiosChart"
+                        app:layout_constraintStart_toStartOf="@+id/iconCoin"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="BTC" />
+
+                    <TextView
+                        android:id="@+id/textCurrentUsdPrice"
+                        style="@style/TextDollarPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:checked="@={vm.chartRadios[0]}"
-                        android:text="@string/time_day" />
+                        android:text="@string/usd"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toStartOf="@+id/trendDayUsd"
+                        app:layout_constraintTop_toBottomOf="@+id/radiosChart" />
 
-                    <com.google.android.material.radiobutton.MaterialRadioButton
+                    <TextView
+                        android:id="@+id/textCurrentBtcPrice"
+                        android:textColor="@color/colorSecondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:checked="@={vm.chartRadios[1]}"
-                        android:text="@string/time_week" />
+                        android:text="@string/btc"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/textCurrentUsdPrice"
+                        app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice" />
 
-                    <com.google.android.material.radiobutton.MaterialRadioButton
+                    <RadioGroup
+                        android:id="@+id/radiosChart"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textCurrentUsdPrice"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@{vm.chartRadios[0] ? @color/colorSecondary : @color/white}"
+                            android:checked="@={vm.chartRadios[0]}"
+                            android:text="@string/time_day" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@{vm.chartRadios[1] ? @color/colorSecondary : @color/white}"
+                            android:checked="@={vm.chartRadios[1]}"
+                            android:text="@string/time_week" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@{vm.chartRadios[2] ? @color/colorSecondary : @color/white}"
+                            android:checked="@={vm.chartRadios[2]}"
+                            android:text="@string/time_month" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@{vm.chartRadios[3] ? @color/colorSecondary : @color/white}"
+                            android:checked="@={vm.chartRadios[3]}"
+                            android:text="@string/time_year" />
+                    </RadioGroup>
+
+                    <include
+                        android:id="@+id/trendDayUsd"
+                        layout="@layout/layout_trend_light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:checked="@={vm.chartRadios[2]}"
-                        android:text="@string/time_month" />
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.DAY)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline24h"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
 
-                    <com.google.android.material.radiobutton.MaterialRadioButton
+                    <include
+                        android:id="@+id/trendDayBtc"
+                        layout="@layout/layout_trend_light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="@={vm.chartRadios[3]}"
-                        android:text="1y" />
-                </RadioGroup>
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.DAY)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentBtcPrice"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline24h"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentBtcPrice" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iconCoin"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="@dimen/screen_padding_half"
-                    android:src="@drawable/ic_coin_bitcoin"
-                    app:layout_constraintBottom_toBottomOf="@id/radiosChart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/radiosChart"
-                    app:url="@{vm.coin.image}" />
+                    <include
+                        android:id="@+id/trendWeekUsd"
+                        layout="@layout/layout_trend_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.WEEK)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline7d"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
 
-                <TextView
-                    android:id="@+id/textSymbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@{vm.coin.symbol}"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/iconCoin"
-                    app:layout_constraintStart_toEndOf="@id/iconCoin"
-                    app:layout_constraintTop_toTopOf="@+id/iconCoin"
-                    tools:text="BTC" />
+                    <include
+                        android:id="@+id/trendWeekBtc"
+                        layout="@layout/layout_trend_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.WEEK)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentBtcPrice"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline7d"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentBtcPrice" />
+
+                    <include
+                        android:id="@+id/trendMonthUsd"
+                        layout="@layout/layout_trend_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.MONTH)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
+                        app:layout_constraintEnd_toEndOf="@id/guideline30d"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
+
+                    <include
+                        android:id="@+id/trendMonthBtc"
+                        layout="@layout/layout_trend_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.MONTH)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentBtcPrice"
+                        app:layout_constraintEnd_toEndOf="@+id/trendMonthUsd"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentBtcPrice" />
+
+                    <include
+                        android:id="@+id/trendYearUsd"
+                        layout="@layout/layout_trend_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:data="@{vm.coin.getPercentUsd(TimeInterval.YEAR)}"
+                        android:layout_marginEnd="@dimen/screen_padding"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
+
+                    <include
+                        android:id="@+id/trendYearBtc"
+                        layout="@layout/layout_trend_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:data="@{vm.coin.getPercentBtc(TimeInterval.YEAR)}"
+                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentBtcPrice"
+                        app:layout_constraintEnd_toEndOf="@+id/trendYearUsd"
+                        app:layout_constraintTop_toTopOf="@+id/textCurrentBtcPrice" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginStart="@dimen/screen_padding_half"
-                    android:layout_marginEnd="@dimen/screen_padding_half"
                     android:visibility="invisible"
                     app:animationIn="@{@anim/fade_in}"
                     app:data="@{vm.chartData}"
-                    app:layout_constraintTop_toBottomOf="@id/radiosChart"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
                     app:visibleOrInvisible="@{!vm.loadingChart}"
                     tools:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/textSelectedDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{vm.chartSelectedDate}"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/radiosChart"
-                    tools:text="1.1.1970" />
 
                 <ProgressBar
                     android:id="@+id/progressChart"
@@ -323,271 +441,171 @@
                     app:layout_constraintTop_toTopOf="@id/chart"
                     app:visibleOrGone="@{vm.loadingChart}" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layoutData"
-                    android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:layout_constraintTop_toBottomOf="@id/chart">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineAthDate"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.56" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/chart">
+                    app:constraint_referenced_ids="textCurrentPriceBtc, textAthBtc, textAthBtcDate"
+                    app:visibleOrInvisible="@{!vm.coin.isBtc()}"
+                    tools:layout_editor_absoluteX="16dp"
+                    tools:layout_editor_absoluteY="16dp" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.56" />
+                <TextView
+                    android:id="@+id/textCurrentPriceUsd"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.usdPriceString}"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="1000 USD" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.78" />
+                <TextView
+                    android:id="@+id/textCurrentPriceBtc"
+                    style="@style/TextBitcoinPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.btcPriceString}"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textCurrentPriceUsd"
+                    tools:text="1 BTC" />
 
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/coin_current_price"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/textMarketcapTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coin_marketcap"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/textCurrentUsdPrice"
-                        style="@style/TextDollarPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.coin.usdPriceString}"
-                        app:layout_constraintStart_toStartOf="@+id/title"
-                        app:layout_constraintTop_toBottomOf="@+id/title"
-                        tools:text="1000 USD" />
+                <TextView
+                    android:id="@+id/textMarketcap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.marketCapString}"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textMarketcapTitle"
+                    tools:text="1 000 000 000 000 USD" />
 
-                    <TextView
-                        android:id="@+id/textCurrentPriceBtc"
-                        style="@style/TextBitcoinPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.coin.btcPriceString}"
-                        app:layout_constraintStart_toStartOf="@+id/textCurrentUsdPrice"
-                        app:layout_constraintTop_toBottomOf="@+id/textCurrentUsdPrice"
-                        tools:text="1 BTC" />
+                <TextView
+                    android:id="@+id/textAthTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coin_ath"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textCurrentPriceBtc" />
 
-                    <TextView
-                        android:id="@+id/text24hTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/time_day"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                        app:layout_constraintStart_toStartOf="@+id/trendDayUsd"
-                        app:layout_constraintTop_toTopOf="@+id/title"
-                        app:layout_goneMarginTop="8dp" />
+                <TextView
+                    android:id="@+id/textAthUsd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.athUsdString}"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textAthTitle"
+                    tools:text="1000 USD" />
 
-                    <include
-                        android:id="@+id/trendDayUsd"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentUsd(TimeInterval.DAY)}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
+                <TextView
+                    android:id="@+id/textAthBtc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.athBtcString}"
+                    android:textColor="@color/coin_bitcoin"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textAthUsd"
+                    tools:text="1 BTC" />
 
-                    <include
-                        android:id="@+id/trendDayBtc"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentBtc(TimeInterval.DAY)}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                        app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
+                <TextView
+                    android:id="@+id/textAthDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/coin_date"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/guidelineAthDate"
+                    app:layout_constraintStart_toStartOf="@+id/textAthUsdDate"
+                    app:layout_constraintTop_toBottomOf="@+id/textCurrentPriceBtc" />
 
-                    <TextView
-                        android:id="@+id/text7dTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/time_week"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                        app:layout_constraintStart_toStartOf="@+id/trendWeekUsd"
-                        app:layout_constraintTop_toTopOf="@+id/title"
-                        app:layout_goneMarginTop="8dp" />
+                <TextView
+                    android:id="@+id/textAthUsdDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.priceUsd.athDateString}"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/guidelineAthDate"
+                    app:layout_constraintTop_toBottomOf="@+id/textAthTitle"
+                    tools:text="1.1.1970" />
 
-                    <include
-                        android:id="@+id/trendWeekUsd"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentUsd(TimeInterval.WEEK)}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
+                <TextView
+                    android:id="@+id/textAthBtcDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.coin.priceBtc.athDateString}"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintEnd_toEndOf="@+id/textAthUsdDate"
+                    app:layout_constraintTop_toBottomOf="@+id/textAthUsdDate"
+                    tools:text="1.1.1970" />
 
-                    <include
-                        android:id="@+id/trendWeekBtc"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentBtc(TimeInterval.WEEK)}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                        app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
+                <TextView
+                    android:id="@+id/textSaleTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/red"
+                    android:gravity="center"
+                    android:text="@string/coin_sale"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/trendAthUsd"
+                    app:layout_constraintStart_toStartOf="@+id/trendAthUsd"
+                    app:layout_constraintTop_toTopOf="@+id/textAthTitle"
+                    app:layout_goneMarginTop="8dp" />
 
-                    <TextView
-                        android:id="@+id/text30dTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/time_month"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/trendMonthUsd"
-                        app:layout_constraintStart_toStartOf="@+id/trendMonthUsd"
-                        app:layout_constraintTop_toTopOf="@+id/title"
-                        app:layout_goneMarginTop="8dp" />
+                <include
+                    android:id="@+id/trendAthUsd"
+                    layout="@layout/layout_trend_large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:data="@{vm.coin.priceUsd.athPercent}"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAthUsd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textAthUsd" />
 
-                    <include
-                        android:id="@+id/trendMonthUsd"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentUsd(TimeInterval.MONTH)}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentUsdPrice"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textCurrentUsdPrice" />
+                <include
+                    android:id="@+id/trendAthBtc"
+                    layout="@layout/layout_trend_large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:data="@{vm.coin.priceBtc.athPercent}"
+                    app:invisible="@{vm.coin.isBtc()}"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAthBtc"
+                    app:layout_constraintEnd_toEndOf="@+id/trendAthUsd"
+                    app:layout_constraintTop_toTopOf="@+id/textAthBtc" />
 
-                    <include
-                        android:id="@+id/trendMonthBtc"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.getPercentBtc(TimeInterval.MONTH)}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textCurrentPriceBtc"
-                        app:layout_constraintEnd_toEndOf="@+id/trendMonthUsd"
-                        app:layout_constraintTop_toTopOf="@+id/textCurrentPriceBtc" />
 
-                    <TextView
-                        android:id="@+id/textAthTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/coin_ath"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@id/title"
-                        app:layout_constraintTop_toBottomOf="@id/textCurrentPriceBtc" />
 
-                    <TextView
-                        android:id="@+id/textAthUsd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.coin.athUsdString}"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintStart_toStartOf="@+id/title"
-                        app:layout_constraintTop_toBottomOf="@+id/textAthTitle"
-                        tools:text="1000 USD" />
 
-                    <TextView
-                        android:id="@+id/textAthBtc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="@{vm.coin.athBtcString}"
-                        android:textColor="@color/coin_bitcoin"
-
-                        app:layout_constraintStart_toStartOf="@+id/title"
-                        app:layout_constraintTop_toBottomOf="@+id/textAthUsd"
-                        tools:text="1 BTC" />
-
-                    <TextView
-                        android:id="@+id/textAthDateTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/coin_date"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/text24hTitle"
-                        app:layout_constraintStart_toStartOf="@+id/text24hTitle"
-                        app:layout_constraintTop_toTopOf="@+id/textAthTitle" />
-
-                    <TextView
-                        android:id="@+id/textAthUsdDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.coin.priceUsd.athDateString}"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintEnd_toEndOf="@+id/textAthDateTitle"
-                        app:layout_constraintStart_toStartOf="@+id/textAthDateTitle"
-                        app:layout_constraintTop_toBottomOf="@+id/textAthTitle"
-                        tools:text="1.1.1970" />
-
-                    <TextView
-                        android:id="@+id/textAthBtcDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.coin.priceBtc.athDateString}"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintEnd_toEndOf="@+id/textAthUsdDate"
-                        app:layout_constraintTop_toBottomOf="@+id/textAthUsdDate"
-                        tools:text="1.1.1970" />
-
-                    <TextView
-                        android:id="@+id/textSaleTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/coin_sale"
-                        android:textColor="@color/red"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@+id/text7dTitle"
-                        app:layout_constraintStart_toStartOf="@+id/text7dTitle"
-                        app:layout_constraintTop_toTopOf="@+id/textAthDateTitle"
-                        app:layout_goneMarginTop="8dp" />
-
-                    <include
-                        android:id="@+id/trendAthUsd"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.priceUsd.athPercent}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textAthUsd"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                        app:layout_constraintTop_toTopOf="@+id/textAthUsd" />
-
-                    <include
-                        android:id="@+id/trendAthBtc"
-                        layout="@layout/layout_trend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:data="@{vm.coin.priceBtc.athPercent}"
-                        app:layout_constraintBottom_toBottomOf="@+id/textAthBtc"
-                        app:layout_constraintEnd_toEndOf="@+id/trendAthUsd"
-                        app:layout_constraintTop_toTopOf="@+id/textAthBtc" />
-
-                    <TextView
-                        android:id="@+id/textMarketcapTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/coin_marketcap"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="@id/title"
-                        app:layout_constraintTop_toBottomOf="@+id/textAthBtc" />
-
-                    <TextView
-                        android:id="@+id/textMarketcap"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{vm.coin.marketCapString}"
-                        android:textColor="@color/textPrimary"
-                        app:layout_constraintStart_toStartOf="@+id/title"
-                        app:layout_constraintTop_toBottomOf="@+id/textMarketcapTitle"
-                        tools:text="1 000 000 000 000 USD" />
-
-                    <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:constraint_referenced_ids="textCurrentPriceBtc, trendDayBtc, trendWeekBtc, trendMonthBtc, textAthBtc, textAthBtcDate, trendAthBtc"
-                        app:visibleOrInvisible="@{!vm.coin.isBtc()}" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 

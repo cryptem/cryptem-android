@@ -20,7 +20,7 @@
     <ImageView
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:src="@{data >= 0 ? @drawable/ic_trend_up_light : @drawable/ic_trend_down_light}"
+        android:src="@{data >= 0 ? @drawable/ic_trend_up : @drawable/ic_trend_down}"
         tools:src="@drawable/ic_trend_up"
         tools:tint="@color/trend_up"
        />
@@ -29,8 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="end"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:text="@{FormatUtils.formatTrendPercent(data)}"
-        app:textColorResource="@{data >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
+        app:textColorResource="@{data >= 0 ? R.color.trend_up : R.color.trend_down}"
         tools:text="300.0%"/>
 
 

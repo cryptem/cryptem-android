@@ -33,12 +33,16 @@ class PortfolioDbEntity(
     var priceChangePercentage7dBtc: Double? = null,
     @ColumnInfo(name = "price_change_percentage_30d_btc")
     var priceChangePercentage30dBtc: Double? = null,
+    @ColumnInfo(name = "price_change_percentage_1y_btc")
+    var priceChangePercentage1yBtc: Double? = null,
     @ColumnInfo(name = "price_change_percentage_24h_usd")
     var priceChangePercentage24hUsd: Double? = null,
     @ColumnInfo(name = "price_change_percentage_7d_usd")
     var priceChangePercentage7dUsd: Double? = null,
     @ColumnInfo(name = "price_change_percentage_30d_usd")
     var priceChangePercentage30dUsd: Double? = null,
+    @ColumnInfo(name = "price_change_percentage_1y_usd")
+    var priceChangePercentage1yUsd: Double? = null,
     @ColumnInfo(name = "last_update")
     var lastUpdate: Long = System.currentTimeMillis()
 )

@@ -53,6 +53,10 @@
     <string name="time_day" translatable="false" >24h</string>
     <string name="time_week" translatable="false" >7d</string>
     <string name="time_month" translatable="false" >30d</string>
+    <string name="time_year" translatable="false" >1y</string>
+
+    <string name="usd" translatable="false" >$</string>
+    <string name="btc" translatable="false" >₿</string>
 
     <string name="portfolio_deposit_hint">Sum of deposits</string>
     <string name="portfolio_empty">You don\'t have any coins in your portfolio yet.</string>

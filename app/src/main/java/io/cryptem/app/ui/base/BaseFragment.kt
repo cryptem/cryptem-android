@@ -11,7 +11,11 @@ abstract class BaseFragment<VM : BaseVM, B : ViewDataBinding>(@LayoutRes layoutR
     KodebaseFragment<VM, B>(layoutRes) {
 
     protected fun showUrl(url: String) {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (t: Throwable){
+            // Ignore
+        }
     }
 
     protected fun runOrInstall(packageName: String){
