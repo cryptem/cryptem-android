@@ -142,13 +142,12 @@ class PortfolioRepository @Inject constructor(
         }
     }
 
-    // Avoid chart glitches during initial portfolio setup
     private suspend fun canSaveSnapshot(portfolio: Portfolio): Boolean {
         val lastPortfolioAdd = prefs.getPortfolioLastAdd()
-        val minimumSnapshotIntervalOk = System.currentTimeMillis() - (db.dao().getLastSnapshot() ?: 0) >= TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
-        val minimumAddCoinIntervalOk = System.currentTimeMillis() - lastPortfolioAdd > TimeUnit.MILLISECONDS.convert(
-            30,
-            TimeUnit.MINUTES)
+        val minimumInterval = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
+        val minimumSnapshotIntervalOk = System.currentTimeMillis() - (db.dao().getLastSnapshot() ?: 0) >= minimumInterval
+        // Avoid chart glitches during initial portfolio setup
+        val minimumAddCoinIntervalOk = System.currentTimeMillis() - lastPortfolioAdd >= minimumInterval
 
         return portfolio.items.isNotEmpty() && minimumSnapshotIntervalOk && (lastPortfolioAdd == 0L || minimumAddCoinIntervalOk)
     }
@@ -203,7 +202,7 @@ class PortfolioRepository @Inject constructor(
 
         var previousTimestamp = 0L
         snapshots.forEach {
-            if (it.timestamp > previousTimestamp + (interval.miliseconds / 50)) {
+            if (it.timestamp > previousTimestamp + (interval.miliseconds / 30)) {
                 fiatData.add(Entry(it.timestamp.toFloat(), it.fiat.toFloat()))
                 btcData.add(Entry(it.timestamp.toFloat(), it.btc.toFloat()))
                 previousTimestamp = it.timestamp
