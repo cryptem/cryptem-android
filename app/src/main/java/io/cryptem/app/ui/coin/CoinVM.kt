@@ -12,6 +12,7 @@ import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.ui.CoinPrice
+import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.util.L
@@ -41,6 +42,9 @@ class CoinVM @Inject constructor(
     val amountTotal = MutableLiveData<String>()
     val amountTotalFiat = MutableLiveData<String>()
     val amountTotalBtc = MutableLiveData<String>()
+
+    val usdPriceString = MutableLiveData<String>()
+    val btcPriceString = MutableLiveData<String>()
 
     val simpleCoinVisible = MutableLiveData<Boolean>()
     val isInPortfolio = MutableLiveData(false)
@@ -134,10 +138,16 @@ class CoinVM @Inject constructor(
             kotlin.runCatching {
                 marketRepo.getCoinFromCache(id)
             }.onSuccess {
-                it?.let {
-                    coin.value = it
-                }
+                setCoin(it)
             }
+        }
+    }
+
+    private fun setCoin(newCoin: Coin?){
+        newCoin?.let {
+            coin.value = it
+            usdPriceString.value = it.getUsdPriceString()
+            btcPriceString.value = it.getBtcPriceString()
         }
     }
 
@@ -147,7 +157,7 @@ class CoinVM @Inject constructor(
                 marketRepo.getCoin(id = id)
             }.onSuccess {
                 it?.let {
-                    coin.value = it
+                    setCoin(it)
                     recalculatePortfolio()
                 }
             }.onFailure {
@@ -280,5 +290,11 @@ class CoinVM @Inject constructor(
             DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
         }
         chartSelectedDate.value = formatter.format(Date(timestamp))
+        chartData.value?.let {
+            usdPriceString.value = it.dataSets[0].getEntryForXValue(timestamp.toFloat(), 0f).y.toDouble().toFiatString(Currency.USD)
+            if (it.dataSetCount > 1){
+                btcPriceString.value = it.dataSets[1].getEntryForXValue(timestamp.toFloat(), 0f).y.toDouble().toBtcString()
+            }
+        }
     }
 }

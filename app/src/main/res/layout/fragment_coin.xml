@@ -464,15 +464,9 @@
                 android:id="@+id/layoutData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:paddingStart="@dimen/screen_padding"
+                android:paddingEnd="@dimen/screen_padding"
                 app:layout_constraintTop_toBottomOf="@id/chart">
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guidelineAthDate"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.56" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/group"
@@ -484,14 +478,23 @@
                     tools:layout_editor_absoluteY="16dp" />
 
                 <TextView
-                    android:id="@+id/textCurrentPriceUsd"
-                    android:textStyle="bold"
+                    android:id="@+id/textSelectedDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.coin.usdPriceString}"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@{vm.chartSelectedDate}"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="1.1.1970" />
+
+                <TextView
+                    android:id="@+id/textCurrentPriceUsd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.usdPriceString}"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textSelectedDate"
                     tools:text="1000 USD" />
 
                 <TextView
@@ -499,7 +502,7 @@
                     style="@style/TextBitcoinPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{vm.coin.btcPriceString}"
+                    android:text="@{vm.btcPriceString}"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -513,7 +516,7 @@
                     android:text="@string/coin_marketcap"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/textCurrentPriceUsd" />
 
                 <TextView
                     android:id="@+id/textMarketcap"
@@ -556,24 +559,14 @@
                     tools:text="1 BTC" />
 
                 <TextView
-                    android:id="@+id/textAthDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/coin_date"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/guidelineAthDate"
-                    app:layout_constraintStart_toStartOf="@+id/textAthUsdDate"
-                    app:layout_constraintTop_toBottomOf="@+id/textCurrentPriceBtc" />
-
-                <TextView
                     android:id="@+id/textAthUsdDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{vm.coin.priceUsd.athDateString}"
                     android:textColor="@color/textPrimary"
-                    app:layout_constraintEnd_toStartOf="@+id/guidelineAthDate"
-                    app:layout_constraintTop_toBottomOf="@+id/textAthTitle"
+                    app:layout_constraintTop_toTopOf="@+id/textAthUsd"
+                    app:layout_constraintStart_toStartOf="@id/textAthBtcDate"
+                    tools:layout_editor_absoluteX="137dp"
                     tools:text="1.1.1970" />
 
                 <TextView
@@ -582,8 +575,9 @@
                     android:layout_height="wrap_content"
                     android:text="@{vm.coin.priceBtc.athDateString}"
                     android:textColor="@color/textPrimary"
-                    app:layout_constraintEnd_toEndOf="@+id/textAthUsdDate"
-                    app:layout_constraintTop_toBottomOf="@+id/textAthUsdDate"
+                    app:layout_constraintBottom_toBottomOf="@+id/textAthBtc"
+                    app:layout_constraintStart_toEndOf="@+id/textAthBtc"
+                    android:layout_marginStart="36dp"
                     tools:text="1.1.1970" />
 
                 <TextView
