@@ -124,7 +124,8 @@
 
     <string name="about_license">Open-Source License GNU GPL v3.0</string>
     <string name="about_url">https://cryptem.io</string>
-    <string name="about_support_us">Do you like the app and want to support development?</string>
+    <string name="about_support_us_title">Do you like the app?</string>
+    <string name="about_support_us">We want to keep it free and without annoying ads. So every donate for future development is much appreciated. Thanks a lot!</string>
     <string name="about_copied">%s address copied to clipboard.</string>
     <string name="about_partners">Partners</string>
     <string name="report_poi">Report problem</string>

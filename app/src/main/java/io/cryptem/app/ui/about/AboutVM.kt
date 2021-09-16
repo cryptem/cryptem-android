@@ -16,7 +16,7 @@ import io.cryptem.app.model.DonateAddress
 import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.ui.Partner
 import io.cryptem.app.model.ui.WalletCoin
-import io.cryptem.app.ui.about.event.ClipboardEvent
+import io.cryptem.app.ui.about.event.DonateEvent
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.UrlEvent
 import javax.inject.Inject
@@ -24,13 +24,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val remoteConfigRepository: RemoteConfigRepository, val vibrator: Vibrator, val analytics: AnalyticsRepository) : BaseVM() {
-
-    val btcAddress = MutableLiveData("")
-    val ethAddress = MutableLiveData("")
-    val adaAddress = MutableLiveData("")
-    val ltcAddress = MutableLiveData("")
-    val xmrAddress = MutableLiveData("")
-    val solAddress = MutableLiveData("")
 
     val partners = ObservableArrayList<Partner>()
     val donates = ObservableArrayList<DonateAddress>()
@@ -47,6 +40,7 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
     }
 
     fun initPartners(){
+        partners.clear()
         partners.apply {
             add(Partner("CoinGecko", R.drawable.ic_partner_coingecko, "https://coingecko.com"))
             add(Partner("Binance", R.drawable.ic_partner_binance, remoteConfigRepository.getBinanceLink()))
@@ -57,6 +51,7 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
     }
 
     fun initDonates(){
+        donates.clear()
         donates.add(getDonateCoin(WalletCoin.BTC))
         donates.add(getDonateCoin(WalletCoin.ETH))
         donates.add(getDonateCoin(WalletCoin.ADA))
@@ -79,7 +74,7 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
             vibrator.vibrate(50)
         }
 
-        publish(ClipboardEvent(donate.coin))
+        publish(DonateEvent(donate))
     }
 
     fun gitHub(){

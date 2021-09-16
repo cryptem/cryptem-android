@@ -99,7 +99,8 @@
 
     <string name="about_license">Open-Source License GNU GPL v3.0</string>
     <string name="about_url">https://cryptem.io</string>
-    <string name="about_support_us">Páči se ti aplikácia a chceš podporiť jej vývoj?</string>
+    <string name="about_support_us_title">Páči se ti aplikácia?</string>
+    <string name="about_support_us">Chceme, aby zostala zadarmo a bez otravných reklám. Preto si veľmi vážime každého dobrovoľného príspevku na ďalší vývoj. Vďaka moc!</string>
     <string name="about_copied">%s adresa skopírovaná do schránky.</string>
     <string name="about_partners">Partneri</string>
     <string name="report_poi">Nahlásiť problém</string>
