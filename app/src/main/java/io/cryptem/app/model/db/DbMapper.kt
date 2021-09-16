@@ -15,13 +15,15 @@ fun PortfolioDbEntity.toCoin(): Coin {
             currentPrice = currentPriceBtc,
             percentChange24h = priceChangePercentage24hBtc,
             percentChange7d = priceChangePercentage7dBtc,
-            percentChange30d = priceChangePercentage30dBtc
+            percentChange30d = priceChangePercentage30dBtc,
+            percentChange1y = priceChangePercentage1yBtc
         ),
         priceUsd = CoinPrice(
             currentPrice = currentPriceUsd,
             percentChange24h = priceChangePercentage24hUsd,
             percentChange7d = priceChangePercentage7dUsd,
-            percentChange30d = priceChangePercentage30dUsd
+            percentChange30d = priceChangePercentage30dUsd,
+            percentChange1y = priceChangePercentage1yUsd
         ),
         priceCustom = CoinPrice(currentPrice = currentPriceCustom)
     )
