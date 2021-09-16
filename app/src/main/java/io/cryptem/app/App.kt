@@ -27,9 +27,12 @@ class App : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        initPortfolioUpdateWorker()
+    }
 
+    private fun initPortfolioUpdateWorker(){
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "PortfolioWork",
+            "PortfolioUpdate",
             ExistingPeriodicWorkPolicy.REPLACE,
             PeriodicWorkRequestBuilder<PortfolioUpdateWorker>(
                 1, TimeUnit.HOURS

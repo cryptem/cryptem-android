@@ -27,21 +27,30 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     val addCoinMode = MutableLiveData(false)
     val timeInterval = SafeMutableLiveData(prefs.getPortfolioTimeInterval())
     val chartData = MutableLiveData<LineData>()
+    val coinsSearch = SafeMutableLiveData("")
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(){
         prefs.setHomeScreen(HomeScreen.PORTFOLIO)
         loadPortfolioFromDb()
-        loadFromCache()
         loadChart()
 
-        if (coins.isEmpty()){
-            loadCoins()
+        coinsSearch.observeForever {
+            searchCoins(it)
         }
     }
 
-    private fun loadFromCache(){
-        coins.addAll(marketRepo.getCoinsFromCache())
+    private fun searchCoins(name : String){
+        coins.clear()
+        viewModelScope.launch {
+            kotlin.runCatching {
+                marketRepo.search(name)
+            }.onSuccess {
+                coins.addAll(it)
+            }.onFailure {
+                L.e(it)
+            }
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -85,7 +94,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         loadChart()
     }
 
-    fun loadCoins(){
+    fun loadCoinsNextPage(){
         loadingCoins.value = true
         viewModelScope.launch {
             kotlin.runCatching {
@@ -100,7 +109,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         }
     }
 
-    fun loadChart(){
+    private fun loadChart(){
         viewModelScope.launch {
             kotlin.runCatching {
                 portfolioRepo.getChart(timeInterval.value)

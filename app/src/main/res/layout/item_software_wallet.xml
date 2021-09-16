@@ -30,11 +30,11 @@
             android:paddingStart="@dimen/card_padding">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineSidebar"
+                android:id="@+id/guidelineGoldenRatio"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.6" />
+                app:layout_constraintGuide_percent="0.618" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/icon"
@@ -52,11 +52,10 @@
                 android:id="@+id/sidebar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
                 android:background="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+                app:layout_constraintStart_toStartOf="@+id/guidelineGoldenRatio"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

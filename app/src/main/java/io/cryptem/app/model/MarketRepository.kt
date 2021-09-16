@@ -58,6 +58,13 @@ class MarketRepository @Inject constructor(
         return result
     }
 
+    suspend fun search(name : String) : List<Coin>{
+        if (marketCoinsCache.isEmpty()) {
+            getCoinsNextPage(true)
+        }
+        return marketCoinsCache.filter { it.name.startsWith(name, true) }
+    }
+
     suspend fun getCoin(id: String): Coin? {
         return marketCoinsMap.get(id)
     }

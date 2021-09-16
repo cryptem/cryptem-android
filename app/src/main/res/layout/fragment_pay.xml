@@ -15,11 +15,11 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineSidebar"
+        android:id="@+id/guidelineGoldenRatio"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.64" />
+        app:layout_constraintGuide_percent="0.618" />
 
     <View
         android:id="@+id/sidebar"
@@ -28,7 +28,7 @@
         android:background="@color/portfolioBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintStart_toStartOf="@+id/guidelineGoldenRatio"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -44,7 +44,7 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineGoldenRatio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +61,7 @@
         android:onClick="@{() -> vm.showTrezor()}"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintStart_toStartOf="@+id/guidelineGoldenRatio"
         app:layout_constraintTop_toTopOf="@+id/textWarning" />
 
     <androidx.recyclerview.widget.RecyclerView

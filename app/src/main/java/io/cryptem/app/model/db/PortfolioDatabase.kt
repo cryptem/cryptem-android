@@ -14,7 +14,7 @@ abstract class PortfolioDatabase : RoomDatabase() {
     companion object{
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE 'snapshot' ('timestamp' INTEGER NOT NULL, 'deposit' INTEGER, 'fiat' INTEGER NOT NULL, 'btc' REAL NOT NULL, 'percent' REAL NOT NULL, PRIMARY KEY('timestamp'))")
+                database.execSQL("CREATE TABLE 'snapshot' ('timestamp' INTEGER NOT NULL, 'deposit' INTEGER NOT NULL, 'fiat' INTEGER NOT NULL, 'btc' REAL NOT NULL, 'percent' REAL NOT NULL, PRIMARY KEY('timestamp'))")
             }
         }
     }

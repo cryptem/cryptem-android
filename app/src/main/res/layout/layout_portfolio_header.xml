@@ -21,7 +21,7 @@
     android:minHeight="@dimen/portfolio_header_min_height">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineSidebar"
+        android:id="@+id/guidelineGoldenRatio"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -105,7 +105,8 @@
         android:textAllCaps="false"
         android:layout_margin="4dp"
         app:iconSize="16dp"
-        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintStart_toStartOf="@+id/guidelineGoldenRatio"
+        app:visibleOrInvisible="@{!vm.portfolio.items.empty}"
         app:layout_constraintTop_toTopOf="@+id/chart"
         app:strokeColor="@color/colorSecondary"
         app:textResource="@{vm.timeInterval.title}"
@@ -120,7 +121,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/buttonTimeInterval"
         app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
         app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval"
-        app:visible="@{!data.items.empty}" />
+        app:visibleOrInvisible="@{!data.items.empty}" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
@@ -129,7 +130,7 @@
         android:layout_marginTop="4dp"
         app:data="@{vm.chartData}"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineGoldenRatio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BtcIndicator" />
 
@@ -141,7 +142,7 @@
         android:src="@{vm.portfolio.topCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval) > 0.0 ? @drawable/ic_rocket : @drawable/ic_parachute}"
         tools:src="@drawable/ic_rocket"
         app:layout_constraintBottom_toBottomOf="@+id/textTopCoin"
-        app:layout_constraintStart_toStartOf="@+id/guidelineSidebar"
+        app:layout_constraintStart_toStartOf="@+id/guidelineGoldenRatio"
         app:layout_constraintTop_toTopOf="@+id/textTopCoin"
         app:tint="@color/top_coin" />
 
@@ -165,10 +166,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:data="@{vm.portfolio.topCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval)}"
+        app:visibleOrInvisible="@{vm.portfolio.topCoins.get(vm.timeInterval) != null}"
         app:layout_constraintBottom_toBottomOf="@+id/textTopCoin"
         app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
-        app:layout_constraintTop_toTopOf="@+id/textTopCoin"
-        app:visible="@{!data.items.empty}" />
+        app:layout_constraintTop_toTopOf="@+id/textTopCoin" />
 
     <ImageView
         android:id="@+id/iconThumbDown"
@@ -200,16 +201,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:data="@{vm.portfolio.worstCoins.get(vm.timeInterval).coin.getPercentUsd(vm.timeInterval)}"
+        app:visibleOrInvisible="@{vm.portfolio.worstCoins.get(vm.timeInterval) != null}"
         app:layout_constraintBottom_toBottomOf="@+id/textWorstCoin"
         app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
-        app:layout_constraintTop_toTopOf="@+id/textWorstCoin"
-        app:visible="@{!data.items.empty}" />
+        app:layout_constraintTop_toTopOf="@+id/textWorstCoin" />
 
     <androidx.constraintlayout.widget.Group
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:visibleOrInvisible="@{!vm.portfolio.items.empty}"
-        app:constraint_referenced_ids="iconCrown, textTopCoin, iconThumbDown, textWorstCoin, buttonTimeInterval"/>
+        app:visibleOrInvisible="@{vm.portfolio.topCoins.get(vm.timeInterval) != null}"
+        app:constraint_referenced_ids="iconCrown, textTopCoin"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:visibleOrInvisible="@{vm.portfolio.worstCoins.get(vm.timeInterval) != null}"
+        app:constraint_referenced_ids="iconThumbDown, textWorstCoin"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

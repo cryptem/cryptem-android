@@ -5,6 +5,9 @@
         <variable
             name="data"
             type="io.cryptem.app.model.ui.Coin" />
+        <variable
+            name="hideTicker"
+            type="Boolean" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
@@ -26,6 +29,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:maxWidth="140dp"
+        android:lines="1"
+        android:ellipsize="end"
         android:text="@{data.name}"
         app:layout_constraintStart_toEndOf="@+id/textRank"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,6 +39,7 @@
 
     <TextView
         android:id="@+id/textTicker"
+        app:visibleOrGone="@{!hideTicker}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@{data.symbol}"

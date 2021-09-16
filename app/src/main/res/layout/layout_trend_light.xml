@@ -8,13 +8,13 @@
             name="data"
             type="Double" />
         <variable
-            name="visible"
+            name="visibleOrInvisible"
             type="Boolean" />
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:visibleOrInvisible="@{visible}"
+    app:visibleOrInvisible="@{visibleOrInvisible}"
     android:gravity="center">
 
     <ImageView

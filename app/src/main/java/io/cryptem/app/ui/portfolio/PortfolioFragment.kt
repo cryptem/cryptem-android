@@ -74,9 +74,9 @@ class PortfolioFragment :
                         visibleItemCount = layoutManager.childCount
                         totalItemCount = layoutManager.itemCount
                         firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-                        if (!viewModel.loadingCoins.value) {
+                        if (!viewModel.loadingCoins.value && viewModel.coinsSearch.value.isEmpty()) {
                             if (visibleItemCount + firstVisibleItem >= totalItemCount) {
-                                viewModel.loadCoins()
+                                viewModel.loadCoinsNextPage()
                             }
                         }
                     }

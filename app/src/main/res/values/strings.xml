@@ -75,6 +75,8 @@
     <string name="portfolio_withdraw">Withdrawal</string>
     <string name="portfolio_amount">Amount (%s)</string>
 
+    <string name="portfolio_search_coins">Search in TOP %d</string>
+
     <string name="coin_ath">All Time High</string>
     <string name="coin_marketcap">Marketcap</string>
     <string name="coin_date">Date</string>

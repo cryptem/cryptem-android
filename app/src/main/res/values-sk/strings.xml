@@ -62,6 +62,8 @@
     <string name="portfolio_withdraw">Výber</string>
     <string name="portfolio_amount">Čiastka (%s)</string>
 
+    <string name="portfolio_search_coins">Hľadať v TOP %d</string>
+
     <string name="buy">Kúpiť</string>
     <string name="coin_ath">Historické maximum</string>
     <string name="coin_marketcap">Trhová kapitalizácia</string>
