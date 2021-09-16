@@ -29,6 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="end"
+        tools:textColor="@color/white"
         android:text="@{FormatUtils.formatTrendPercent(data)}"
         app:textColorResource="@{data >= 0 ? R.color.trend_up_light : R.color.trend_down_light}"
         tools:text="300.0%"/>

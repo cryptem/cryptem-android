@@ -115,7 +115,7 @@ class PortfolioFragment :
         chart.legend.isEnabled = false
         chart.setDrawBorders(false)
         chart.minOffset = 0f
-        //chart.setExtraOffsets(0f,0f,0f,0f)
+        chart.setNoDataText("")
 
         val xAxis: XAxis = chart.xAxis
         xAxis.textSize = 11f

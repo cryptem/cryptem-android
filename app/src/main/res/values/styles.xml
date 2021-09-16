@@ -52,6 +52,14 @@
         <item name="iconTint">@color/white</item>
     </style>
 
+    <style name="RadioButton">
+        <item name="android:button">@android:color/transparent</item>
+        <item name="android:background">@drawable/radio_background</item>
+        <item name="android:textColor">@color/bottom_bar_icon_selector</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.Normal" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/card_radius</item>
