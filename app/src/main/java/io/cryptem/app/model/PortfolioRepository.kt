@@ -102,6 +102,7 @@ class PortfolioRepository @Inject constructor(
                         priceChangePercentage7dUsd = coin.getPercentUsd(TimeInterval.WEEK)
                         priceChangePercentage30dUsd = coin.getPercentUsd(TimeInterval.MONTH)
                         priceChangePercentage1yUsd = coin.getPercentUsd(TimeInterval.YEAR)
+                        marketCapRank = coin.rank
                     }
 
                     if (binanceAccount != null) {

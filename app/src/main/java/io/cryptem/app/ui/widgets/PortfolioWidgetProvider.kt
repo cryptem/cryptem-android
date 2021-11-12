@@ -38,9 +38,11 @@ class PortfolioWidgetProvider : AppWidgetProvider() {
                 ).apply {
                     val pendingIntent: PendingIntent = Intent(context, MainActivity::class.java)
                         .let { intent ->
-                            PendingIntent.getActivity(context, 0, intent, 0)
+                            PendingIntent.getActivity(context, 0, intent,
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                                    PendingIntent.FLAG_IMMUTABLE
+                                } else 0)
                         }
-
                     if (it.valuationPercent >= 0.0){
                         setTextColor(R.id.textValuationPercent, ResourcesCompat.getColor(context.resources, R.color.trend_up_light, null))
                         setImageViewResource(R.id.iconTrend, R.drawable.ic_trend_up_light)
