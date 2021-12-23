@@ -79,5 +79,9 @@ class PortfolioItem(
     fun getPortfolioPercentInt(): Int {
         return (portfolioFiatPercent * 100).toInt()
     }
+
+    fun getPortfolioWeightedGain(interval: TimeInterval): Double {
+        return portfolioFiatPercent * (coin.getPercentUsd(interval) ?: 0.0)
+    }
 }
 

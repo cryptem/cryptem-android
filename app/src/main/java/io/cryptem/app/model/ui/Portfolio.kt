@@ -16,6 +16,8 @@ class Portfolio(var currency: Currency, val deposit: Long) {
     var percentOnExchange = 0.0
     val topCoins = HashMap<TimeInterval, PortfolioItem?>()
     val worstCoins = HashMap<TimeInterval, PortfolioItem?>()
+    val topCoinsWeighted = HashMap<TimeInterval, PortfolioItem?>()
+    val worstCoinsWeighted = HashMap<TimeInterval, PortfolioItem?>()
     val percentGains = HashMap<TimeInterval, Double?>()
 
     fun recalculate() {
@@ -42,8 +44,10 @@ class Portfolio(var currency: Currency, val deposit: Long) {
 
     private fun setTopAndWorst(){
         TimeInterval.values().forEach { interval ->
-            topCoins[interval] = items.maxByOrNull { it.coin.getPercentUsd(interval) ?: 0.0 }
-            worstCoins[interval] = items.minByOrNull { it.coin.getPercentUsd(interval) ?: 0.0 }
+            topCoins[interval] = items.maxByOrNull { it.coin.getPercentUsd(interval) ?: 0.0}
+            worstCoins[interval] = items.minByOrNull { it.coin.getPercentUsd(interval) ?: 0.0}
+            topCoinsWeighted[interval] = items.maxByOrNull { it.getPortfolioWeightedGain(interval)}
+            worstCoinsWeighted[interval] = items.minByOrNull { it.getPortfolioWeightedGain(interval)}
         }
     }
 
@@ -51,7 +55,7 @@ class Portfolio(var currency: Currency, val deposit: Long) {
         TimeInterval.values().forEach { interval ->
             var weightedPercent = 0.0
             items.forEach {
-                weightedPercent += (it.portfolioFiatPercent * (it.coin.getPercentUsd(interval) ?: 0.0))
+                weightedPercent += it.getPortfolioWeightedGain(interval)
             }
             percentGains[interval] = weightedPercent
         }
