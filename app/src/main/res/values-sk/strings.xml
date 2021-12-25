@@ -15,6 +15,8 @@
     <string name="about">O aplikácii</string>
     <string name="add_poi">Pridať obchodníka</string>
 
+    <string name="favorites">Obľúbené</string>
+
     <string name="nav_pay">Zaplatiť</string>
     <string name="nav_map">Mapa</string>
     <string name="nav_request">Vyžiadať</string>
@@ -74,6 +76,8 @@
 
     <string name="market_marketcap">Kapitalizácia: %s</string>
     <string name="load_error">Nepodarilo sa načítať dáta, skontroluj pripojenie a skús to znova.</string>
+
+    <string name="favorites_empty">Zatiaľ nemáš žiadne obľúbené.\nCoiny môžeš pridať do obľúbených dlhým stlačením.</string>
 
     <string name="binance_dialog_title">Zmenáreň Binance</string>
     <string name="binance_dialog_message">Máš už vytvorený účet na najvätšej krypto zmenárni Binance?</string>

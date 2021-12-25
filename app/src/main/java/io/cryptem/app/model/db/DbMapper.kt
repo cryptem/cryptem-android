@@ -1,5 +1,6 @@
 package io.cryptem.app.model.db
 
+import io.cryptem.app.model.db.entity.FavoriteCoinDbEntity
 import io.cryptem.app.model.db.entity.PortfolioDbEntity
 import io.cryptem.app.model.db.entity.WalletDbEntity
 import io.cryptem.app.model.ui.*
@@ -52,4 +53,8 @@ fun Wallet.toDbEntity(): WalletDbEntity {
         privateName = name.value,
         address = address.value
     )
+}
+
+fun FavoriteCoinDbEntity.toUiEntity() : String {
+    return id
 }

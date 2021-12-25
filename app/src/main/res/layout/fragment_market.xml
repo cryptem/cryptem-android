@@ -2,98 +2,140 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="vm"
             type="io.cryptem.app.ui.market.MarketVM" />
+
         <variable
             name="lifecycle"
             type="androidx.lifecycle.LifecycleOwner" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/header"
-        layout="@layout/layout_market_header"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:vm="@{vm}"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:refreshing="@{vm.reloading}"
-        app:onRefresh="@{() -> vm.loadCoins(true)}"
-        app:layout_constraintBottom_toBottomOf="parent">
+        <include
+            android:id="@+id/header"
+            layout="@layout/layout_market_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:vm="@{vm}"
+            tools:layout_editor_absoluteX="0dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:id="@+id/recycler"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:paddingTop="4dp"
-        android:paddingBottom="64dp"
-        android:clipToPadding="false"
-        app:visibleOrGone="@{!vm.error}"
-        app:data="@{vm.items}"
-        app:viewModel="@{vm}"
-        app:layoutId="@{@layout/item_market}"
-        app:lifecycle="@{lifecycle}"/>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:onRefresh="@{() -> vm.loadCoins(true)}"
+            app:refreshing="@{vm.reloading}"
+            app:visibleOrGone="@{!vm.favoriteMode &amp;&amp; !vm.error}">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerMarket"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="4dp"
+                android:paddingBottom="64dp"
+                app:data="@{vm.items}"
+                app:layoutId="@{@layout/item_market}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:lifecycle="@{lifecycle}"
+                app:viewModel="@{vm}" />
 
-    <LinearLayout
-        android:id="@+id/layoutError"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/screen_padding"
-        android:orientation="vertical"
-        app:visibleOrGone="@{vm.error}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header">
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshFavorites"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:onRefresh="@{() -> vm.loadFavorites(true)}"
+            app:refreshing="@{vm.reloadingFavorites}"
+            app:visibleOrGone="@{vm.favoriteMode &amp;&amp; !vm.error}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                app:data="@{vm.favorites}"
+                app:layoutId="@{@layout/item_market}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:lifecycle="@{lifecycle}"
+                app:viewModel="@{vm}" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
+            android:id="@+id/textFavoritesEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp"
-            android:text="@string/load_error"/>
+            android:text="@string/favorites_empty"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeRefreshFavorites"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/swipeRefreshFavorites"
+            app:visibleOrGone="@{vm.favoriteMode &amp;&amp; vm.favorites.empty}" />
 
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layoutError"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/retry"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:onClick="@{() -> vm.retry()}"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header"
+            app:visibleOrGone="@{vm.error}">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/load_error" />
 
-    <LinearLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:visibleOrGone="@{vm.loading}"
-        app:animationIn="@{@anim/fade_in}"
-        app:animationOut="@{@anim/fade_out}"
-        android:background="@drawable/loading_background"
-        android:layout_marginBottom="@dimen/screen_padding"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:onClick="@{() -> vm.retry()}"
+                android:text="@string/retry" />
 
-    <ProgressBar
-        android:layout_width="24dp"
-        android:layout_height="24dp" />
-    </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="@dimen/screen_padding"
+            android:background="@drawable/loading_background"
+            android:gravity="center"
+            app:animationIn="@{@anim/fade_in}"
+            app:animationOut="@{@anim/fade_out}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visibleOrGone="@{vm.loading}">
+
+            <ProgressBar
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+        </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

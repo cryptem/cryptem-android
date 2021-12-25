@@ -32,6 +32,7 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val SW_WALLET = "SW_WALLET"
         const val COIN_PRICE_CHART_DAYS = "COIN_PRICE_CHART_DAYS"
         const val MAP_TYPE = "MAP_TYPE"
+        const val FAVORITE_COINS_MODE = "FAVORITE_COINS_MODE"
     }
 
     fun saveDefaultWallet(id: Long?) {
@@ -177,5 +178,13 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
 
     fun getMapType() : Int{
         return prefs.getInt(MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL)
+    }
+
+    fun saveFavoriteCoinsMode(enabled : Boolean) {
+        prefs.edit().putBoolean(FAVORITE_COINS_MODE, enabled).apply()
+    }
+
+    fun isFavoriteCoinsMode(): Boolean {
+        return prefs.getBoolean(FAVORITE_COINS_MODE, false)
     }
 }

@@ -50,8 +50,8 @@ abstract class KodebaseFragment<VM : KodebaseViewModel, B : ViewDataBinding>(
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        binding.lifecycleOwner = this
-        binding.setVariable(BR.lifecycle, this)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.setVariable(BR.lifecycle, viewLifecycleOwner)
         binding.setVariable(BR.vm, viewModel)
         return binding.root
     }

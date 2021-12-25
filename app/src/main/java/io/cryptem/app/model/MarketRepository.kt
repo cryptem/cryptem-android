@@ -10,6 +10,9 @@ import io.cryptem.app.AppConfig.COIN_CHART_CACHE_MINUTES
 import io.cryptem.app.AppConfig.MARKET_GLOBAL_DATA_CACHE_MINUTES
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.coingecko.dto.CoinsResponseItemDto
+import io.cryptem.app.model.db.FavoriteCoinsDatabase
+import io.cryptem.app.model.db.entity.FavoriteCoinDbEntity
+import io.cryptem.app.model.db.toUiEntity
 import io.cryptem.app.model.ui.*
 import io.cryptem.app.model.ui.Currency
 import java.util.*
@@ -21,15 +24,19 @@ import kotlin.collections.HashMap
 @Singleton
 class MarketRepository @Inject constructor(
     val coinGeckoApi: CoinGeckoApiDef,
+    val favoritesDb: FavoriteCoinsDatabase
 ) {
 
     private val marketCoinsMap =
         HashedCache(COIN_CACHE_MINUTES, funLoadItem = this::loadMarketCoin, keyMapFun = { it.id })
     private val chartCache =
         HashedCache(COIN_CHART_CACHE_MINUTES, funLoadItem = this::loadChart, keyMapFun = { it.key })
-    private val marketGlobalData = Cache(MARKET_GLOBAL_DATA_CACHE_MINUTES, funLoad = this::loadMarketGlobalData)
+    private val marketGlobalData =
+        Cache(MARKET_GLOBAL_DATA_CACHE_MINUTES, funLoad = this::loadMarketGlobalData)
 
     private val marketCoinsCache = ArrayList<Coin>()
+    private val favoriteCoinsCache = ArrayList<Coin>()
+    private val favoritesMap = HashMap<String, Boolean>()
     var marketCoinsPage = 1
         private set
 
@@ -37,6 +44,7 @@ class MarketRepository @Inject constructor(
         if (forceReload) {
             marketCoinsCache.clear()
             marketCoinsPage = 1
+            loadFavoriteIds()
         }
 
         val resultUsd = coinGeckoApi.getCoins(currency = "USD", page = marketCoinsPage)
@@ -50,7 +58,10 @@ class MarketRepository @Inject constructor(
         marketCoinsPage += 1
         val result = resultUsd.map {
             it.toUiEntity(Currency.USD)
-                .apply { priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity() }
+                .apply {
+                    priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity()
+                    favorite.postValue(favoritesMap[it.id] == true)
+                }
         }.onEach { coin ->
             saveToCache(coin)
         }
@@ -58,7 +69,38 @@ class MarketRepository @Inject constructor(
         return result
     }
 
-    suspend fun search(name : String) : List<Coin>{
+    suspend fun getFavoriteCoins(forceReload: Boolean = false): List<Coin> {
+        if (forceReload) {
+            favoriteCoinsCache.clear()
+        }
+
+        val ids = loadFavoriteIds()
+        if (ids.isEmpty()){
+            return emptyList()
+        }
+        val idsString = ids.joinToString(",")
+        val resultUsd = coinGeckoApi.getCoins(ids = idsString, currency = "USD")
+        val resultBtc = coinGeckoApi.getCoins(ids = idsString, currency = "BTC")
+        val btcPriceMap = HashMap<String, CoinsResponseItemDto>()
+
+        resultBtc.forEach {
+            btcPriceMap[it.id] = it
+        }
+
+        val result = resultUsd.map {
+            it.toUiEntity(Currency.USD)
+                .apply {
+                    priceBtc = btcPriceMap[it.id]?.toCoinPriceUiEntity()
+                    favorite.postValue(favoritesMap[it.id] == true)
+                }
+        }.onEach { coin ->
+            saveToCache(coin)
+        }
+        favoriteCoinsCache.addAll(result)
+        return result
+    }
+
+    suspend fun search(name: String): List<Coin> {
         if (marketCoinsCache.isEmpty()) {
             getCoinsNextPage(true)
         }
@@ -73,14 +115,18 @@ class MarketRepository @Inject constructor(
         return marketCoinsCache
     }
 
+    fun getFavoritesFromCache(): ArrayList<Coin> {
+        return favoriteCoinsCache
+    }
+
     fun getCoinFromCache(id: String): Coin? {
         return marketCoinsMap.peek(key = id)
     }
 
-    private fun saveToCache(coin : Coin){
+    private fun saveToCache(coin: Coin) {
         // Prevent overriding coins with custom prices (portfolio)
         val cached = marketCoinsMap.peek(coin.id)
-        if (cached?.priceCustom == null || coin.priceCustom != null){
+        if (cached?.priceCustom == null || coin.priceCustom != null) {
             marketCoinsMap.put(coin)
         }
     }
@@ -149,7 +195,7 @@ class MarketRepository @Inject constructor(
         return coinGeckoApi.getGlobalMarketData().data?.toUiEntity()
     }
 
-    private suspend fun loadChart(key : PriceChartData.Key) : PriceChartData{
+    private suspend fun loadChart(key: PriceChartData.Key): PriceChartData {
         val responseUsd = coinGeckoApi.getMarketChart(key.id, "USD", key.days)
         val responseBtc = coinGeckoApi.getMarketChart(key.id, "BTC", key.days)
 
@@ -189,5 +235,23 @@ class MarketRepository @Inject constructor(
 
     suspend fun getChart(id: String, days: Int): PriceChartData? {
         return chartCache.get(PriceChartData.Key(id, days))
+    }
+
+    private suspend fun loadFavoriteIds(): List<String> {
+        return favoritesDb.dao().getFavorites().map { it.toUiEntity() }
+            .onEach {
+                favoritesMap[it] = true
+            }
+    }
+
+    suspend fun addToFavorites(id: String) {
+        favoritesDb.dao().addFavorite(FavoriteCoinDbEntity(id))
+        favoritesMap[id] = true
+    }
+
+    suspend fun removeFromFavorites(id: String) {
+        favoritesDb.dao().removeFavorite(FavoriteCoinDbEntity(id))
+        favoriteCoinsCache.removeAll { it.id == id }
+        favoritesMap.remove(id)
     }
 }

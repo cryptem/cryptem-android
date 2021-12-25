@@ -1,6 +1,9 @@
 package io.cryptem.app.ui.market
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,12 +22,46 @@ class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fr
     var firstVisibleItem:Int = 0
     var visibleItemCount:Int = 0
     var totalItemCount:Int = 0
+    var favoritesMenuItem : MenuItem? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.market, menu)
+        favoritesMenuItem = menu.findItem(R.id.action_favorites)
+        handleFavoritesIcon()
+    }
+
+    private fun handleFavoritesIcon(){
+        if(viewModel.favoriteMode.value){
+            favoritesMenuItem?.setIcon(R.drawable.ic_action_favorites_on)
+        } else {
+            favoritesMenuItem?.setIcon(R.drawable.ic_action_favorites_off)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.action_favorites -> {
+                viewModel.favoriteMode.value = !viewModel.favoriteMode.value
+                if (viewModel.favoriteMode.value){
+                    viewModel.loadFavorites(true)
+                }
+                handleFavoritesIcon()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recycler.itemAnimator = null
+        binding.recyclerMarket.itemAnimator = null
 
-        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerMarket.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
                     (recyclerView.layoutManager as LinearLayoutManager).let { layoutManager ->

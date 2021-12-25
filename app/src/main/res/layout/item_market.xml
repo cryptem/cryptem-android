@@ -21,6 +21,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
+        android:onLongClick="@{() -> vm.toggleFavorite(data)}"
         android:onClick="@{() -> vm.showCoin(data)}"
         style="@style/Card.Clickable">
 
@@ -61,6 +62,17 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="@+id/icon" />
+
+            <ImageView
+                android:id="@+id/iconFavorite"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_star"
+                app:visibleOrGone="@{data.favorite}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/icon"
+                app:layout_constraintStart_toStartOf="@+id/icon"
+                app:tint="@color/colorSecondary" />
 
             <TextView
                 android:id="@+id/textMarketCap"

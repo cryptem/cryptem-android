@@ -21,6 +21,7 @@ import io.cryptem.app.model.api.MoshiDateAdapter
 import io.cryptem.app.model.binance.BinanceApiDef
 import io.cryptem.app.model.binance.BinanceInterceptor
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
+import io.cryptem.app.model.db.FavoriteCoinsDatabase
 import io.cryptem.app.model.db.PortfolioDatabase
 import io.cryptem.app.model.db.WalletDatabase
 import okhttp3.OkHttpClient
@@ -116,6 +117,15 @@ class AppModule {
         return Room.databaseBuilder(
             context,
             WalletDatabase::class.java, "wallet"
+        ).fallbackToDestructiveMigration().build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteCoinsDatabase(@ApplicationContext context: Context): FavoriteCoinsDatabase {
+        return Room.databaseBuilder(
+            context,
+            FavoriteCoinsDatabase::class.java, "favorite"
         ).fallbackToDestructiveMigration().build()
     }
 
