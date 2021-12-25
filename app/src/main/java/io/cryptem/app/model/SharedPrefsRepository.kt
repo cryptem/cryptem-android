@@ -31,7 +31,10 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
         const val SW_WALLET = "SW_WALLET"
         const val COIN_PRICE_CHART_DAYS = "COIN_PRICE_CHART_DAYS"
         const val MAP_TYPE = "MAP_TYPE"
-        const val FAVORITE_COINS_MODE = "FAVORITE_COINS_MODE"
+        const val MARKET_FAVORITE_MODE = "MARKET_FAVORITE_MODE"
+        const val MARKET_SALE_MODE = "MARKET_SALE_MODE"
+        const val MARKET_TIME_INTERVAL_1 = "MARKET_TIME_INTERVAL_1"
+        const val MARKET_TIME_INTERVAL_2 = "MARKET_TIME_INTERVAL_2"
     }
 
     fun saveDefaultWallet(id: Long?) {
@@ -180,10 +183,26 @@ class SharedPrefsRepository @Inject constructor(@ApplicationContext val context:
     }
 
     fun saveFavoriteCoinsMode(enabled : Boolean) {
-        prefs.edit().putBoolean(FAVORITE_COINS_MODE, enabled).apply()
+        prefs.edit().putBoolean(MARKET_FAVORITE_MODE, enabled).apply()
     }
 
     fun isFavoriteCoinsMode(): Boolean {
-        return prefs.getBoolean(FAVORITE_COINS_MODE, false)
+        return prefs.getBoolean(MARKET_FAVORITE_MODE, false)
+    }
+
+    fun saveMarketTimeInterval(index : Int, interval: TimeInterval) {
+        prefs.edit().putString(if (index == 0) MARKET_TIME_INTERVAL_1 else MARKET_TIME_INTERVAL_2, interval.name).apply()
+    }
+
+    fun getMarketTimeInterval(index : Int): TimeInterval {
+        return TimeInterval.valueOf(prefs.getString(if (index == 0) MARKET_TIME_INTERVAL_1 else MARKET_TIME_INTERVAL_2, if (index == 0) TimeInterval.DAY.name else TimeInterval.WEEK.name)!!)
+    }
+
+    fun saveMarketSaleMode(enabled : Boolean) {
+        prefs.edit().putBoolean(MARKET_SALE_MODE, enabled).apply()
+    }
+
+    fun isMarketSaleMode(): Boolean {
+        return prefs.getBoolean(MARKET_SALE_MODE, false)
     }
 }

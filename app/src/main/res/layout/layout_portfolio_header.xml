@@ -97,7 +97,7 @@
         android:backgroundTint="@color/black"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:minWidth="44dp"
+        android:minWidth="48dp"
         android:minHeight="0dp"
         android:onClick="@{() -> vm.toggleTrendTime()}"
         android:paddingStart="8dp"

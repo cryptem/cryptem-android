@@ -9,4 +9,5 @@ enum class TimeInterval(@StringRes val title : Int, val miliseconds : Long) {
     WEEK(R.string.time_week, TimeUnit.MILLISECONDS.convert(7, TimeUnit.DAYS)),
     MONTH(R.string.time_month, TimeUnit.MILLISECONDS.convert(30, TimeUnit.DAYS)),
     YEAR(R.string.time_year, TimeUnit.MILLISECONDS.convert(365, TimeUnit.DAYS)),
+    ATH(R.string.time_ath, -1),
 }

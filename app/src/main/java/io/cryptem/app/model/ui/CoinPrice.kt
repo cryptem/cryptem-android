@@ -21,6 +21,7 @@ class CoinPrice(
         percentChange[TimeInterval.WEEK] = percentChange7d
         percentChange[TimeInterval.MONTH] = percentChange30d
         percentChange[TimeInterval.YEAR] = percentChange1y
+        percentChange[TimeInterval.ATH] = athPercent
     }
 
     fun getAthDateString() : String?{

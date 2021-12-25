@@ -72,6 +72,7 @@
     <string name="coin_date">Datum</string>
     <string name="coin_current_price">Aktuální cena</string>
     <string name="coin_sale">Sleva</string>
+    <string name="coin_chart">Graf</string>
     <string name="edit_amounts">Upravit množství</string>
 
     <string name="market_marketcap">Kapitalizace: %s</string>

@@ -40,13 +40,21 @@ class MarketVM @Inject constructor(
     val altcoinIndex = MutableLiveData<Double>()
     val altcoinIndexInt = MutableLiveData<Int>()
     val altcoinIndexColorRes = SafeMutableLiveData(R.color.white)
-    val percentInterval =
-        listOf(MutableLiveData(TimeInterval.DAY), MutableLiveData(TimeInterval.WEEK))
+    val percentInterval = listOf(MutableLiveData(prefs.getMarketTimeInterval(0)), MutableLiveData(prefs.getMarketTimeInterval(1)))
     val favoriteMode = SafeMutableLiveData(prefs.isFavoriteCoinsMode())
+    val saleMode = SafeMutableLiveData(prefs.isMarketSaleMode())
 
     init {
         favoriteMode.observeForever {
             prefs.saveFavoriteCoinsMode(it)
+        }
+        saleMode.observeForever {
+            prefs.saveMarketSaleMode(it)
+        }
+        percentInterval.forEachIndexed { index, liveData ->
+            liveData.observeForever {
+                prefs.saveMarketTimeInterval(index, it)
+            }
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -195,13 +203,18 @@ class MarketVM @Inject constructor(
         return true
     }
 
+    fun toggleSaleMode(){
+        saleMode.value = !saleMode.value
+    }
+
     fun toggleTrendTime(index: Int) {
         percentInterval[index].value = when (percentInterval[index].value) {
             TimeInterval.DAY -> TimeInterval.WEEK
             TimeInterval.WEEK -> TimeInterval.MONTH
             TimeInterval.MONTH -> TimeInterval.YEAR
-            TimeInterval.YEAR -> TimeInterval.DAY
-            null -> TimeInterval.DAY
+            TimeInterval.YEAR -> TimeInterval.ATH
+            TimeInterval.ATH -> TimeInterval.DAY
+            else -> TimeInterval.DAY
         }
     }
 

@@ -56,6 +56,7 @@
     <string name="time_week" translatable="false" >7d</string>
     <string name="time_month" translatable="false" >30d</string>
     <string name="time_year" translatable="false" >1y</string>
+    <string name="time_ath" translatable="false" >ATH</string>
 
     <string name="usd" translatable="false" >$</string>
     <string name="btc" translatable="false" >₿</string>
@@ -94,6 +95,7 @@
 
     <string name="coin_current_price">Current Price</string>
     <string name="coin_sale">Sale</string>
+    <string name="coin_chart">Chart</string>
     <string name="edit_amounts">Edit amounts</string>
 
     <string name="market_btc_dominance" translatable="false" >BTC %s</string>

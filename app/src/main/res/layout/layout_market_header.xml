@@ -132,7 +132,7 @@
         android:layout_marginEnd="8dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:minWidth="44dp"
+        android:minWidth="48dp"
         android:minHeight="0dp"
         android:onClick="@{() -> vm.toggleTrendTime(0)}"
         android:paddingStart="8dp"
@@ -152,20 +152,40 @@
         style="@style/OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:minWidth="44dp"
+        android:minWidth="48dp"
         android:minHeight="0dp"
         android:onClick="@{() -> vm.toggleTrendTime(1)}"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:layout_marginEnd="8dp"
         android:text="7d"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/buttonChartOrSale"
+        app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval1"
+        app:strokeColor="@color/colorSecondary"
+        app:textResource="@{vm.percentInterval.get(1).title}" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonChartOrSale"
+        style="@style/OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="80dp"
+        android:minHeight="0dp"
+        android:onClick="@{() -> vm.toggleSaleMode()}"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        tools:text="Chart"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="@+id/textAltcoinIndex"
         app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval1"
         app:strokeColor="@color/colorSecondary"
-        app:textResource="@{vm.percentInterval.get(1).title}" />
+        android:text="@{vm.saleMode ? @string/coin_sale : @string/coin_chart}" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
