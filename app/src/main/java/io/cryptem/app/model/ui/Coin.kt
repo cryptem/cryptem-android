@@ -17,7 +17,7 @@ class Coin(
     var marketCap : Double? = null,
 ) {
 
-    var favorite = MutableLiveData<Boolean>()
+    val favorite = MutableLiveData<Boolean>()
 
     fun getPriceDouble(currency : Currency) : Double?{
         return when (currency){
