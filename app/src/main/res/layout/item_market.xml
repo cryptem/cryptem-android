@@ -190,8 +190,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guidelinePercentSecondary"
                 app:layout_constraintTop_toTopOf="@+id/trendWeekUsd"
-                app:svgUrl="@{data.sparkline}"
-                app:skipCache="@{true}"/>
+                app:svgUrl="@{data.sparkline}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
