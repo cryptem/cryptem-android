@@ -16,11 +16,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
+import kodebase.BR
 import kodebase.event.LiveEvent
 import kodebase.event.NavigationEvent
 import kodebase.extensions.navigate
 import kodebase.viewmodel.KodebaseViewModel
-import kodebase.BR
 import kotlin.reflect.KClass
 
 /**

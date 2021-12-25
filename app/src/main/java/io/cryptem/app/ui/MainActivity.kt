@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.ActivityMainBinding
 import io.cryptem.app.ui.poieditor.PoiEditorFragmentArgs
-import io.cryptem.app.util.L
 import kodebase.view.KodebaseActivity
 
 @AndroidEntryPoint

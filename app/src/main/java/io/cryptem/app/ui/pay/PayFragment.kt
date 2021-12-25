@@ -1,7 +1,5 @@
 package io.cryptem.app.ui.pay
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -11,7 +9,6 @@ import io.cryptem.app.databinding.FragmentPayBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.InstallAppEvent
 import io.cryptem.app.ui.base.event.RunAppEvent
-import io.cryptem.app.util.L
 
 
 @AndroidEntryPoint

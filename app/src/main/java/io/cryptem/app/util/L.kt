@@ -1,8 +1,8 @@
 package io.cryptem.app.util
 
-import io.cryptem.app.BuildConfig
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.cryptem.app.BuildConfig
 
 /**
  * Handcrafted by Stepan Sonsky

@@ -1,6 +1,5 @@
 package io.cryptem.app.model.ui
 
-import androidx.lifecycle.MutableLiveData
 import kodebase.livedata.SafeMutableLiveData
 
 class Wallet(

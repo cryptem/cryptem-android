@@ -1,13 +1,16 @@
 package io.cryptem.app.ui.wallets
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.AnalyticsRepository
-import io.cryptem.app.model.ui.WalletCoin
 import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.WalletRepository
 import io.cryptem.app.model.ui.Wallet
+import io.cryptem.app.model.ui.WalletCoin
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.ScanQrEvent
 import io.cryptem.app.ui.base.listener.OnWalletCoinSelectedListener

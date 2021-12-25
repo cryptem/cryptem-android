@@ -7,7 +7,6 @@ import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.model.ui.SoftwareWallet
 import io.cryptem.app.model.ui.TimeInterval
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 

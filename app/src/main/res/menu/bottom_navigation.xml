@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/marketFragment"
+    <item
+        android:id="@+id/marketFragment"
         android:title="@string/nav_prices"
-        android:icon="@drawable/ic_market"/>
-    <item android:id="@+id/portfolioFragment"
+        android:icon="@drawable/ic_market" />
+    <item
+        android:id="@+id/portfolioFragment"
         android:title="@string/nav_portfolio"
-        android:icon="@drawable/ic_wallet"/>
-    <item android:id="@+id/mapFragment"
+        android:icon="@drawable/ic_wallet" />
+    <item
+        android:id="@+id/mapFragment"
         android:title="@string/nav_map"
-        android:icon="@drawable/ic_map"/>
-    <item android:id="@+id/requestFragment"
+        android:icon="@drawable/ic_map" />
+    <item
+        android:id="@+id/requestFragment"
         android:title="@string/nav_request"
-        android:icon="@drawable/ic_request"/>
-    <item android:id="@+id/payFragment"
+        android:icon="@drawable/ic_request" />
+    <item
+        android:id="@+id/payFragment"
         android:title="@string/nav_pay"
-        android:icon="@drawable/ic_send"/>
+        android:icon="@drawable/ic_send" />
 </menu>

@@ -7,7 +7,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.R

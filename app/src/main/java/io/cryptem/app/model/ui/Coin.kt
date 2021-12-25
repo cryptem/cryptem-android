@@ -1,12 +1,9 @@
 package io.cryptem.app.model.ui
 
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import io.cryptem.app.ext.toBtcString
 import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.ext.toSatString
-import kodebase.livedata.SafeMutableLiveData
-import kotlinx.parcelize.Parcelize
 
 class Coin(
     val id: String,

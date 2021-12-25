@@ -2,7 +2,6 @@ package io.cryptem.app.model.db
 
 import androidx.room.*
 import io.cryptem.app.model.db.entity.WalletDbEntity
-import io.cryptem.app.model.ui.WalletCoin
 
 @Dao
 interface WalletDao {

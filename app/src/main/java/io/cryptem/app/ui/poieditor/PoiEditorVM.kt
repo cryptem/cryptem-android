@@ -6,7 +6,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.GeoPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.FirestoreRepository
@@ -14,7 +13,6 @@ import io.cryptem.app.model.RemoteConfigRepository
 import io.cryptem.app.model.ui.Poi
 import io.cryptem.app.model.ui.PoiCategory
 import io.cryptem.app.ui.base.BaseVM
-import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.ui.poieditor.event.GoogleMapsEvent
 import io.cryptem.app.ui.poieditor.event.PoiEditorValidationEvent
 import io.cryptem.app.ui.poieditor.event.PoiSentEvent

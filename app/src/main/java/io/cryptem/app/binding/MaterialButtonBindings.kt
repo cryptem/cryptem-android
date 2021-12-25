@@ -1,7 +1,6 @@
 package io.cryptem.app.binding
 
 import android.content.res.ColorStateList
-import android.widget.ProgressBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton

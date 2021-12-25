@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.databinding.BindingAdapter

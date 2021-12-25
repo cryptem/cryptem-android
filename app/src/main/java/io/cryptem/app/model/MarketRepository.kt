@@ -14,7 +14,6 @@ import io.cryptem.app.model.db.FavoriteCoinsDatabase
 import io.cryptem.app.model.db.entity.FavoriteCoinDbEntity
 import io.cryptem.app.model.db.toUiEntity
 import io.cryptem.app.model.ui.*
-import io.cryptem.app.model.ui.Currency
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton

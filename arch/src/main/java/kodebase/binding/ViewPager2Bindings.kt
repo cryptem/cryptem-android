@@ -3,11 +3,11 @@ package kodebase.binding
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kodebase.adapter.KodebaseRecyclerAdapter
 import kodebase.adapter.SingleTypeRecyclerAdapter
 import kodebase.viewmodel.KodebaseViewModel
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 /**
  * Handcrafted by Stepan Sonsky

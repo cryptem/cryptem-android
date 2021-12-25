@@ -12,7 +12,10 @@ import io.cryptem.app.R
 import io.cryptem.app.model.PortfolioRepository
 import io.cryptem.app.ui.MainActivity
 import io.cryptem.app.util.L
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint

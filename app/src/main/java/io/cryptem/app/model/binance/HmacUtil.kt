@@ -1,7 +1,6 @@
 package io.cryptem.app.model.binance
 
 import okhttp3.internal.and
-import java.lang.Exception
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 

@@ -1,15 +1,9 @@
 package kodebase.adapter
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import kodebase.R
-import kodebase.BR
 
 class BaseSpinnerAdapter<T>(
     context: Context,

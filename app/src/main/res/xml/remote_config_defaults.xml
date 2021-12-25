@@ -49,7 +49,9 @@
     </entry>
     <entry>
         <key>donateXmr</key>
-        <value>44wQELFsb6xLpVAwktiBMMjZbUfXExbS4LxvjW35LoNBjV91cqKPieH63FMAvHpuBGax4Nrw8K4ArMv3SaUBSfdJG3WopDv</value>
+        <value>
+            44wQELFsb6xLpVAwktiBMMjZbUfXExbS4LxvjW35LoNBjV91cqKPieH63FMAvHpuBGax4Nrw8K4ArMv3SaUBSfdJG3WopDv
+        </value>
     </entry>
     <entry>
         <key>donateEth</key>
@@ -57,7 +59,9 @@
     </entry>
     <entry>
         <key>donateAda</key>
-        <value>addr1qyjne2zd2tynywaauk3s9jxy7he247vanxzec4dk02xfcye98j5y65kfxgammedrqtyvfa0j4tuemxv9n32mv75vnsfscevhm7</value>
+        <value>
+            addr1qyjne2zd2tynywaauk3s9jxy7he247vanxzec4dk02xfcye98j5y65kfxgammedrqtyvfa0j4tuemxv9n32mv75vnsfscevhm7
+        </value>
     </entry>
     <entry>
         <key>donateSol</key>

@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.LineData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.*
-import io.cryptem.app.model.ui.*
+import io.cryptem.app.model.ui.Coin
+import io.cryptem.app.model.ui.Portfolio
+import io.cryptem.app.model.ui.TimeInterval
 import io.cryptem.app.ui.base.BaseVM
 import io.cryptem.app.ui.base.event.UpdateWidgetEvent
 import io.cryptem.app.util.L

@@ -1,9 +1,7 @@
 package io.cryptem.app.ext
 
-import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.ui.Currency
 import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
 import java.util.*
 import kotlin.math.absoluteValue

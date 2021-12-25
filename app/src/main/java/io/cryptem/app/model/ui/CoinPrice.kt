@@ -1,8 +1,6 @@
 package io.cryptem.app.model.ui
 
-import android.os.Parcelable
 import io.cryptem.app.ext.format
-import kotlinx.parcelize.Parcelize
 import java.util.*
 import kotlin.collections.HashMap
 

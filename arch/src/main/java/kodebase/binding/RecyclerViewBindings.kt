@@ -5,13 +5,12 @@ import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kodebase.adapter.KodebaseRecyclerAdapter
+import kodebase.adapter.MultiTypeRecyclerAdapter
 import kodebase.adapter.RecyclerLayoutStrategy
 import kodebase.adapter.SingleTypeRecyclerAdapter
-import kodebase.adapter.MultiTypeRecyclerAdapter
 import kodebase.view.KodebaseDividerItemDecoration
 import kodebase.viewmodel.KodebaseViewModel
 

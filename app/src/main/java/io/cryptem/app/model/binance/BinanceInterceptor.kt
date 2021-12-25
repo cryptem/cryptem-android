@@ -1,7 +1,6 @@
 package io.cryptem.app.model.binance
 
 import io.cryptem.app.model.SharedPrefsRepository
-import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
 

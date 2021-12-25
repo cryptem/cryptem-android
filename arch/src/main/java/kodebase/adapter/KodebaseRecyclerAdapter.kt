@@ -9,8 +9,8 @@ import androidx.databinding.ObservableList
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import kodebase.viewmodel.KodebaseViewModel
 import kodebase.BR
+import kodebase.viewmodel.KodebaseViewModel
 
 /**
  * Handcrafted by Stepan Sonsky

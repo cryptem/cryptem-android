@@ -2,11 +2,11 @@ package kodebase.binding
 
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
-import kodebase.adapter.BaseSpinnerAdapter
 import android.widget.AutoCompleteTextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import kodebase.adapter.BaseSpinnerAdapter
 
 /**
  * Handcrafted by Stepan Sonsky

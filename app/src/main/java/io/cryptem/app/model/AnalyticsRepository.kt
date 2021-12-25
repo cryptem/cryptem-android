@@ -1,14 +1,11 @@
 package io.cryptem.app.model
 
 import android.content.Context
-import com.google.firebase.analytics.FirebaseAnalytics
-import javax.inject.Inject
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.MapFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.cryptem.app.ui.about.AboutFragment
-import io.cryptem.app.ui.about.AboutVM_Factory
 import io.cryptem.app.ui.coin.CoinFragment
 import io.cryptem.app.ui.market.MarketFragment
 import io.cryptem.app.ui.pay.PayFragment
@@ -19,6 +16,7 @@ import io.cryptem.app.ui.request.RequestFragment
 import io.cryptem.app.ui.trezor.TrezorFragment
 import io.cryptem.app.ui.wallets.WalletFragment
 import io.cryptem.app.ui.wallets.WalletsFragment
+import javax.inject.Inject
 
 
 class AnalyticsRepository @Inject constructor(@ApplicationContext context : Context) {

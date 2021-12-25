@@ -1,6 +1,5 @@
 package io.cryptem.app.model.ui
 
-import androidx.lifecycle.MutableLiveData
 import io.cryptem.app.ext.toBtcString
 import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.ext.toPercentString

@@ -8,18 +8,17 @@ import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kodebase.BR
 import kodebase.event.LiveEvent
 import kodebase.event.NavigationEvent
 import kodebase.extensions.navigate
 import kodebase.viewmodel.KodebaseViewModel
-import kodebase.BR
 import kotlin.reflect.KClass
 
 /**

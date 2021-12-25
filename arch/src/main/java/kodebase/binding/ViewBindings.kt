@@ -1,13 +1,10 @@
 package kodebase.binding
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
-import android.widget.ImageView
-import androidx.core.widget.ImageViewCompat
 import androidx.databinding.BindingAdapter
 
 /**

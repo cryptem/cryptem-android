@@ -16,7 +16,6 @@ import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentPortfolioSettingsBinding
 import io.cryptem.app.ui.base.BaseFragment
 import io.cryptem.app.ui.base.event.ScanQrEvent
-import io.cryptem.app.ui.portfolio.depositwithdraw.DepositWithdrawMode
 import io.cryptem.app.ui.portfolio.depositwithdraw.DialogDepositWithdraw
 import io.cryptem.app.ui.portfolio.settings.event.BinanceTestEvent
 import io.cryptem.app.ui.qrscanner.QrScannerActivity
