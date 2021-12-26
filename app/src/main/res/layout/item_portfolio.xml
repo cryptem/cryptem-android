@@ -220,18 +220,6 @@
                 app:constraint_referenced_ids="trendDayBtc, textCurrentPriceBtc, textValuationBtc"/>
 
             <ImageView
-                android:id="@+id/iconKingCoin"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:padding="4dp"
-                android:src="@drawable/ic_crown"
-                app:layout_constraintBottom_toBottomOf="@+id/title"
-                app:layout_constraintStart_toStartOf="@+id/sidebar"
-                app:layout_constraintTop_toTopOf="@+id/title"
-                app:tint="@color/top_coin"
-                app:visibleOrGone="@{data == vm.portfolio.topCoinsWeighted.get(vm.timeInterval)}" />
-
-            <ImageView
                 android:id="@+id/iconTopCoin"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
