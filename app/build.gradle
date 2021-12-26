@@ -10,8 +10,8 @@ plugins {
 }
 
 final VERSION_MAJOR = 1
-final VERSION_MINOR = 4
-final VERSION_PATCH = 3
+final VERSION_MINOR = 5
+final VERSION_PATCH = 0
 
 android {
     compileSdkVersion 31
@@ -114,7 +114,7 @@ dependencies {
 
     //OkHttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"

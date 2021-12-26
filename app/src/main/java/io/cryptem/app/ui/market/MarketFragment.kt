@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentMarketBinding
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.util.svg.GlideApp
 
 @AndroidEntryPoint
 class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fragment_market){
@@ -25,6 +26,7 @@ class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        GlideApp.get(requireContext()).clearMemory()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
