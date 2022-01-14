@@ -10,8 +10,8 @@ plugins {
 }
 
 final VERSION_MAJOR = 1
-final VERSION_MINOR = 5
-final VERSION_PATCH = 1
+final VERSION_MINOR = 6
+final VERSION_PATCH = 0
 
 android {
     compileSdkVersion 31
@@ -130,10 +130,10 @@ dependencies {
 
     //Google Play Services
     implementation 'com.google.gms:google-services:4.3.10'
-    implementation 'com.google.android.gms:play-services-location:19.0.0'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     //Google Maps
-    implementation 'com.google.android.gms:play-services-maps:18.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     //ZXing
     implementation 'com.google.zxing:core:3.4.1'
