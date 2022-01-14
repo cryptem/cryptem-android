@@ -85,6 +85,22 @@ class RemoteConfigRepository @Inject constructor() {
         return remoteConfig.getString(SIMPLE_COIN)
     }
 
+    fun getFearAndGreedIndexUrl(): String {
+        return remoteConfig.getString(FEAR_AND_GREED_INDEX_URL)
+    }
+
+    fun getFearAndGreedIndexRegex(): String {
+        return remoteConfig.getString(FEAR_AND_GREED_INDEX_REGEX)
+    }
+
+    fun getAltcoinSeasonIndexUrl(): String {
+        return remoteConfig.getString(ALTCOIN_SEASON_INDEX_URL)
+    }
+
+    fun getAltcoinSeasonIndexRegex(): String {
+        return remoteConfig.getString(ALTCOIN_SEASON_INDEX_REGEX)
+    }
+
     companion object {
         const val SUPPORTED_CURRENCIES = "supportedCurrencies"
         const val SUPPORTED_COUNTRIES = "supportedCountries"
@@ -98,5 +114,10 @@ class RemoteConfigRepository @Inject constructor() {
         const val TREZOR_T_ALZA = "trezorTAlza"
 
         const val DONATE = "donate"
+
+        const val FEAR_AND_GREED_INDEX_URL = "fearAndGreedIndexUrl"
+        const val FEAR_AND_GREED_INDEX_REGEX = "fearAndGreedIndexRegex"
+        const val ALTCOIN_SEASON_INDEX_URL = "altcoinSeasonIndexUrl"
+        const val ALTCOIN_SEASON_INDEX_REGEX = "altcoinSeasonIndexRegex"
     }
 }

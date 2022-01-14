@@ -100,7 +100,8 @@
 
     <string name="market_btc_dominance" translatable="false" >BTC %s</string>
     <string name="market_eth_dominance" translatable="false" >ETH %s</string>
-    <string name="market_altcoin_index" translatable="false">Altcoin Index: %s</string>
+    <string name="market_altcoin_index" translatable="false">Altcoin Season: %s</string>
+    <string name="market_fear_and_greed_index" translatable="false">Fear &amp; Greed: %s</string>
     <string name="market_marketcap">Marketcap: %s</string>
     <string name="load_error">Load data failed, check your connection and try again.</string>
 

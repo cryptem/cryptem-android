@@ -15,24 +15,32 @@ import io.cryptem.app.model.db.entity.FavoriteCoinDbEntity
 import io.cryptem.app.model.db.toUiEntity
 import io.cryptem.app.model.ui.*
 import io.cryptem.app.model.ui.Currency
+import io.cryptem.app.util.L
+import kotlinx.coroutines.Dispatchers
+import okhttp3.*
+import okio.IOException
+import java.text.ParseException
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class MarketRepository @Inject constructor(
-    val coinGeckoApi: CoinGeckoApiDef,
-    val favoritesDb: FavoriteCoinsDatabase
+    private val coinGeckoApi: CoinGeckoApiDef,
+    private val favoritesDb: FavoriteCoinsDatabase,
+    private val httpClient: OkHttpClient,
+    private val cache: CacheRepository,
+    private val remoteConfigRepository: RemoteConfigRepository
 ) {
 
     private val marketCoinsMap =
         HashedCache(COIN_CACHE_MINUTES, funLoadItem = this::loadMarketCoin, keyMapFun = { it.id })
     private val chartCache =
         HashedCache(COIN_CHART_CACHE_MINUTES, funLoadItem = this::loadChart, keyMapFun = { it.key })
-    private val marketGlobalData =
-        Cache(MARKET_GLOBAL_DATA_CACHE_MINUTES, funLoad = this::loadMarketGlobalData)
 
     private val marketCoinsCache = ArrayList<Coin>()
     private val favoriteCoinsCache = ArrayList<Coin>()
@@ -75,7 +83,7 @@ class MarketRepository @Inject constructor(
         }
 
         val ids = loadFavoriteIds()
-        if (ids.isEmpty()){
+        if (ids.isEmpty()) {
             return emptyList()
         }
         val idsString = ids.joinToString(",")
@@ -187,12 +195,13 @@ class MarketRepository @Inject constructor(
         return loadCoinsPrice(id, currency)[id]?.get(currency.code.toLowerCase(Locale.getDefault()))
     }
 
-    suspend fun getMarketGlobalData(): MarketGlobalData? {
-        return marketGlobalData.get()
-    }
-
-    private suspend fun loadMarketGlobalData(): MarketGlobalData? {
-        return coinGeckoApi.getGlobalMarketData().data?.toUiEntity()
+    suspend fun loadMarketGlobalData(): MarketGlobalData? {
+        return coinGeckoApi.getGlobalMarketData().data?.toUiEntity()?.apply {
+            cache.saveMarketcap(marketCap)
+            cache.saveMarketcapPercentChange24h(marketCapPercentChange24h)
+            cache.saveBtcDominance(btcDominance)
+            cache.saveEthDominance(ethDominance)
+        }
     }
 
     private suspend fun loadChart(key: PriceChartData.Key): PriceChartData {
@@ -253,5 +262,53 @@ class MarketRepository @Inject constructor(
         favoritesDb.dao().removeFavorite(FavoriteCoinDbEntity(id))
         favoriteCoinsCache.removeAll { it.id == id }
         favoritesMap.remove(id)
+    }
+
+    suspend fun loadFearAndGreedIndex(): Int? {
+        val result = getCryptoIndex(remoteConfigRepository.getFearAndGreedIndexUrl(), remoteConfigRepository.getFearAndGreedIndexRegex())
+        cache.saveFearAndGreedIndex(result)
+        return result
+    }
+
+    suspend fun loadAltcoinSeasonIndex(): Int? {
+        val result = getCryptoIndex(remoteConfigRepository.getAltcoinSeasonIndexUrl(), remoteConfigRepository.getAltcoinSeasonIndexRegex())
+        cache.saveAltcoinSeasonIndex(result)
+        return result
+    }
+
+    fun getFearAndGreedIndex(): Int? {
+        return cache.getFearAndGreedIndex()
+    }
+
+    fun getAltcoinSeasonIndex(): Int? {
+        return cache.getAltcoinSeasonIndex()
+    }
+
+    private suspend fun getCryptoIndex(url : String, regexString : String) : Int?{
+        return suspendCoroutine { cont ->
+            val request: Request = Request.Builder().url(url).build()
+
+            httpClient.newCall(request).enqueue(object: Callback{
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    L.e(e)
+                    cont.resumeWith(Result.success(null))
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    response.body?.string()?.let {
+                        val regex = regexString.toRegex(RegexOption.DOT_MATCHES_ALL)
+                        val result = regex.find(it)?.groupValues?.get(1)?.toIntOrNull()
+                        cont.resumeWith(Result.success(result))
+                    } ?: kotlin.run {
+                        L.e(IOException("Error loading $url"))
+                        cont.resumeWith(Result.success(null))
+                    }
+                }
+            })
+        }
+    }
+
+    fun getMarketGlobalDataFromCache(): MarketGlobalData? {
+        return cache.getMarketGlobalData()
     }
 }

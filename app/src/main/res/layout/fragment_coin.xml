@@ -299,7 +299,7 @@
                     <RadioGroup
                         android:id="@+id/radiosChart"
                         android:layout_width="0dp"
-                        android:layout_height="30dp"
+                        android:layout_height="24dp"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textCurrentUsdPrice"

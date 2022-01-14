@@ -33,6 +33,16 @@
     <color name="coin_cardano">#0033AD</color>
     <color name="coin_solana">#9945ff</color>
 
+    <color name="crypto_index_1">#FF0000</color>
+    <color name="crypto_index_2">#FF3F00</color>
+    <color name="crypto_index_3">#FF7F00</color>
+    <color name="crypto_index_4">#FFC300</color>
+    <color name="crypto_index_5">#FFFF00</color>
+    <color name="crypto_index_6">#C3FF00</color>
+    <color name="crypto_index_7">#80FF00</color>
+    <color name="crypto_index_8">#40FF00</color>
+    <color name="crypto_index_9">#00FF00</color>
+
     <color name="trend_up">@color/green</color>
     <color name="trend_down">@color/red</color>
 

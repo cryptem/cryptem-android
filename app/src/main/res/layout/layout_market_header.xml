@@ -36,10 +36,10 @@
         android:layout_height="wrap_content"
         android:text="@{vm.marketGlobalData.marketCapString}"
         android:textColor="@color/white"
+        android:layout_marginEnd="@dimen/screen_padding"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/screen_padding"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="$1 000 000 000 000 000" />
 
@@ -48,11 +48,11 @@
         layout="@layout/layout_trend_large_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="@dimen/screen_padding"
-        app:visible="@{vm.marketGlobalData.marketCapPercentChange24h != 0}"
-        app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"/>
+        app:data="@{vm.marketGlobalData.marketCapPercentChange24h}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textMarketCap"
+        app:visible="@{vm.marketGlobalData.marketCapPercentChange24h != 0}" />
 
 
     <TextView
@@ -61,8 +61,9 @@
         android:layout_height="wrap_content"
         android:text='@{@string/market_btc_dominance(vm.marketGlobalData.btcDominanceString != null ? vm.marketGlobalData.btcDominanceString : "... %")}'
         android:textColor="@color/colorSecondary"
-        app:layout_constraintStart_toStartOf="@+id/textMarketCap"
-        app:layout_constraintTop_toBottomOf="@id/textMarketCap"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/screen_padding"
         tools:text="@string/market_btc_dominance" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -81,11 +82,11 @@
         android:id="@+id/textEthDominance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text='@{@string/market_eth_dominance(vm.marketGlobalData.ethDominanceString != null ? vm.marketGlobalData.ethDominanceString : "... %")}'
         android:layout_marginStart="8dp"
+        android:text='@{@string/market_eth_dominance(vm.marketGlobalData.ethDominanceString != null ? vm.marketGlobalData.ethDominanceString : "... %")}'
         android:textColor="@color/coin_ethereum_light"
         app:layout_constraintStart_toEndOf="@+id/textBtcDominance"
-        app:layout_constraintTop_toBottomOf="@+id/textMarketCap"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/market_eth_dominance" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -101,13 +102,40 @@
         tools:progress="50" />
 
     <TextView
+        android:id="@+id/textFearAndGreedIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{@string/market_fear_and_greed_index(vm.getPercentString(vm.fearAndGreedIndex))}"
+        app:layout_constraintStart_toStartOf="@+id/textBtcDominance"
+        app:layout_constraintTop_toBottomOf="@+id/btcDominanceIndicator"
+        app:textColorResource="@{vm.getIndexColorRes(vm.fearAndGreedIndex)}"
+        android:onClick="@{() -> vm.showFearAndGreedIndexWeb()}"
+        tools:text="@string/market_fear_and_greed_index" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/fearAndGreedIndicator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/DepositIndicator"
+        app:indeterminate="@{vm.fearAndGreedIndex == null}"
+        android:progress="@{vm.fearAndGreedIndex}"
+        app:tintResource="@{vm.getIndexColorRes(vm.fearAndGreedIndex)}"
+        app:layout_constraintTop_toBottomOf="@id/textFearAndGreedIndex"
+        app:layout_constraintEnd_toEndOf="@+id/textFearAndGreedIndex"
+        app:layout_constraintStart_toStartOf="@+id/textFearAndGreedIndex"
+        android:onClick="@{() -> vm.showFearAndGreedIndexWeb()}"
+        android:layout_marginBottom="2dp"
+        tools:progress="50" />
+
+    <TextView
         android:id="@+id/textAltcoinIndex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@{@string/market_altcoin_index(vm.getAltcoinIndexString(vm.altcoinIndex))}"
-        app:textColorResource="@{vm.altcoinIndexColorRes}"
-        app:layout_constraintEnd_toEndOf="@+id/layoutValuationPercent"
-        app:layout_constraintTop_toBottomOf="@+id/layoutValuationPercent"
+        android:text="@{@string/market_altcoin_index(vm.getPercentString(vm.altcoinIndex))}"
+        app:layout_constraintStart_toStartOf="@+id/textFearAndGreedIndex"
+        app:layout_constraintTop_toBottomOf="@+id/fearAndGreedIndicator"
+        app:textColorResource="@{vm.getIndexColorRes(vm.altcoinIndex)}"
+        android:onClick="@{() -> vm.showAltcoinSeasonIndexWeb()}"
         tools:text="@string/market_altcoin_index" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -116,76 +144,52 @@
         android:layout_height="wrap_content"
         android:theme="@style/DepositIndicator"
         app:indeterminate="@{vm.altcoinIndex == null}"
-        android:progress="@{vm.altcoinIndexInt}"
-        app:tintResource="@{vm.altcoinIndexColorRes}"
+        android:progress="@{vm.altcoinIndex}"
+        app:tintResource="@{vm.getIndexColorRes(vm.altcoinIndex)}"
         app:layout_constraintTop_toBottomOf="@id/textAltcoinIndex"
         app:layout_constraintEnd_toEndOf="@+id/textAltcoinIndex"
         app:layout_constraintStart_toStartOf="@+id/textAltcoinIndex"
+        android:onClick="@{() -> vm.showAltcoinSeasonIndexWeb()}"
         android:layout_marginBottom="2dp"
         tools:progress="50" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonTimeInterval1"
-        style="@style/OutlinedButton"
+        style="@style/OutlinedButton.Light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="48dp"
-        android:minHeight="0dp"
-        android:onClick="@{() -> vm.toggleTrendTime(0)}"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="24h"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/buttonTimeInterval2"
-        app:layout_constraintTop_toBottomOf="@+id/altcoinIndexIndicator"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:strokeColor="@color/colorSecondary"
+        android:onClick="@{() -> vm.toggleTrendTime(0)}"
+        android:text="24h"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonTimeInterval2"
+        app:layout_constraintTop_toTopOf="@+id/textAltcoinIndex"
         app:textResource="@{vm.percentInterval.get(0).title}" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonTimeInterval2"
-        style="@style/OutlinedButton"
+        style="@style/OutlinedButton.Light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="48dp"
-        android:minHeight="0dp"
         android:onClick="@{() -> vm.toggleTrendTime(1)}"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:layout_marginEnd="8dp"
         android:text="7d"
-        android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/buttonChartOrSale"
         app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval1"
-        app:strokeColor="@color/colorSecondary"
         app:textResource="@{vm.percentInterval.get(1).title}" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonChartOrSale"
-        style="@style/OutlinedButton"
+        style="@style/OutlinedButton.Light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="80dp"
-        android:minHeight="0dp"
         android:onClick="@{() -> vm.toggleSaleMode()}"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        tools:text="Chart"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="@+id/textAltcoinIndex"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:text="@{vm.saleMode ? @string/coin_sale : @string/coin_chart}"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonTimeInterval1"
-        app:strokeColor="@color/colorSecondary"
-        android:text="@{vm.saleMode ? @string/coin_sale : @string/coin_chart}" />
+        tools:text="Chart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

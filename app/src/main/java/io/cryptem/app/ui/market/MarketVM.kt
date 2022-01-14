@@ -8,15 +8,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.R
 import io.cryptem.app.ext.toPercentString
-import io.cryptem.app.model.AnalyticsRepository
-import io.cryptem.app.model.HomeScreen
-import io.cryptem.app.model.MarketRepository
-import io.cryptem.app.model.SharedPrefsRepository
-import io.cryptem.app.model.coingecko.CoinGeckoApiDef
+import io.cryptem.app.model.*
 import io.cryptem.app.model.ui.Coin
 import io.cryptem.app.model.ui.MarketGlobalData
 import io.cryptem.app.model.ui.TimeInterval
 import io.cryptem.app.ui.base.BaseVM
+import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.util.L
 import kodebase.livedata.SafeMutableLiveData
 import kotlinx.coroutines.launch
@@ -26,7 +23,8 @@ import javax.inject.Inject
 class MarketVM @Inject constructor(
     private val prefs: SharedPrefsRepository,
     private val marketRepo: MarketRepository,
-    private val analytics: AnalyticsRepository
+    private val analytics: AnalyticsRepository,
+    private val remoteConfigRepository: RemoteConfigRepository,
 ) : BaseVM() {
 
     val reloading = SafeMutableLiveData(false)
@@ -37,10 +35,12 @@ class MarketVM @Inject constructor(
     val favorites = ObservableArrayList<Coin>()
     val currency = MutableLiveData(prefs.getPortfolioCurrency())
     val marketGlobalData = MutableLiveData<MarketGlobalData>()
-    val altcoinIndex = MutableLiveData<Double>()
-    val altcoinIndexInt = MutableLiveData<Int>()
-    val altcoinIndexColorRes = SafeMutableLiveData(R.color.white)
-    val percentInterval = listOf(MutableLiveData(prefs.getMarketTimeInterval(0)), MutableLiveData(prefs.getMarketTimeInterval(1)))
+    val altcoinIndex = MutableLiveData<Int?>(marketRepo.getAltcoinSeasonIndex())
+    val fearAndGreedIndex = MutableLiveData<Int?>(marketRepo.getFearAndGreedIndex())
+    val percentInterval = listOf(
+        MutableLiveData(prefs.getMarketTimeInterval(0)),
+        MutableLiveData(prefs.getMarketTimeInterval(1))
+    )
     val favoriteMode = SafeMutableLiveData(prefs.isFavoriteCoinsMode())
     val saleMode = SafeMutableLiveData(prefs.isMarketSaleMode())
 
@@ -57,10 +57,11 @@ class MarketVM @Inject constructor(
             }
         }
     }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
         prefs.setHomeScreen(HomeScreen.MARKET)
-        loadGlobalMarketData()
+        getMarketGlobalDataFromCache()
         loadMarketFromCache()
         loadFavoritesFromCache()
         loadCoins(true)
@@ -70,13 +71,11 @@ class MarketVM @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
         analytics.logMarketScreen()
+        loadGlobalMarketData()
     }
 
     private fun loadMarketFromCache() {
         items.addAll(marketRepo.getCoinsFromCache())
-        if (items.isNotEmpty()) {
-            calculateAltcoinIndex(items)
-        }
     }
 
     private fun loadFavoritesFromCache() {
@@ -92,7 +91,6 @@ class MarketVM @Inject constructor(
                 stopLoading()
                 if (forceReload) {
                     items.clear()
-                    calculateAltcoinIndex(it)
                 }
                 items.addAll(it)
             }.onFailure {
@@ -135,42 +133,45 @@ class MarketVM @Inject constructor(
         loading.value = false
     }
 
-    fun calculateAltcoinIndex(data: List<Coin>) {
-        var betterThanBtc = 0
-        var count = 0
-        val stableCoins = listOf("DAI", "UST")
-
-        for (i in 0 until CoinGeckoApiDef.PAGE_SIZE) {
-            val symbol = data[i].symbol.uppercase()
-            if (!stableCoins.contains(symbol) && !symbol.contains("BTC") && !symbol.contains("USD")) {
-                if (data[i].getPercentBtc(TimeInterval.MONTH) ?: 0.0 > 0.0) {
-                    betterThanBtc += 1
-                }
-                count += 1
-                if (count == 50) {
-                    break
-                }
-            }
-        }
-        altcoinIndex.value = betterThanBtc / 50.0
-        altcoinIndexInt.value = ((altcoinIndex.value ?: 0.0) * 100.0).toInt()
-        altcoinIndexColorRes.value = when {
-            ((altcoinIndexInt.value ?: 0) < 25) -> R.color.trend_down_light
-            ((altcoinIndexInt.value ?: 0) > 75) -> R.color.trend_up_light
-            else -> R.color.white
+    fun getIndexColorRes(value: Int?): Int {
+        return when {
+            (value != null && value < 15) -> R.color.crypto_index_1
+            (value in 15..25) -> R.color.crypto_index_2
+            (value in 25..35) -> R.color.crypto_index_3
+            (value in 35..45) -> R.color.crypto_index_4
+            (value in 45..55) -> R.color.crypto_index_5
+            (value in 55..65) -> R.color.crypto_index_6
+            (value in 65..75) -> R.color.crypto_index_7
+            (value in 75..85) -> R.color.crypto_index_8
+            (value != null && value > 85) -> R.color.crypto_index_9
+            else -> R.color.crypto_index_1
         }
     }
 
     fun loadGlobalMarketData() {
         viewModelScope.launch {
             kotlin.runCatching {
-                marketRepo.getMarketGlobalData()
+                marketRepo.loadMarketGlobalData()
             }.onSuccess {
                 marketGlobalData.value = it
             }.onFailure {
                 error.value = true
                 L.e(it)
             }
+        }
+        loadFearAndGreed()
+        loadAltcoinSeason()
+    }
+
+    fun loadFearAndGreed() {
+        viewModelScope.launch {
+            fearAndGreedIndex.value = marketRepo.loadFearAndGreedIndex()
+        }
+    }
+
+    fun loadAltcoinSeason() {
+        viewModelScope.launch {
+            altcoinIndex.value = marketRepo.loadAltcoinSeasonIndex()
         }
     }
 
@@ -184,7 +185,7 @@ class MarketVM @Inject constructor(
         )
     }
 
-    fun toggleFavorite(coin: Coin) : Boolean{
+    fun toggleFavorite(coin: Coin): Boolean {
         viewModelScope.launch {
             kotlin.runCatching {
                 if (coin.favorite.value == false) {
@@ -195,7 +196,7 @@ class MarketVM @Inject constructor(
             }.onSuccess {
                 coin.favorite.value = coin.favorite.value != true
                 items.find { it.id == coin.id }?.favorite?.value = coin.favorite.value
-                if(coin.favorite.value == false) {
+                if (coin.favorite.value == false) {
                     favorites.remove(coin)
                 }
             }
@@ -203,7 +204,7 @@ class MarketVM @Inject constructor(
         return true
     }
 
-    fun toggleSaleMode(){
+    fun toggleSaleMode() {
         saleMode.value = !saleMode.value
     }
 
@@ -218,13 +219,30 @@ class MarketVM @Inject constructor(
         }
     }
 
-    fun getAltcoinIndexString(value: Double?): String {
-        return value?.toPercentString(0) ?: "... %"
+    fun getPercentString(value: Int?): String {
+        return value?.toPercentString() ?: "... %"
+    }
+
+    fun getMarketGlobalDataFromCache() {
+        marketGlobalData.value = marketRepo.getMarketGlobalDataFromCache()
+    }
+
+    fun refresh(){
+        loadCoins(true)
+        loadGlobalMarketData()
     }
 
     fun retry() {
         error.value = false
         loadGlobalMarketData()
         loadCoins()
+    }
+
+    fun showFearAndGreedIndexWeb() {
+        publish(UrlEvent(remoteConfigRepository.getFearAndGreedIndexUrl()))
+    }
+
+    fun showAltcoinSeasonIndexWeb() {
+        publish(UrlEvent(remoteConfigRepository.getAltcoinSeasonIndexUrl()))
     }
 }

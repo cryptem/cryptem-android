@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.cryptem.app.R
 import io.cryptem.app.databinding.FragmentMarketBinding
 import io.cryptem.app.ui.base.BaseFragment
+import io.cryptem.app.ui.base.event.UrlEvent
 import io.cryptem.app.util.svg.GlideApp
 
 @AndroidEntryPoint
@@ -27,6 +28,32 @@ class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fr
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         GlideApp.get(requireContext()).clearMemory()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.recyclerMarket.itemAnimator = null
+
+        binding.recyclerMarket.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    (recyclerView.layoutManager as LinearLayoutManager).let { layoutManager ->
+                        visibleItemCount = layoutManager.childCount
+                        totalItemCount = layoutManager.itemCount
+                        firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+                        if (!viewModel.reloading.value && !viewModel.loading.value) {
+                            if (visibleItemCount + firstVisibleItem >= totalItemCount) {
+                                viewModel.loadCoins(false)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        observe(UrlEvent::class){
+            showUrl(it.url)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -55,27 +82,5 @@ class MarketFragment : BaseFragment<MarketVM, FragmentMarketBinding>(R.layout.fr
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.recyclerMarket.itemAnimator = null
-
-        binding.recyclerMarket.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    (recyclerView.layoutManager as LinearLayoutManager).let { layoutManager ->
-                        visibleItemCount = layoutManager.childCount
-                        totalItemCount = layoutManager.itemCount
-                        firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-                        if (!viewModel.reloading.value && !viewModel.loading.value) {
-                            if (visibleItemCount + firstVisibleItem >= totalItemCount) {
-                                viewModel.loadCoins(false)
-                            }
-                        }
-                    }
-                }
-            }
-        })
     }
 }

@@ -76,7 +76,7 @@
                 app:backgroundTint="@color/trezor"
                 android:textColor="@color/white"
                 android:onClick="@{() -> vm.buyTrezorOne()}"
-                android:text="Trezor.io" />
+                android:text="Trezor" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                 android:textColor="@color/white"
                 app:visibleOrGone="@{vm.alzaEnabled}"
                 android:onClick="@{() -> vm.buyTrezorOneAlza()}"
-                android:text="Alza.cz" />
+                android:text="Alza" />
 
         </LinearLayout>
 
@@ -130,7 +130,7 @@
                 app:backgroundTint="@color/trezor"
                 android:textColor="@color/white"
                 android:onClick="@{() -> vm.buyTrezorT()}"
-                android:text="Trezor.io" />
+                android:text="Trezor" />
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
                 android:textColor="@color/white"
                 android:onClick="@{() -> vm.buyTrezorTAlza()}"
                 app:visibleOrGone="@{vm.alzaEnabled}"
-                android:text="Alza.cz" />
+                android:text="Alza" />
 
         </LinearLayout>
 

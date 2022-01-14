@@ -56,6 +56,12 @@ fun Double.toPercentString(decimalDigits: Int = 2, abs: Boolean = false): String
     return format.format(if (abs) this.absoluteValue else this)
 }
 
+fun Int.toPercentString(): String {
+    val format = NumberFormat.getPercentInstance(Locale.getDefault())
+    format.maximumFractionDigits = 0
+    return format.format(this / 100.0)
+}
+
 fun Double.toAmountString(symbol: String? = null, maxDecimals : Int = 8): String {
     val format: NumberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
     format.maximumFractionDigits = maxDecimals

@@ -67,4 +67,25 @@
         <key>donateSol</key>
         <value>6UsS43mCuKKeNrfUAHHXEsws8RnUwowxhK4x4Spw3TjY</value>
     </entry>
+    <entry>
+        <key>fearAndGreedIndexUrl</key>
+        <value>https://alternative.me/crypto/fear-and-greed-index/</value>
+    </entry>
+    <entry>
+        <key>fearAndGreedIndexRegex</key>
+        <value>Now&lt;/div&gt;.*?fng-circle.*?&gt;(.*?)&lt;</value>
+    </entry>
+    <entry>
+        <key>altcoinSeasonIndexUrl</key>
+        <value>https://www.blockchaincenter.net/altcoin-season-index/</value>
+    </entry>
+    <entry>
+        <key>altcoinSeasonIndexRegex</key>
+        <value>Season Index&lt;br/&gt;&lt;/h3&gt;.*?46px\)">(.*?)&lt;</value>
+    </entry>
+
+    "fearAndGreedIndexUrl"
+    const val FEAR_AND_GREED_INDEX_REGEX = "fearAndGreedIndexRegex"
+    const val ALTCOIN_SEASON_INDEX_URL = "altcoinSeasonIndexUrl"
+    const val ALTCOIN_SEASON_INDEX_REGEX = "altcoinSeasonIndexRegex"
 </defaultsMap>
