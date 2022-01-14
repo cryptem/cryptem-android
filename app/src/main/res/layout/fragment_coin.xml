@@ -118,7 +118,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutEdit"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="74dp"
             android:elevation="4dp"
             android:background="@color/colorPrimary"
             app:visibleOrGone="@{vm.editMode}"
