@@ -1,10 +1,7 @@
 package io.cryptem.app.ui.portfolio.settings
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,8 +32,7 @@ class PortfolioSettingsVM @Inject constructor(
     val binanceApiKey = MutableLiveData(prefs.getBinanceApiKey())
     val binanceSecretKey = MutableLiveData(prefs.getBinanceSecretKey())
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         currency.observeForever {
             if (currencyInitFlag) {
                 savePortfolio()
@@ -52,9 +48,12 @@ class PortfolioSettingsVM @Inject constructor(
         loadCurrnecies()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logPortfolioSettingsScreen()
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        portfolioRepo.clearPortfolioCache()
     }
 
     fun onSwitchClick() {

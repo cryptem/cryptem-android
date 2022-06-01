@@ -20,6 +20,7 @@ import io.cryptem.app.model.SharedPrefsRepository
 import io.cryptem.app.model.api.MoshiDateAdapter
 import io.cryptem.app.model.binance.BinanceApiDef
 import io.cryptem.app.model.binance.BinanceInterceptor
+import io.cryptem.app.model.binance.BinanceVapiDef
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.db.FavoriteCoinsDatabase
 import io.cryptem.app.model.db.PortfolioDatabase
@@ -66,6 +67,27 @@ class AppModule {
             )
             .build()
             .create(CoinGeckoApiDef::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBinanceVapi(loggingInterceptor : HttpLoggingInterceptor): BinanceVapiDef {
+        val httpClient = OkHttpClient().newBuilder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .client(httpClient)
+            .baseUrl("https://vapi.binance.com/")
+            .addConverterFactory(
+                MoshiConverterFactory.create(
+                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                )
+            )
+            .build()
+            .create(BinanceVapiDef::class.java)
     }
 
     @Provides

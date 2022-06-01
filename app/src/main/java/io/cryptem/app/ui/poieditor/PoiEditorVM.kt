@@ -2,10 +2,7 @@ package io.cryptem.app.ui.poieditor
 
 import android.location.Geocoder
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.FirestoreRepository
@@ -40,13 +37,11 @@ class PoiEditorVM @Inject constructor(
     val category = MutableLiveData<PoiCategory?>()
     val loading = MutableLiveData(false)
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         loadCategories()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logPoiEditorScreen()
     }
 

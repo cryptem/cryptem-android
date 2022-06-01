@@ -240,6 +240,10 @@ class PortfolioRepository @Inject constructor(
         return data
     }
 
+    fun clearPortfolioCache(){
+        portfolio.clear()
+    }
+
     suspend fun clearChart() {
         db.dao().clearSnapshots()
     }

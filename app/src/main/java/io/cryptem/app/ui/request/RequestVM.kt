@@ -1,10 +1,7 @@
 package io.cryptem.app.ui.request
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.ext.toFiatString
 import io.cryptem.app.model.*
@@ -54,7 +51,7 @@ class RequestVM @Inject constructor(
     var isInit = false
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         prefs.setHomeScreen(HomeScreen.PAYMENT_REQUEST)
         loadCurrnecies()
 
@@ -77,8 +74,7 @@ class RequestVM @Inject constructor(
         coins.addAll(walletRepository.getSupportedCoins())
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logRequestScreen()
         isInit = false
         init()

@@ -23,9 +23,6 @@ class WalletRepository @Inject constructor(
     fun getSupportedCoins(): List<WalletCoin> {
         return listOf(
             WalletCoin.BTC,
-            WalletCoin.ETH,
-            WalletCoin.ADA,
-            WalletCoin.SOL,
             WalletCoin.LTC,
             WalletCoin.XMR
         )

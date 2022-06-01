@@ -1,10 +1,7 @@
 package io.cryptem.app.ui.portfolio
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.github.mikephil.charting.data.LineData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.*
@@ -31,8 +28,7 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
     val chartData = MutableLiveData<LineData>()
     val coinsSearch = SafeMutableLiveData("")
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(){
+    override fun onCreate(owner: LifecycleOwner) {
         prefs.setHomeScreen(HomeScreen.PORTFOLIO)
         loadPortfolioFromDb()
         loadChart()
@@ -55,8 +51,8 @@ class PortfolioVM @Inject constructor(private val prefs : SharedPrefsRepository,
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         analytics.logPortfolioScreen()
         loadPortfolio()
     }

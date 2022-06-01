@@ -1,10 +1,7 @@
 package io.cryptem.app.ui.market
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.R
 import io.cryptem.app.ext.toPercentString
@@ -58,8 +55,7 @@ class MarketVM @Inject constructor(
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         prefs.setHomeScreen(HomeScreen.MARKET)
         getMarketGlobalDataFromCache()
         loadMarketFromCache()
@@ -68,8 +64,7 @@ class MarketVM @Inject constructor(
         loadFavorites(true)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume() {
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logMarketScreen()
         loadGlobalMarketData()
     }

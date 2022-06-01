@@ -26,7 +26,7 @@ class MainActivity : KodebaseActivity<MainActivityVM, ActivityMainBinding>(R.lay
         setSupportActionBar(binding.toolbar)
 
         val navGraph = navController().navInflater.inflate(R.navigation.nav_graph)
-        navGraph.startDestination = viewModel.getHomeScreen().id
+        navGraph.setStartDestination(viewModel.getHomeScreen().id)
 
         navController().graph = navGraph
 

@@ -1,6 +1,7 @@
 package io.cryptem.app.ui.portfolio.depositwithdraw
 
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,7 @@ class DepositWithdrawVM @Inject constructor() : BaseVM() {
     val valueNumber = SafeMutableLiveData(0L)
     val currency = MutableLiveData<String>()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(){
+    override fun onCreate(owner: LifecycleOwner) {
         value.observeForever {
             valueNumber.value = it.toLongOrNull() ?: 0L
         }

@@ -3,10 +3,7 @@ package io.cryptem.app.ui.map
 import android.annotation.SuppressLint
 import android.location.Location
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,7 +47,8 @@ class MapVM @Inject constructor(
     val search = MutableLiveData<String?>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+
+    override fun onCreate(owner: LifecycleOwner) {
         //prefs.setHomeScreen(HomeScreen.MAP)
         loadCountries()
         country.observeForever {
@@ -69,8 +67,7 @@ class MapVM @Inject constructor(
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logMapScreen()
     }
 

@@ -7,6 +7,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.R
@@ -27,14 +28,12 @@ class AboutVM @Inject constructor(val clipboardManager: ClipboardManager, val re
     val partners = ObservableArrayList<Partner>()
     val donates = ObservableArrayList<DonateAddress>()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(){
+    override fun onCreate(owner: LifecycleOwner) {
         initDonates()
         initPartners()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logAboutScreen()
     }
 

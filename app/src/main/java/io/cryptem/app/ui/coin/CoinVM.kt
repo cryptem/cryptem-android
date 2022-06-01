@@ -1,9 +1,6 @@
 package io.cryptem.app.ui.coin
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.github.mikephil.charting.data.LineData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.ext.toAmountString
@@ -63,8 +60,7 @@ class CoinVM @Inject constructor(
     var currentChartDays: Int = 0
     val chartSelectedDate = MutableLiveData<String>()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate() {
+    override fun onCreate(owner: LifecycleOwner) {
         checkIsInPortfolio()
         checkSimpleCoin()
         setupChartRadios()
@@ -72,8 +68,7 @@ class CoinVM @Inject constructor(
         getCoinFromCache()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logCoinScreen(symbol)
         loadData()
     }

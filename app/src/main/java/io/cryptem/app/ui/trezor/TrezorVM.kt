@@ -1,6 +1,7 @@
 package io.cryptem.app.ui.trezor
 
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +17,7 @@ class TrezorVM @Inject constructor(val remoteConfigRepository: RemoteConfigRepos
 
     val alzaEnabled = MutableLiveData(checkAlzaCz())
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logTrezorScreen()
     }
 

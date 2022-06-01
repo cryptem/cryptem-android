@@ -2,6 +2,7 @@ package io.cryptem.app.ui.wallets
 
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +20,7 @@ class WalletsVM @Inject constructor(val repo : WalletRepository, val analytics: 
 
     val wallets = ObservableArrayList<Wallet>()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logWalletsScreen()
         loadWallets()
     }

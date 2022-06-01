@@ -3,6 +3,7 @@ package io.cryptem.app.ui.pay
 import android.content.pm.PackageManager
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.AnalyticsRepository
@@ -21,13 +22,7 @@ class PayVM @Inject constructor(private val walletRepository: WalletRepository, 
     val defaultWallet = SafeMutableLiveData(prefs.getDefaultSwWallet())
     val wallets = ObservableArrayList<SoftwareWallet>()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(){
-
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logPayScreen()
         wallets.apply {
             clear()

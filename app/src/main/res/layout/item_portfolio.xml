@@ -76,22 +76,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 app:data="@{data.coin}"
                 app:hideTicker="@{true}"
-                app:layout_constraintEnd_toStartOf="@+id/trendDayUsd"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineGoldenRatio"
                 app:layout_constraintStart_toEndOf="@+id/icon"
                 app:layout_constraintTop_toTopOf="@+id/icon" />
-
-            <include
-                android:id="@+id/trendWeightedGain"
-                layout="@layout/layout_trend_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                app:data="@{data.getPortfolioWeightedGain(vm.timeInterval)}"
-                app:layout_constraintBottom_toBottomOf="@+id/title"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineGoldenRatio"
-                app:layout_constraintTop_toTopOf="@+id/title" />
 
             <TextView
                 android:id="@+id/textPercent"

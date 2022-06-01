@@ -1,10 +1,7 @@
 package io.cryptem.app.ui.wallets
 
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.cryptem.app.model.AnalyticsRepository
 import io.cryptem.app.model.SharedPrefsRepository
@@ -27,8 +24,7 @@ class WalletVM @Inject constructor(val repo : WalletRepository, val prefs : Shar
     val scanWarning = MutableLiveData(false)
     override val selectedCoin = MutableLiveData<WalletCoin>()
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(){
+    override fun onCreate(owner: LifecycleOwner) {
         selectedCoin.observeForever {
             wallet.value?.coin = it
         }
@@ -37,8 +33,7 @@ class WalletVM @Inject constructor(val repo : WalletRepository, val prefs : Shar
         coins.addAll(repo.getSupportedCoins())
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    override fun onResume(owner: LifecycleOwner) {
         analytics.logWalletScreen()
     }
 
