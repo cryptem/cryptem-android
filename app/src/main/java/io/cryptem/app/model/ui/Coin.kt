@@ -73,7 +73,7 @@ class Coin(
 
     fun getSparkline() : String{
         val id = image?.substringAfter("images/")?.substringBefore("/")
-        return "https://www.coingecko.com/coins/$id/sparkline"
+        return "https://www.coingecko.com/coins/$id/sparkline.svg"
     }
 
     fun isBtc() : Boolean{

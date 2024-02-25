@@ -7,7 +7,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import io.cryptem.app.AppConfig.COIN_CACHE_MINUTES
 import io.cryptem.app.AppConfig.COIN_CHART_CACHE_MINUTES
-import io.cryptem.app.AppConfig.MARKET_GLOBAL_DATA_CACHE_MINUTES
 import io.cryptem.app.model.coingecko.CoinGeckoApiDef
 import io.cryptem.app.model.coingecko.dto.CoinsResponseItemDto
 import io.cryptem.app.model.db.FavoriteCoinsDatabase
@@ -16,16 +15,13 @@ import io.cryptem.app.model.db.toUiEntity
 import io.cryptem.app.model.ui.*
 import io.cryptem.app.model.ui.Currency
 import io.cryptem.app.util.L
-import kotlinx.coroutines.Dispatchers
 import okhttp3.*
 import okio.IOException
-import java.text.ParseException
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
@@ -179,8 +175,7 @@ class MarketRepository @Inject constructor(
 
     suspend fun loadCoins(ids: String, customCurrency: Currency): List<Coin> {
         return coinGeckoApi.getCoins(currency = customCurrency.code, ids = ids).map {
-            val result = it.toUiEntity(customCurrency)
-            return@map result
+            return@map it.toUiEntity(customCurrency)
         }
     }
 

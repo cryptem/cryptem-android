@@ -42,7 +42,7 @@ data class CoinsResponseItemDto(
     @Json(name = "market_cap_change_percentage_24h")
     val marketCapChangePercentage24h: Double?,
     @Json(name = "market_cap_rank")
-    val marketCapRank: Int,
+    val marketCapRank: Int?,
     @Json(name = "max_supply")
     val maxSupply: Double?,
     @Json(name = "name")
