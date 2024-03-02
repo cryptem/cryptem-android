@@ -20,14 +20,10 @@ class App : Application(), Configuration.Provider {
         lateinit var instance: App
     }
 
-    override fun getWorkManagerConfiguration() = Configuration.Builder()
-        .setWorkerFactory(workerFactory)
-        .build()
-
     override fun onCreate() {
         super.onCreate()
         instance = this
-        initPortfolioUpdateWorker()
+        //initPortfolioUpdateWorker()
     }
 
     private fun initPortfolioUpdateWorker(){
@@ -43,4 +39,9 @@ class App : Application(), Configuration.Provider {
             ).build()
         )
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 }

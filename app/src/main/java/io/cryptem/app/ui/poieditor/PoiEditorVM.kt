@@ -50,10 +50,12 @@ class PoiEditorVM @Inject constructor(
     }
 
     fun getGps() {
-        geocoder.getFromLocationName(address.value, 1).firstOrNull()?.let {
-            country.value = it.countryCode
-            latitude.value = it.latitude
-            longitude.value = it.longitude
+        address.value?.let {
+            geocoder.getFromLocationName(it, 1)?.firstOrNull()?.let {
+                country.value = it.countryCode
+                latitude.value = it.latitude
+                longitude.value = it.longitude
+            }
         }
     }
 
